@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Xwt;
 using Xwt.Drawing;
 using Commons.Music.Midi;
@@ -19,41 +20,14 @@ namespace Xmdsp
 			WidthRequest = vmk.WhiteKeyWidth * 7 * (octaves - vmk.VisibleOctaves);
 			HeightRequest = vmk.WhiteKeyHeight;
 			this.BackgroundColor = vm.Pallette.KeyboardBackgroundColor.ToXwt ();
+			key_on_status = new bool [vm.Keyboard.MaxKeys];
 		}
 		
-		Queue<SmfMessage> received_messages = new Queue<SmfMessage> ();
-		Queue<SmfMessage> drawing_messages = new Queue<SmfMessage> ();
+		bool [] key_on_status;
 		
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		bool DrawMessage (Context ctx, Rectangle dirtyRect, SmfMessage m)
 		{
-			base.OnDraw (ctx, dirtyRect);
-			
-			if (!RequestDrawForMessage (ctx, dirtyRect) && !DrawMessage (ctx, dirtyRect))
-				DrawDefault (ctx, dirtyRect);
-		}
-		
-		bool RequestDrawForMessage (Context ctx, Rectangle dirtyRect)
-		{
-			if (received_messages.Count == 0)
-				return false;
 			var vmk = vm.Keyboard;
-			var m = received_messages.Dequeue ();
-			ViewModel.Rectangle rect;
-			if (vmk.IsBlackKey (m.Msb))
-				rect = vmk.GetBlackKeyRect (m.Msb);
-			else
-				rect = vmk.GetWhiteKeyRect (m.Msb);
-			drawing_messages.Enqueue (m);
-			QueueDraw (new Rectangle (rect.X, rect.Y, rect.Width, rect.Height));
-			return true;
-		}
-		
-		bool DrawMessage (Context ctx, Rectangle dirtyRect)
-		{
-			if (drawing_messages.Count == 0)
-				return false;
-			var vmk = vm.Keyboard;
-			var m = drawing_messages.Dequeue ();
 			if (vmk.IsBlackKey (m.Msb)) {
 				var rect = vmk.GetBlackKeyRect (m.Msb);
 				ctx.SetColor ((m.MessageType == SmfMessage.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.BlackKeyFillColor).ToXwt ());
@@ -89,8 +63,8 @@ namespace Xmdsp
 			return true;
 		}
 			
-		void DrawDefault (Context ctx, Rectangle dirtyRect)
-		{			
+		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		{
 			if (Bounds.IsEmpty || dirtyRect.IsEmpty)
 				return;
 			
@@ -98,6 +72,7 @@ namespace Xmdsp
 			
 			var vmk = vm.Keyboard;
 			
+			Color noteOnColor = vm.Pallette.NoteOnColor.ToXwt ();
 			Color whiteKeyFillColor = vm.Pallette.WhiteKeyFillColor.ToXwt ();
 			Color whiteKeyStrokeColor = vm.Pallette.WhiteKeyStrokeColor.ToXwt ();
 			Color blackKeyFillColor = vm.Pallette.BlackKeyFillColor.ToXwt ();
@@ -107,30 +82,50 @@ namespace Xmdsp
 			int wwidth = vmk.WhiteKeyWidth;
 			int wheight = vmk.WhiteKeyHeight;
 			ctx.SetLineWidth (1);
+			int n = 0;
 			foreach (var rect in vmk.WhiteKeyRectangles ()) {
-				ctx.SetColor (whiteKeyFillColor);
+				int key = n / 7 * 12 + white_key_index_to_note [n % 7];
+				if (key_on_status [key])
+					ctx.SetColor (noteOnColor);
+				else
+					ctx.SetColor (whiteKeyFillColor);
 				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
 				ctx.Fill ();
 				ctx.SetColor (whiteKeyStrokeColor);
 				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
 				ctx.Stroke ();
+				n++;
 			}
+			n = 0;
 			foreach (var rect in vmk.BlackKeyRectangles ()) {
-				ctx.SetColor (blackKeyFillColor);
+				int key = n / 5 * 12 + black_key_index_to_note [n % 5];
+				if (key_on_status [key])
+					ctx.SetColor (noteOnColor);
+				else
+					ctx.SetColor (blackKeyFillColor);
 				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
 				ctx.Fill ();
 				ctx.SetColor (blackKeyStrokeColor);
 				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
 				ctx.Stroke ();
+				n++;
 			}
 		}
 		
-		static readonly Rectangle edge = new Rectangle (0, 0, 1, 1);
+		static readonly byte [] white_key_index_to_note = {0, 2, 4, 5, 7 ,9, 11};
+		static readonly byte [] black_key_index_to_note = {1, 3, 6, 8, 10};
 		
 		public void ProcessMidiMessage (SmfMessage m)
 		{
-			received_messages.Enqueue (m);
-			QueueDraw (edge);
+			switch (m.MessageType) {
+			case SmfMessage.NoteOn:
+				key_on_status [m.Msb] = m.Lsb > 0;
+				break;
+			case SmfMessage.NoteOff:
+				key_on_status [m.Msb] = false;
+				break;
+			}
+			QueueDraw ();
 		}
 	}
 }

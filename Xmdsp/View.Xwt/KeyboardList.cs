@@ -24,6 +24,9 @@ namespace Xmdsp
 				case SmfMessage.NoteOff:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
 					break;
+				case SmfMessage.CC:
+					keyboards [m.Channel].KeyParameters.ProcessMidiMessage (m);
+					break;
 				}
 			};
 		}

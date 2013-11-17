@@ -1,6 +1,7 @@
 using System;
 using Xwt;
 using Xwt.Drawing;
+using Commons.Music.Midi;
 
 namespace Xmdsp
 {
@@ -129,6 +130,44 @@ namespace Xmdsp
 				DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
 				SoftPedal = null;
 			}
+		}
+		
+		public void ProcessMidiMessage (SmfMessage m)
+		{
+			switch (m.MessageType) {
+			case SmfMessage.CC:
+				switch (m.Msb) {
+				case SmfCC.Volume:
+					Volume = m.Lsb;
+					break;
+				case SmfCC.Expression:
+					Expression = m.Lsb;
+					break;
+				case SmfCC.Effect1:
+					Rsd = m.Lsb;
+					break;
+				case SmfCC.Effect2:
+					Csd = m.Lsb;
+					break;
+				case SmfCC.Effect3:
+					Dsd = m.Lsb;
+					break;
+				case SmfCC.Hold:
+					Hold = m.Lsb > 63;
+					break;
+				case SmfCC.PortamentoSwitch:
+					PortamentoSwitch = m.Lsb > 63;
+					break;
+				case SmfCC.Sostenuto:
+					Sostenuto = m.Lsb;
+					break;
+				case SmfCC.SoftPedal:
+					SoftPedal = m.Lsb;
+					break;
+				}
+				break;
+			}
+			QueueDraw ();
 		}
 	}
 }
