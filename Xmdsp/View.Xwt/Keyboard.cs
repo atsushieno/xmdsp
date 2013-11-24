@@ -4,6 +4,7 @@ using Xwt;
 using Xwt.Drawing;
 using Commons.Music.Midi;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Xmdsp
 {
@@ -24,6 +25,8 @@ namespace Xmdsp
 		}
 		
 		bool [] key_on_status;
+		ImageBuilder back_image_builder;
+		Context back_context;
 		
 		bool DrawMessage (Context ctx, Rectangle dirtyRect, SmfMessage m)
 		{
@@ -68,6 +71,19 @@ namespace Xmdsp
 			if (Bounds.IsEmpty || dirtyRect.IsEmpty)
 				return;
 			
+			if (back_context != null)
+				ctx.DrawImage (back_image_builder.ToBitmap (ImageFormat.ARGB32), 0, 0);
+			else {
+				back_image_builder = new ImageBuilder (this.Bounds.Width, this.Bounds.Height);
+				back_context = back_image_builder.Context;
+				new Thread (() => { while (loop) {Thread.Sleep (120); if (dirty) DrawAll (back_context); }}).Start ();
+			}
+		}
+		
+		bool drawn, loop = true, dirty = true;
+
+		void DrawAll (Context ctx)
+		{
 			Console.WriteLine ("Keyboard.OnDraw()");
 			
 			var vmk = vm.Keyboard;
@@ -110,6 +126,8 @@ namespace Xmdsp
 				ctx.Stroke ();
 				n++;
 			}
+			dirty = false;
+			QueueDraw ();
 		}
 		
 		static readonly byte [] white_key_index_to_note = {0, 2, 4, 5, 7 ,9, 11};
@@ -120,12 +138,13 @@ namespace Xmdsp
 			switch (m.MessageType) {
 			case SmfMessage.NoteOn:
 				key_on_status [m.Msb] = m.Lsb > 0;
+				dirty = true;
 				break;
 			case SmfMessage.NoteOff:
 				key_on_status [m.Msb] = false;
+				dirty = true;
 				break;
 			}
-			QueueDraw ();
 		}
 	}
 }

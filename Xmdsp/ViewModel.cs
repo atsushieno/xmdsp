@@ -10,6 +10,7 @@ namespace Xmdsp
 		public int MaxChannels { get; set; }
 		
 		public PalletteDefinition Pallette { get; private set; }		
+		public KeyboardListViewModel KeyboardList { get; private set; }
 		public KeyboardViewModel Keyboard { get; private set; }
 		public KeyboardParameterBlockViewModel KeyboardParameterBlock { get; private set; }
 		public event MidiMessageAction MidiMessageReceived;
@@ -21,6 +22,7 @@ namespace Xmdsp
 			Pallette = new PalletteDefinition ();
 			Keyboard = new KeyboardViewModel (this);
 			KeyboardParameterBlock = new KeyboardParameterBlockViewModel (this);
+			KeyboardList = new KeyboardListViewModel (this);
 			
 			MaxChannels = 16;
 		}
@@ -31,6 +33,24 @@ namespace Xmdsp
 		{
 			if (MidiMessageReceived != null)
 				MidiMessageReceived (m);
+		}
+		
+		public class KeyboardListViewModel
+		{
+			ViewModel vm;
+			
+			public KeyboardListViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+			}
+			
+			public int Width {
+				get { return Math.Max (vm.Keyboard.Width, vm.KeyboardParameterBlock.Width); }
+			}
+			
+			public int Height {
+				get { return vm.MaxChannels * (vm.Keyboard.Height + vm.KeyboardParameterBlock.Height); }
+			}
 		}
 		
 		public class KeyboardViewModel
@@ -48,6 +68,14 @@ namespace Xmdsp
 				BlackKeyWidth = WhiteKeyWidth - 1;
 				BlackKeyHeight = 10;
 				BlackKeyShiftWidth = WhiteKeyWidth / 2;
+			}
+			
+			public int Width {
+				get { return WhiteKeyWidth * 7 * (MaxKeys / 12 - VisibleOctaves); }
+			}
+			
+			public int Height {
+				get { return WhiteKeyHeight; }
 			}
 	
 			public int MaxKeys { get; private set; }
@@ -133,10 +161,20 @@ namespace Xmdsp
 				Console.WriteLine (KeyBlockHeaderTextSize * 2 + 4);
 				Console.WriteLine (KeyBlockChannelNumberTextSize + 2);
 			}
+			
+			public int Width {
+				get { return ColumnPositions [ColumnPositions.Length - 1]; }
+			}
+			
+			public int Height {
+				get { return KeyBlockHeaderTextSize * 2; }
+			}
 	
 			public int KeyBlockParameterTextSize { get; private set; }
 			public int KeyBlockHeaderTextSize { get; private set; }
 			public int KeyBlockChannelNumberTextSize { get; private set; }
+					
+			public int [] ColumnPositions = {0, 100, 160, 220, 320, 360};
 		}
 		
 		public class PalletteDefinition
