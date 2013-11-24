@@ -75,7 +75,7 @@ namespace Xmdsp
 			}
 			
 			public int Height {
-				get { return WhiteKeyHeight; }
+				get { return WhiteKeyHeight + 2; }
 			}
 	
 			public int MaxKeys { get; private set; }
@@ -167,7 +167,7 @@ namespace Xmdsp
 			}
 			
 			public int Height {
-				get { return KeyBlockHeaderTextSize * 2; }
+				get { return 2 + Math.Max (Math.Max (KeyBlockParameterTextSize * 2 + 2, KeyBlockHeaderTextSize * 2 + 2), KeyBlockChannelNumberTextSize + 2); }
 			}
 	
 			public int KeyBlockParameterTextSize { get; private set; }

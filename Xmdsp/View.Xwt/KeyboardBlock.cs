@@ -1,21 +1,18 @@
 using System;
 using Xwt;
+using Xwt.Drawing;
 
 namespace Xmdsp
 {
-	public class KeyboardBlock : VBox
+	public class KeyboardBlock
 	{
 		ViewModel vm;
 		
-		public KeyboardBlock (ViewModel viewModel, int channel)
+		public KeyboardBlock (ViewModel viewModel, Font font, int channel)
 		{
 			vm = viewModel;
-			Keyboard = new Keyboard (vm);
-			KeyParameters = new KeyboardParameterBlock (vm, channel);
-			WidthRequest = Keyboard.WidthRequest + KeyParameters.WidthRequest;
-			HeightRequest = Keyboard.HeightRequest + KeyParameters.HeightRequest;
-			this.PackStart (KeyParameters, true);
-			this.PackStart (Keyboard, true);
+			Keyboard = new Keyboard (vm, channel);
+			KeyParameters = new KeyboardParameterBlock (vm, font, channel);
 		}
 
 		public Keyboard Keyboard { get; private set; }

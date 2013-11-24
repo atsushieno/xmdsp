@@ -5,21 +5,18 @@ using Commons.Music.Midi;
 
 namespace Xmdsp
 {
-	public class KeyboardParameterBlock : Canvas
+	public class KeyboardParameterBlock
 	{
 		ViewModel vm;
-		int channel;
+		int channel;		
+		Font font;
 		
-		public KeyboardParameterBlock (ViewModel viewModel, int channel)
+		public KeyboardParameterBlock (ViewModel viewModel, Font font, int channel)
 		{
 			vm = viewModel;
-			var vmk = vm.KeyboardParameterBlock;
+			this.font = font;
 			
-			Margin = 0;
-			WidthRequest = 100;
-			HeightRequest = 4 + Math.Max (Math.Max (vmk.KeyBlockParameterTextSize * 2 + 2, vmk.KeyBlockHeaderTextSize * 2 + 2), vmk.KeyBlockChannelNumberTextSize + 2);
 			this.channel = channel;
-			BackgroundColor = vm.Pallette.KeyParameterBackgroundColor.ToXwt ();
 			
 			Volume = Expression = Rsd = Csd = Dsd = SoftPedal = Sostenuto = 127;
 			Hold = false;
@@ -36,18 +33,17 @@ namespace Xmdsp
 		public int? SoftPedal;
 		public int? Sostenuto;
 		
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		bool dirty = true;
+		
+		internal void DoDraw (Context ctx)
 		{
-			base.OnDraw (ctx, dirtyRect);
-			
-			if (Bounds.IsEmpty || dirtyRect.IsEmpty)
+			if (!dirty)
 				return;
-			
-			Console.WriteLine ("KeyboardParameterBlock.OnDraw()");
 			
 			var vmk = vm.KeyboardParameterBlock;
 			
-			var font = this.Font.WithSize (vmk.KeyBlockHeaderTextSize);
+			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height);
+			ctx.Translate (0, yOffset);
 			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
 			
@@ -67,6 +63,8 @@ namespace Xmdsp
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextDarkest, "SP:", 320, row2Y);
 			
 			UpdateParameters (ctx, font);
+			
+			ctx.Translate (0, -yOffset);
 		}
 		
 		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
@@ -89,7 +87,7 @@ namespace Xmdsp
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, value ? vm.Pallette.KeyParameterTextBlightest : vm.Pallette.KeyParameterTextDarkest, label, x, y);
 		}
 		
-		void UpdateParameters (Context ctx, Font font)
+		internal void UpdateParameters (Context ctx, Font font)
 		{
 			var vmk = vm.KeyboardParameterBlock;			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
@@ -167,8 +165,7 @@ namespace Xmdsp
 				}
 				break;
 			}
-			QueueDraw ();
+			dirty = true;
 		}
 	}
 }
-

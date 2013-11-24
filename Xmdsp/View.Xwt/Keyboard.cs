@@ -8,25 +8,21 @@ using System.Threading;
 
 namespace Xmdsp
 {
-	public class Keyboard : Canvas
+	public class Keyboard
 	{
 		ViewModel vm;
+		int channel;
 		
-		public Keyboard (ViewModel viewModel)
+		public Keyboard (ViewModel viewModel, int channel)
 		{
 			this.vm = viewModel;
+			this.channel = channel;
 			var vmk = vm.Keyboard;
 			int octaves = vmk.MaxKeys / 12;
-			Margin = 0;
-			WidthRequest = vmk.WhiteKeyWidth * 7 * (octaves - vmk.VisibleOctaves);
-			HeightRequest = vmk.WhiteKeyHeight;
-			this.BackgroundColor = vm.Pallette.KeyboardBackgroundColor.ToXwt ();
 			key_on_status = new bool [vm.Keyboard.MaxKeys];
 		}
 		
 		bool [] key_on_status;
-		ImageBuilder back_image_builder;
-		Context back_context;
 		
 		bool DrawMessage (Context ctx, Rectangle dirtyRect, SmfMessage m)
 		{
@@ -65,28 +61,18 @@ namespace Xmdsp
 			}
 			return true;
 		}
-			
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		
+		bool dirty = true;
+
+		internal void DoDraw (Context ctx)
 		{
-			if (Bounds.IsEmpty || dirtyRect.IsEmpty)
+			if (!dirty)
 				return;
 			
-			if (back_context != null)
-				ctx.DrawImage (back_image_builder.ToBitmap (ImageFormat.ARGB32), 0, 0);
-			else {
-				back_image_builder = new ImageBuilder (this.Bounds.Width, this.Bounds.Height);
-				back_context = back_image_builder.Context;
-				new Thread (() => { while (loop) {Thread.Sleep (120); if (dirty) DrawAll (back_context); }}).Start ();
-			}
-		}
-		
-		bool drawn, loop = true, dirty = true;
-
-		void DrawAll (Context ctx)
-		{
-			Console.WriteLine ("Keyboard.OnDraw()");
-			
 			var vmk = vm.Keyboard;
+			
+			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height) + vm.KeyboardParameterBlock.Height;
+			ctx.Translate (0, yOffset);
 			
 			Color noteOnColor = vm.Pallette.NoteOnColor.ToXwt ();
 			Color whiteKeyFillColor = vm.Pallette.WhiteKeyFillColor.ToXwt ();
@@ -126,8 +112,8 @@ namespace Xmdsp
 				ctx.Stroke ();
 				n++;
 			}
+			ctx.Translate (0, -yOffset);
 			dirty = false;
-			QueueDraw ();
 		}
 		
 		static readonly byte [] white_key_index_to_note = {0, 2, 4, 5, 7 ,9, 11};

@@ -17,13 +17,17 @@ namespace Xmdsp
 		{
 			//MidiMachine = new MidiMachine ();
 			Platform = new DesktopPlatformLayer ();
+			IsApplicationActive = true;
 		}
 		
 		public void Dispose ()
 		{
+			IsApplicationActive = false;
 			EnsurePlayerStopped ();
 			Platform.Shutdown ();
 		}
+
+		public bool IsApplicationActive { get; set; }
 		
 		public event MidiMessageAction MidiMessageReceived;
 		//public MidiMachine MidiMachine { get; private set; }
@@ -57,6 +61,10 @@ namespace Xmdsp
 			current_player = Platform.CreateMidiPlayer (current_music);
 			current_player.MessageReceived += MidiMessageReceived;
 			current_player.PlayAsync ();
+		}
+		
+		public PlayerState PlayerState {
+			get { return current_player != null ? current_player.State : PlayerState.Stopped; }
 		}
 	}
 }
