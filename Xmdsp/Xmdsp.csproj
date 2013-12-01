@@ -64,6 +64,7 @@
   <ItemGroup>
     <Folder Include="PlatformDependent\" />
     <Folder Include="View.Xwt\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libportmidi.so">
@@ -74,5 +75,10 @@
       <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\xmdsp_icon.png">
+      <LogicalName>xmdsp_icon.png</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
