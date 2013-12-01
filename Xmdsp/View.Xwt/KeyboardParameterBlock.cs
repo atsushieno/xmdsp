@@ -1,17 +1,19 @@
 using System;
-using Xwt;
-using Xwt.Drawing;
+using Gtk;
+using Gdk;
 using Commons.Music.Midi;
+
+using FontFace = Pango.FontFace;
 
 namespace Xmdsp
 {
 	public class KeyboardParameterBlock
 	{
 		ViewModel vm;
-		int channel;		
-		Font font;
+		int channel;
+		FontFace font;
 		
-		public KeyboardParameterBlock (ViewModel viewModel, Font font, int channel)
+		public KeyboardParameterBlock (ViewModel viewModel, FontFace font, int channel)
 		{
 			vm = viewModel;
 			this.font = font;
@@ -35,7 +37,7 @@ namespace Xmdsp
 		
 		bool dirty = true;
 		
-		internal void DoDraw (Context ctx)
+		internal void DoDraw (Cairo.Context ctx)
 		{
 			if (!dirty)
 				return;
@@ -67,27 +69,27 @@ namespace Xmdsp
 			ctx.Translate (0, -yOffset);
 		}
 		
-		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
+		Cairo.TextExtents DrawText (Cairo.Context ctx, FontFace font, int size, ViewModel.Color color, string text, double x, double y)
 		{
-			ctx.SetColor (color.ToXwt ());
-			font = font.WithSize (size);
-			var textLayout = new TextLayout () { Font = font, Text = text, };
-			var numberSize = textLayout.GetSize ();
-			ctx.DrawTextLayout (textLayout, x, y);
+			Gdk.CairoHelper.SetSourceColor (ctx, color.ToGdk ());
+			//font.FontExtents = new FontExtents (font.FontExtents.Ascent, font.FontExtents.Descent, size, font.FontExtents.MaxXAdvance, font.FontExtents.MaxYAdvance);
+			//ctx.SetScaledFont (font);
+			ctx.MoveTo (x, y);
+			ctx.TextPath (text);
 			ctx.Stroke ();
-			return textLayout.GetSize ();
+			return ctx.TextExtents (text);
 		}
 		
-		void DrawBoolSwitch (Context ctx, Font font, bool value, string label, int x, int y)
+		void DrawBoolSwitch (Cairo.Context ctx, FontFace font, bool value, string label, int x, int y)
 		{
 			var vmk = vm.KeyboardParameterBlock;
-			ctx.SetColor ((value ? vm.Pallette.KeyParameterTextMiddle : vm.Pallette.KeyParameterBackgroundColor).ToXwt ());
+			CairoHelper.SetSourceColor (ctx, (value ? vm.Pallette.KeyParameterTextMiddle : vm.Pallette.KeyParameterBackgroundColor).ToGdk ());
 			ctx.Rectangle (x - 1, y, vmk.KeyBlockParameterTextSize + 2, vmk.KeyBlockParameterTextSize + 3);
 			ctx.Fill ();
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, value ? vm.Pallette.KeyParameterTextBlightest : vm.Pallette.KeyParameterTextDarkest, label, x, y);
 		}
 		
-		internal void UpdateParameters (Context ctx, Font font)
+		internal void UpdateParameters (Cairo.Context ctx, FontFace font)
 		{
 			var vmk = vm.KeyboardParameterBlock;			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;

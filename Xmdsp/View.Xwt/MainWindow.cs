@@ -1,5 +1,6 @@
 using System;
-using Xwt;
+using System.Linq;
+using Gtk;
 
 namespace Xmdsp
 {
@@ -9,68 +10,81 @@ namespace Xmdsp
 		readonly ViewModel vm;
 		
 		public MainWindow ()
+			: base ("XMDSP")
 		{
 			model = new Model ();
 			vm = new ViewModel (model);
 			
-			Title = "xmdsp";
-			Width = 800;
-			Height = 600;
-			Padding = 0;
+			WidthRequest = 800;
+			HeightRequest = 600;
 
-			SetupMenu ();
+			VBox mainPane = new VBox ()/* { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () }*/;
+			Add (mainPane);
+			mainPane.PackStart (SetupMenu (), false, false, 0);
 			
-			this.CloseRequested += delegate { ShutdownApplication (); };
+			this.Destroyed += delegate { ShutdownApplication (); };
 			
-			HBox mainPane = new HBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			mainPane.PackStart (new KeyboardList (vm), true);
-			Content = mainPane;
+			mainPane.PackStart (new KeyboardList (vm), true, true, 0);
 		}
 		
 		void ShutdownApplication ()
 		{
 			model.Dispose ();
-			Application.Exit ();			
+			Application.Quit ();			
 		}
 		
-		void SetupMenu ()
+		Widget SetupMenu ()
 		{
-			Menu menu = new Menu ();
-			
+			MenuBar mb = new MenuBar ();
 			var file = new MenuItem ("_File");
-			file.SubMenu = new Menu ();
+			var fileMenu = new Menu ();
+			file.Submenu = fileMenu;
 			
 			MenuItem open = new MenuItem ("_Open");
-			open.Clicked += delegate {
-				var dlg = new OpenFileDialog ();
-				dlg.Filters.Add (new FileDialogFilter ("Standard MIDI Files", "*.mid", "*.MID", "*.Mid"));
-				dlg.Filters.Add (new FileDialogFilter ("All Files", "*"));
-				if (dlg.Run ()) {
-					model.LoadSmf (dlg.FileName);
+			open.Activated += delegate {
+				var dlg = new FileChooserDialog ("Select a Standard MIDI file to play", this, FileChooserAction.Open,
+					"Cancel", ResponseType.Cancel,
+					"OK", ResponseType.Ok);
+				var mid = new FileFilter () { Name = "Standard MIDI Files" };
+				foreach (string pattern in new String [] {"*.mid", "*.MID", "*.Mid"})
+					mid.AddPattern (pattern);
+				dlg.AddFilter (mid);
+				var all = new FileFilter () { Name = "All Files" };
+				all.AddPattern ("*");
+				dlg.AddFilter (all);
+				if (dlg.Run () == (int) ResponseType.Ok) {
+					model.LoadSmf (dlg.Filename);
 					model.Play ();
 				}
+				dlg.Destroy ();
 			};
-			file.SubMenu.Items.Add (open);
-			MenuItem close = new MenuItem ("_Close");
-			close.Clicked += delegate { ShutdownApplication (); };
-			file.SubMenu.Items.Add (close);
-			menu.Items.Add (file);
+			fileMenu.Add (open);
+			MenuItem close = new MenuItem ("_Quit");
+			close.Activated += delegate { ShutdownApplication (); };
+			fileMenu.Add (close);
+			
+			mb.Append (file);
 			
 			var device = new MenuItem ("_Device");
-			device.SubMenu = new Menu ();
-			device.Clicked += delegate {
+			var deviceMenu = new Menu ();
+			device.Submenu = deviceMenu;
+			device.Activated += delegate {
 				Console.WriteLine ("DeviceMenuClicked");
-				device.SubMenu.Items.Clear ();
+				foreach (var c in deviceMenu.Children.ToArray ())
+					if (c is MenuItem)
+						deviceMenu.Remove (c);
+				int nDev = 0;
 				foreach (var dev in model.Platform.AllMidiDevices) {
-					var dmi = new MenuItem (dev.Name);
-					dmi.Clicked += delegate { model.Platform.MidiOutputDeviceIndex = dev.ID; };
-					device.SubMenu.Items.Add (dmi);
+					var dmi = new MenuItem (string.Format ("_{0}: {1}", nDev++, dev.Name));
+					dmi.Activated += delegate { model.Platform.MidiOutputDeviceIndex = dev.ID; };
+					deviceMenu.Add (dmi);
+					dmi.ShowAll ();
 				}
 			};
-			menu.Items.Add (device);
 			
-			this.MainMenu = menu;
+			mb.Append (device);
+
+			return mb;
 		}
 	}
 }
-

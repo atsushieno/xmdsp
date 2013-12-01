@@ -1,13 +1,14 @@
 using System;
-using Xwt;
+using Gtk;
 
 namespace Xmdsp
 {
 	public static class XwtViewModelExtensions
 	{
-		public static Xwt.Drawing.Color ToXwt (this ViewModel.Color color)
+		public static Gdk.Color ToGdk (this ViewModel.Color color)
 		{
-			return Xwt.Drawing.Color.FromBytes (color.R, color.G, color.B, color.A);
+			// no alpha channel?
+			return new Gdk.Color (color.R, color.G, color.B);
 		}
 	}
 }

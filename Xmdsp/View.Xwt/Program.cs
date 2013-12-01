@@ -1,5 +1,5 @@
 using System;
-using Xwt;
+using Gtk;
 
 namespace Xmdsp
 {
@@ -7,28 +7,14 @@ namespace Xmdsp
 	{
 		public static void Main (string[] args)
 		{
-			ToolkitType type;
-			switch (Environment.OSVersion.Platform) {
-			case PlatformID.Unix:
-				type = ToolkitType.Gtk;
-				break;
-			case PlatformID.MacOSX:
-				type = ToolkitType.Cocoa;
-				break;
-			default:
-				type = ToolkitType.Wpf;
-				break;
-			}
-			Application.Initialize (type);
+			Application.Init ();
 			
 			MainWindow w = new MainWindow ();
-			w.Show ();
+			w.ShowAll ();
 			
 			Application.Run ();
 			
 			w.Dispose ();
-
-			Application.Dispose ();
 		}
 	}
 }
