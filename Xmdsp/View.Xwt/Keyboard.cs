@@ -61,14 +61,9 @@ namespace Xmdsp
 			}
 			return true;
 		}
-		
-		bool dirty = true;
 
 		internal void DoDraw (Context ctx)
 		{
-			if (!dirty)
-				return;
-			
 			var vmk = vm.Keyboard;
 			
 			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height) + vm.KeyboardParameterBlock.Height;
@@ -113,7 +108,6 @@ namespace Xmdsp
 				n++;
 			}
 			ctx.Translate (0, -yOffset);
-			dirty = false;
 		}
 		
 		static readonly byte [] white_key_index_to_note = {0, 2, 4, 5, 7 ,9, 11};
@@ -124,11 +118,9 @@ namespace Xmdsp
 			switch (m.MessageType) {
 			case SmfMessage.NoteOn:
 				key_on_status [m.Msb] = m.Lsb > 0;
-				dirty = true;
 				break;
 			case SmfMessage.NoteOff:
 				key_on_status [m.Msb] = false;
-				dirty = true;
 				break;
 			}
 		}

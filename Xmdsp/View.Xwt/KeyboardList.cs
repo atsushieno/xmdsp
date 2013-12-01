@@ -30,60 +30,31 @@ namespace Xmdsp
 				switch (m.MessageType) {
 				case SmfMessage.NoteOn:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
-					dirty = true;
 					break;
 				case SmfMessage.NoteOff:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
-					dirty = true;
 					break;
 				case SmfMessage.CC:
 					keyboards [m.Channel].KeyParameters.ProcessMidiMessage (m);
-					dirty = true;
 					break;
+				}
+				if (DateTime.Now - last > duration) {
+					last = DateTime.Now;
+					QueueDraw ();
 				}
 			};
 		}
 		
-		ImageBuilder back_image_builder;
-		Context back_context;
+		DateTime last = DateTime.MinValue;
+		static readonly TimeSpan duration = TimeSpan.FromMilliseconds (200);
 			
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
-		{
-			if (Bounds.IsEmpty || dirtyRect.IsEmpty)
-				return;
-			
-			if (back_context != null)
-				ctx.DrawImage (back_image_builder.ToBitmap (ImageFormat.ARGB32), 0, 0);
-			else {
-				back_image_builder = new ImageBuilder (this.Bounds.Width, this.Bounds.Height);
-				back_context = back_image_builder.Context;
-				DrawAll (back_context);
-				new Thread (RunLoop).Start ();
-			}
-		}
-		
-		void RunLoop ()
-		{
-			while (true) {
-				Thread.Sleep (200);
-				if (!vm.Model.IsApplicationActive)
-					break;
-				if (dirty)
-					DrawAll (back_context);
-			}
-		}
-		
-		void DrawAll (Context ctx)
 		{
 			foreach (var kb in keyboards) {
 				kb.Keyboard.DoDraw (ctx);
 				kb.KeyParameters.DoDraw (ctx);
 			}
-			QueueDraw ();
-			dirty = false;
 		}
-		
-		bool dirty = true;
 	}
 }
 

@@ -1,5 +1,6 @@
 using System;
 using Xwt;
+using Xwt.Drawing;
 
 namespace Xmdsp
 {
@@ -17,7 +18,7 @@ namespace Xmdsp
 			Width = 800;
 			Height = 600;
 			Padding = 0;
-
+			Icon = Image.FromResource (GetType ().Assembly, "xmdsp_icon.png");
 			SetupMenu ();
 			
 			this.CloseRequested += delegate { ShutdownApplication (); };
