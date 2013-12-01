@@ -16,9 +16,10 @@ namespace Xmdsp
 			vm = new ViewModel (model);
 			
 			WidthRequest = 800;
-			HeightRequest = 600;
+			HeightRequest = 660;
 
-			VBox mainPane = new VBox ()/* { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () }*/;
+			VBox mainPane = new VBox ();
+			mainPane.ModifyBase (StateType.Normal, vm.Pallette.ApplicationBackgroundColor.ToGdk ());
 			Add (mainPane);
 			mainPane.PackStart (SetupMenu (), false, false, 0);
 			

@@ -20,8 +20,6 @@ namespace Xmdsp
 			
 			for (int i = 0; i < vm.MaxChannels; i++)
 				keyboards [i] = new KeyboardBlock (vm, null/*font*/, i);
-						
-			//this.BackgroundColor = vm.Pallette.KeyboardBackgroundColor.ToGdk ();
 			WidthRequest = vm.KeyboardList.Width;
 			HeightRequest = vm.KeyboardList.Height;
 				
@@ -53,6 +51,7 @@ namespace Xmdsp
 		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
 		{
 			var ctx = Gdk.CairoHelper.Create (GdkWindow);
+			GdkWindow.Background = vm.Pallette.KeyboardBackgroundColor.ToGdk ();
 			DrawAll (ctx);
 			/*
 			if (surface1 != null) {
@@ -71,6 +70,7 @@ namespace Xmdsp
 			return true; // ?
 		}
 		
+		/*
 		void RunLoop ()
 		{
 			while (true) {
@@ -81,6 +81,7 @@ namespace Xmdsp
 					DrawAll (surface_flipped ? context2 : context1);
 			}
 		}
+		*/
 		
 		void DrawAll (Cairo.Context ctx)
 		{

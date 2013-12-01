@@ -36,15 +36,18 @@ namespace Xmdsp
 		public int? Sostenuto;
 		
 		bool dirty = true;
+		int platform_text_shift;
 		
 		internal void DoDraw (Cairo.Context ctx)
 		{
-			if (!dirty)
-				return;
+//			if (!dirty)
+//				return;
 			
+			platform_text_shift = vm.KeyboardParameterBlock.KeyBlockParameterTextSize;
+		
 			var vmk = vm.KeyboardParameterBlock;
 			
-			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height);
+			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height) + platform_text_shift;
 			ctx.Translate (0, yOffset);
 			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
@@ -84,7 +87,9 @@ namespace Xmdsp
 		{
 			var vmk = vm.KeyboardParameterBlock;
 			CairoHelper.SetSourceColor (ctx, (value ? vm.Pallette.KeyParameterTextMiddle : vm.Pallette.KeyParameterBackgroundColor).ToGdk ());
+			ctx.Translate (0, -platform_text_shift);
 			ctx.Rectangle (x - 1, y, vmk.KeyBlockParameterTextSize + 2, vmk.KeyBlockParameterTextSize + 3);
+			ctx.Translate (0, platform_text_shift);
 			ctx.Fill ();
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, value ? vm.Pallette.KeyParameterTextBlightest : vm.Pallette.KeyParameterTextDarkest, label, x, y);
 		}
@@ -93,7 +98,17 @@ namespace Xmdsp
 		{
 			var vmk = vm.KeyboardParameterBlock;			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
-			
+
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) Volume).ToString ("D3"), 130, 0);
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) Expression).ToString ("D3"), 190, 0);
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) Rsd).ToString ("D3"), 130, row2Y);
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) Csd).ToString ("D3"), 190, row2Y);
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) Dsd).ToString ("D3"), 250, row2Y);
+			DrawBoolSwitch (ctx, font, (bool) Hold, "H", 300, 0);
+			DrawBoolSwitch (ctx, font, (bool) PortamentoSwitch, "P", 300, row2Y);
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) Sostenuto).ToString ("D3"), 350, 0);
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
+			/*
 			if (Volume != null) {
 				DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) Volume).ToString ("D3"), 130, 0);
 				Volume = null;
@@ -130,6 +145,7 @@ namespace Xmdsp
 				DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
 				SoftPedal = null;
 			}
+			*/
 		}
 		
 		public void ProcessMidiMessage (SmfMessage m)

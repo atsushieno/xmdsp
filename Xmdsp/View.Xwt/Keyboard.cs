@@ -53,9 +53,16 @@ namespace Xmdsp
 				//path.LineTo (x3, 0);
 				ctx.ClosePath ();
 				ctx.Fill ();
-				//ctx.SetColor (vm.Pallette.WhiteKeyStrokeColor.ToXwt ());
-				//ctx.AppendPath (path);
-				//ctx.Stroke ();
+				/*
+				CairoHelper.SetSourceColor (ctx, vm.Pallette.WhiteKeyStrokeColor.ToGdk ());
+				ctx.MoveTo (x, yd);
+				
+				ctx.LineTo (x, vmk.WhiteKeyHeight);
+				ctx.LineTo (x2, vmk.WhiteKeyHeight);
+				ctx.LineTo (x2, yd);
+				ctx.LineTo (x3, yd);
+				ctx.Stroke ();
+				*/
 			}
 			return true;
 		}
@@ -64,8 +71,8 @@ namespace Xmdsp
 
 		internal void DoDraw (Cairo.Context ctx)
 		{
-			if (!dirty)
-				return;
+//			if (!dirty)
+//				return;
 			
 			var vmk = vm.Keyboard;
 			
