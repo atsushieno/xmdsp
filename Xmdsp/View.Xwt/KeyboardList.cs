@@ -38,18 +38,20 @@ namespace Xmdsp
 					keyboards [m.Channel].KeyParameters.ProcessMidiMessage (m);
 					break;
 				}
-				if (DateTime.Now - last > duration) {
-					last = DateTime.Now;
+				if (!dirty) {
+					dirty = true;
 					QueueDraw ();
 				}
 			};
 		}
 		
+		bool dirty = true;
 		DateTime last = DateTime.MinValue;
-		static readonly TimeSpan duration = TimeSpan.FromMilliseconds (200);
+		static readonly TimeSpan duration = TimeSpan.FromMilliseconds (50);
 			
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
+			dirty = false;
 			foreach (var kb in keyboards) {
 				kb.Keyboard.DoDraw (ctx);
 				kb.KeyParameters.DoDraw (ctx);
