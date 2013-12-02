@@ -26,15 +26,15 @@ namespace Xmdsp
 			WidthRequest = vm.KeyboardList.Width;
 			HeightRequest = vm.KeyboardList.Height;
 				
-			vm.MidiMessageReceived += (SmfMessage m) => {
-				switch (m.MessageType) {
-				case SmfMessage.NoteOn:
+			vm.MidiMessageReceived += (SmfEvent m) => {
+				switch (m.EventType) {
+				case SmfEvent.NoteOn:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
 					break;
-				case SmfMessage.NoteOff:
+				case SmfEvent.NoteOff:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
 					break;
-				case SmfMessage.CC:
+				case SmfEvent.CC:
 					keyboards [m.Channel].KeyParameters.ProcessMidiMessage (m);
 					break;
 				}

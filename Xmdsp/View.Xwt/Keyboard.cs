@@ -24,12 +24,12 @@ namespace Xmdsp
 		
 		bool [] key_on_status;
 		
-		bool DrawMessage (Context ctx, Rectangle dirtyRect, SmfMessage m)
+		bool DrawMessage (Context ctx, Rectangle dirtyRect, SmfEvent m)
 		{
 			var vmk = vm.Keyboard;
 			if (vmk.IsBlackKey (m.Msb)) {
 				var rect = vmk.GetBlackKeyRect (m.Msb);
-				ctx.SetColor ((m.MessageType == SmfMessage.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.BlackKeyFillColor).ToXwt ());
+				ctx.SetColor ((m.EventType == SmfEvent.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.BlackKeyFillColor).ToXwt ());
 				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
 				ctx.Fill ();
 				ctx.SetColor (vm.Pallette.BlackKeyStrokeColor.ToXwt ());
@@ -37,7 +37,7 @@ namespace Xmdsp
 				ctx.Stroke ();
 			} else {
 				int x = vmk.GetWhiteKeyX (m.Msb);
-				ctx.SetColor ((m.MessageType == SmfMessage.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.WhiteKeyFillColor).ToXwt ());
+				ctx.SetColor ((m.EventType == SmfEvent.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.WhiteKeyFillColor).ToXwt ());
 				ctx.NewPath ();
 				var path = new DrawingPath ();
 				var x2 = x + vmk.WhiteKeyWidth;
@@ -113,13 +113,13 @@ namespace Xmdsp
 		static readonly byte [] white_key_index_to_note = {0, 2, 4, 5, 7 ,9, 11};
 		static readonly byte [] black_key_index_to_note = {1, 3, 6, 8, 10};
 		
-		public void ProcessMidiMessage (SmfMessage m)
+		public void ProcessMidiMessage (SmfEvent m)
 		{
-			switch (m.MessageType) {
-			case SmfMessage.NoteOn:
+			switch (m.EventType) {
+			case SmfEvent.NoteOn:
 				key_on_status [m.Msb] = m.Lsb > 0;
 				break;
-			case SmfMessage.NoteOff:
+			case SmfEvent.NoteOff:
 				key_on_status [m.Msb] = false;
 				break;
 			}

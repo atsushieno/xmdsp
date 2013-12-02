@@ -104,10 +104,10 @@ namespace Xmdsp
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.KeyParameterTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
 		}
 		
-		public void ProcessMidiMessage (SmfMessage m)
+		public void ProcessMidiMessage (SmfEvent m)
 		{
-			switch (m.MessageType) {
-			case SmfMessage.CC:
+			switch (m.EventType) {
+			case SmfEvent.CC:
 				switch (m.Msb) {
 				case SmfCC.Volume:
 					Volume = m.Lsb;

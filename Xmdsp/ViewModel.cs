@@ -13,7 +13,7 @@ namespace Xmdsp
 		public KeyboardListViewModel KeyboardList { get; private set; }
 		public KeyboardViewModel Keyboard { get; private set; }
 		public KeyboardParameterBlockViewModel KeyboardParameterBlock { get; private set; }
-		public event MidiMessageAction MidiMessageReceived;
+		public event MidiEventAction MidiMessageReceived;
 		
 		public ViewModel (Model model)
 		{
@@ -29,7 +29,7 @@ namespace Xmdsp
 		
 		public Model Model { get; private set; }
 
-		void OnMessageReceived (SmfMessage m)
+		void OnMessageReceived (SmfEvent m)
 		{
 			if (MidiMessageReceived != null)
 				MidiMessageReceived (m);

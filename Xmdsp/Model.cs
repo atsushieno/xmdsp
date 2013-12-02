@@ -29,7 +29,7 @@ namespace Xmdsp
 
 		public bool IsApplicationActive { get; set; }
 		
-		public event MidiMessageAction MidiMessageReceived;
+		public event MidiEventAction MidiMessageReceived;
 		//public MidiMachine MidiMachine { get; private set; }
 		
 		public PlatformLayer Platform { get; private set; }
@@ -59,7 +59,7 @@ namespace Xmdsp
 				return; // nothing to play
 			EnsurePlayerStopped ();
 			current_player = Platform.CreateMidiPlayer (current_music);
-			current_player.MessageReceived += MidiMessageReceived;
+			current_player.EventReceived += MidiMessageReceived;
 			current_player.PlayAsync ();
 		}
 		
