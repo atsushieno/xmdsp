@@ -13,6 +13,10 @@ namespace Xmdsp
 		public KeyboardListViewModel KeyboardList { get; private set; }
 		public KeyboardViewModel Keyboard { get; private set; }
 		public KeyboardParameterBlockViewModel KeyboardParameterBlock { get; private set; }
+
+		public ApplicationHeaderPaneViewModel ApplicationHeaderPane { get; private set; }
+		public PlayerStatusMonitorViewModel PlayerStatusMonitor { get; private set; }
+
 		public event MidiEventAction MidiMessageReceived;
 		
 		public ViewModel (Model model)
@@ -23,6 +27,8 @@ namespace Xmdsp
 			Keyboard = new KeyboardViewModel (this);
 			KeyboardParameterBlock = new KeyboardParameterBlockViewModel (this);
 			KeyboardList = new KeyboardListViewModel (this);
+			ApplicationHeaderPane = new ApplicationHeaderPaneViewModel (this);
+			PlayerStatusMonitor = new PlayerStatusMonitorViewModel (this);
 			
 			MaxChannels = 16;
 		}
@@ -177,6 +183,48 @@ namespace Xmdsp
 			public int [] ColumnPositions = {0, 100, 160, 220, 320, 360};
 		}
 		
+		public class ApplicationHeaderPaneViewModel
+		{
+			ViewModel vm;
+			
+			public ApplicationHeaderPaneViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+				ApplicationNameTextSize = 24;
+			}
+			
+			public int ApplicationNameTextSize { get; private set; }
+
+			public double Width {
+				get { return 300; }
+			}
+			
+			public int Height {
+				get { return ApplicationNameTextSize + 2 + 24; }
+			}
+		}
+		
+		public class PlayerStatusMonitorViewModel
+		{
+			ViewModel vm;
+			
+			public PlayerStatusMonitorViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+				BaseIconSize = 16;
+			}
+			
+			public int BaseIconSize { get; private set; }
+
+			public double Width {
+				get { return (BaseIconSize + 4) * 4; }
+			}
+			
+			public int Height {
+				get { return BaseIconSize + 4; }
+			}
+		}
+		
 		public class PalletteDefinition
 		{
 			public PalletteDefinition ()
@@ -192,9 +240,14 @@ namespace Xmdsp
 				
 				var baseColor = new Color (128, 128, 255);
 				KeyParameterBackgroundColor = Color.Transparent;
-				KeyParameterTextDarkest = baseColor.Darken (0.5);
-				KeyParameterTextMiddle = baseColor.Darken (0.75);
-				KeyParameterTextBlightest = Color.White;
+				CommonTextDarkest = baseColor.Darken (0.5);
+				CommonTextMiddle = baseColor.Darken (0.75);
+				CommonTextBlightest = Color.White;
+				
+				PlayerStateInactiveBackground = Color.Black;
+				PlayerStateActiveBackground = CommonTextMiddle;
+				PlayerStateInactiveStroke = CommonTextDarkest;
+				PlayerStateActiveStroke = baseColor;
 			}
 			
 			//public event Action PalletteChanged;
@@ -209,9 +262,15 @@ namespace Xmdsp
 			public Color NoteOnColor { get; private set; }
 			
 			public Color KeyParameterBackgroundColor { get; private set; }
-			public Color KeyParameterTextDarkest { get; private set; }
-			public Color KeyParameterTextMiddle { get; private set; }
-			public Color KeyParameterTextBlightest { get; private set; }
+
+			public Color PlayerStateActiveBackground { get; private set; }
+			public Color PlayerStateInactiveBackground { get; private set; }
+			public Color PlayerStateActiveStroke { get; private set; }
+			public Color PlayerStateInactiveStroke { get; private set; }
+			
+			public Color CommonTextDarkest { get; private set; }
+			public Color CommonTextMiddle { get; private set; }
+			public Color CommonTextBlightest { get; private set; }
 		}
 	}
 }

@@ -7,6 +7,8 @@ namespace Xmdsp
 {
 	public class Model : IDisposable
 	{
+		public const string VersionNumbers = "0.03";
+		
 		public class MidiDeviceInfo
 		{
 			public int ID { get; set; }
@@ -33,9 +35,11 @@ namespace Xmdsp
 		//public MidiMachine MidiMachine { get; private set; }
 		
 		public PlatformLayer Platform { get; private set; }
-		
+
 		SmfMusic current_music;
 		MidiPlayer current_player;
+		
+		public event Action<PlayerState> PlayerStateChanged;
 		
 		void EnsurePlayerStopped ()
 		{
@@ -59,12 +63,52 @@ namespace Xmdsp
 				return; // nothing to play
 			EnsurePlayerStopped ();
 			current_player = Platform.CreateMidiPlayer (current_music);
+			current_player.Finished += () => {
+				if (PlayerStateChanged != null)
+					PlayerStateChanged (PlayerState.Stopped);
+			};
 			current_player.EventReceived += MidiMessageReceived;
 			current_player.PlayAsync ();
+			if (PlayerStateChanged != null)
+				PlayerStateChanged (PlayerState.Playing);
 		}
 		
-		public PlayerState PlayerState {
-			get { return current_player != null ? current_player.State : PlayerState.Stopped; }
+		public void Pause ()
+		{
+			if (current_player == null)
+				return; // ignore
+			current_player.PauseAsync ();
+			if (PlayerStateChanged != null)
+				PlayerStateChanged (PlayerState.Paused);
+		}
+		
+		public void Stop ()
+		{
+			if (current_player == null)
+				return; // ignore
+			current_player.Dispose ();
+			if (PlayerStateChanged != null)
+				PlayerStateChanged (PlayerState.Stopped);
+		}
+		
+		public void StartFastForward ()
+		{
+			if (current_player == null)
+				return; // ignore
+			if (current_player.State == PlayerState.Paused)
+				current_player.PlayAsync ();
+			current_player.SetTempoRatio (2.0);
+			if (PlayerStateChanged != null)
+				PlayerStateChanged (PlayerState.FastForward);
+		}
+		
+		public void StopFastForward ()
+		{
+			if (current_player == null || current_player.State != PlayerState.Playing)
+				return; // ignore
+			current_player.SetTempoRatio (1.0);
+			if (PlayerStateChanged != null)
+				PlayerStateChanged (PlayerState.Playing);
 		}
 	}
 }

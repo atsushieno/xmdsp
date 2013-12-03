@@ -45,6 +45,8 @@
     <Compile Include="View.Xwt\XwtViewModelExtensions.cs" />
     <Compile Include="View.Xwt\Program.cs" />
     <Compile Include="View.Xwt\MainWindow.cs" />
+    <Compile Include="View.Xwt\ApplicationHeaderPane.cs" />
+    <Compile Include="View.Xwt\PlayerStatusMonitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

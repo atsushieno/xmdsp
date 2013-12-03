@@ -24,7 +24,12 @@ namespace Xmdsp
 			this.CloseRequested += delegate { ShutdownApplication (); };
 			
 			HBox mainPane = new HBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
+			VBox rightPane = new VBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
+			rightPane.PackStart (new ApplicationHeaderPane (vm), false);
+			rightPane.PackStart (new PlayerStatusMonitor (vm), false);
+			
 			mainPane.PackStart (new KeyboardList (vm), true);
+			mainPane.PackStart (rightPane, true);
 			Content = mainPane;
 		}
 		
