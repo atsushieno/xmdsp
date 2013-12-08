@@ -65,7 +65,13 @@ namespace Xmdsp
 		
 		public override void Shutdown ()
 		{
+#if USE_RTMIDI
+			if (midi_output != null)
+				midi_output.Close ();
+			midi_output = null;
+#else
 			// do particularly nothing (PortMidi shuts down at AppDomainUnload.
+#endif
 		}
 	}
 }
