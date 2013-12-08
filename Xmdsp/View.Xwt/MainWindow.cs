@@ -1,6 +1,7 @@
 using System;
 using Xwt;
 using Xwt.Drawing;
+using Commons.Music.Midi.Player;
 
 namespace Xmdsp
 {
@@ -65,7 +66,6 @@ namespace Xmdsp
 			var device = new MenuItem ("_Device");
 			device.SubMenu = new Menu ();
 			device.Clicked += delegate {
-				Console.WriteLine ("DeviceMenuClicked");
 				device.SubMenu.Items.Clear ();
 				foreach (var dev in model.Platform.AllMidiDevices) {
 					var dmi = new MenuItem (dev.Name);
@@ -74,6 +74,33 @@ namespace Xmdsp
 				}
 			};
 			menu.Items.Add (device);
+			
+			var player = new MenuItem ("_Player");
+			player.SubMenu = new Menu ();
+			player.Clicked += delegate {
+				player.SubMenu.Items.Clear ();
+				var state = model.Player == null ? PlayerState.Stopped : model.Player.State;
+				switch (state) {
+				case PlayerState.Playing:
+				case PlayerState.FastForward:
+					MenuItem pause = new MenuItem ("_Pause");
+					pause.Clicked += delegate { model.Pause (); };
+					player.SubMenu.Items.Add (pause);
+					break;
+				default:
+					MenuItem play = new MenuItem ("_Play");
+					play.Clicked += delegate { model.Play (); };
+					player.SubMenu.Items.Add (play);
+					break;
+				}
+				MenuItem stop = new MenuItem ("_Stop");
+				stop.Clicked += delegate { model.Stop (); };
+				player.SubMenu.Items.Add (stop);
+				
+				foreach (var item in player.SubMenu.Items)
+					item.Sensitive = model.Player != null;
+			};
+			menu.Items.Add (player);
 			
 			this.MainMenu = menu;
 		}

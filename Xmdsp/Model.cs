@@ -34,6 +34,10 @@ namespace Xmdsp
 		public event MidiEventAction MidiMessageReceived;
 		//public MidiMachine MidiMachine { get; private set; }
 		
+		public MidiPlayer Player {
+			get { return current_player; }
+		}
+		
 		public PlatformLayer Platform { get; private set; }
 
 		SmfMusic current_music;
