@@ -1,3 +1,4 @@
+#define USE_RTMIDI
 using System;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Xmdsp
 #else
 		PortMidiSharp.MidiOutput midi_output;
 #endif
-		int current_device;
+		int current_device = -1;
 		
 		public override int MidiOutputDeviceIndex {
 			get { return current_device; }
@@ -43,10 +44,11 @@ namespace Xmdsp
 		{
 			if (midi_output != null)
 				midi_output.Close ();
+			int dev = current_device < 0 ? AllMidiDevices.First ().ID : current_device;
 #if USE_RTMIDI
-			midi_output = RtMidiSharp.MidiDeviceManager.OpenOutput (current_device);
+			midi_output = RtMidiSharp.MidiDeviceManager.OpenOutput (dev);
 #else
-			midi_output = PortMidiSharp.MidiDeviceManager.OpenOutput (current_device);
+			midi_output = PortMidiSharp.MidiDeviceManager.OpenOutput (dev);
 #endif
 		}
 		
