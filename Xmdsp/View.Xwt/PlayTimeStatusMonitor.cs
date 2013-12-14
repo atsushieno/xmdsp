@@ -19,6 +19,9 @@ namespace Xmdsp
 			vm.Model.PlayTimerTick += delegate {
 				QueueDraw ();
 			};
+			vm.Model.PlayerStateChanged += delegate {
+				QueueDraw ();
+			};
 		}
 		
 		Font font_label;

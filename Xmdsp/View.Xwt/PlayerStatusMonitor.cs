@@ -22,10 +22,10 @@ namespace Xmdsp
 			WidthRequest = vm.PlayerStatusMonitor.Width;
 			HeightRequest = vm.PlayerStatusMonitor.Height;
 
-			coodinates [PlayerState.Playing] = new Point (0, 0);
-			coodinates [PlayerState.FastForward] = new Point (20, 0);
-			coodinates [PlayerState.Paused] = new Point (40, 0);
-			coodinates [PlayerState.Stopped] = new Point (60, 0);
+			coordinates [PlayerState.Playing] = new Point (0, 0);
+			coordinates [PlayerState.FastForward] = new Point (20, 0);
+			coordinates [PlayerState.Paused] = new Point (40, 0);
+			coordinates [PlayerState.Stopped] = new Point (60, 0);
 			actions [PlayerState.Playing] = (ctx,active) => {
 				ctx.MoveTo (4, 2);
 				ctx.LineTo (9, 6);
@@ -57,9 +57,27 @@ namespace Xmdsp
 				ctx.LineTo (10, 6);
 				ctx.Stroke ();
 				};
+			
+			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
+				if (e.Button != PointerButton.Left)
+					return;
+				for (int i = 0; i < coordinates.Count; i++) {
+					var stat = states [i];
+					if (new Rectangle (coordinates [stat], new Size (16, 16)).Contains (e.Position)) {
+						switch (stat) {
+						case PlayerState.Playing: vm.Model.Play (); break;
+						//case PlayerState.FastForward: vm.Model.StartFastForward (); break;
+						case PlayerState.Paused: vm.Model.Pause (); break;
+						case PlayerState.Stopped: vm.Model.Stop (); break;
+						}
+						break;
+					}
+				}
+			};
 		}
 
-		Dictionary<PlayerState, Point> coodinates = new Dictionary<PlayerState, Point> ();
+		PlayerState [] states = new PlayerState[] {PlayerState.Playing, PlayerState.FastForward, PlayerState.Paused, PlayerState.Stopped};
+		Dictionary<PlayerState, Point> coordinates = new Dictionary<PlayerState, Point> ();
 		Dictionary<PlayerState, Action<Context,bool>> actions = new Dictionary<PlayerState, Action<Context,bool>> ();
 		
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
@@ -78,7 +96,7 @@ namespace Xmdsp
 		void DrawItem (Context ctx, PlayerState target)
 		{
 			var drawContent = actions [target];
-			var offset = coodinates [target];
+			var offset = coordinates [target];
 			bool active = state_to_draw == target;
 
 			ctx.SetLineWidth (1);
