@@ -26,7 +26,7 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -47,6 +47,7 @@
     <Compile Include="View.Xwt\MainWindow.cs" />
     <Compile Include="View.Xwt\ApplicationHeaderPane.cs" />
     <Compile Include="View.Xwt\PlayerStatusMonitor.cs" />
+    <Compile Include="View.Xwt\PlayTimeStatusMonitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

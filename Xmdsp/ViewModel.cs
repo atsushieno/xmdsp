@@ -16,6 +16,7 @@ namespace Xmdsp
 
 		public ApplicationHeaderPaneViewModel ApplicationHeaderPane { get; private set; }
 		public PlayerStatusMonitorViewModel PlayerStatusMonitor { get; private set; }
+		public PlayTimeStatusMonitorViewModel PlayTimeStatusMonitor { get; private set; }
 
 		public event MidiEventAction MidiMessageReceived;
 		
@@ -29,6 +30,7 @@ namespace Xmdsp
 			KeyboardList = new KeyboardListViewModel (this);
 			ApplicationHeaderPane = new ApplicationHeaderPaneViewModel (this);
 			PlayerStatusMonitor = new PlayerStatusMonitorViewModel (this);
+			PlayTimeStatusMonitor = new PlayTimeStatusMonitorViewModel (this);
 			
 			MaxChannels = 16;
 		}
@@ -195,7 +197,7 @@ namespace Xmdsp
 			
 			public int ApplicationNameTextSize { get; private set; }
 
-			public double Width {
+			public int Width {
 				get { return 300; }
 			}
 			
@@ -216,12 +218,33 @@ namespace Xmdsp
 			
 			public int BaseIconSize { get; private set; }
 
-			public double Width {
+			public int Width {
 				get { return (BaseIconSize + 4) * 4; }
 			}
 			
 			public int Height {
 				get { return BaseIconSize + 4; }
+			}
+		}
+		
+		public class PlayTimeStatusMonitorViewModel
+		{
+			ViewModel vm;
+			
+			public PlayTimeStatusMonitorViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+				ItemHeight = 30;
+			}
+			
+			public int ItemHeight { get; set; }
+
+			public int Width {
+				get { return 200; }
+			}
+			
+			public int Height {
+				get { return ItemHeight * 5; }
 			}
 		}
 		
