@@ -18,6 +18,9 @@ namespace Xmdsp
 		public PlayerStatusMonitorViewModel PlayerStatusMonitor { get; private set; }
 		public PlayTimeStatusMonitorViewModel PlayTimeStatusMonitor { get; private set; }
 
+		public KeyOnMeterListViewModel KeyOnMeterList { get; private set; }
+		public KeyOnMeterViewModel KeyOnMeter { get; private set; }
+
 		public event MidiEventAction MidiMessageReceived;
 		
 		public ViewModel (Model model)
@@ -31,6 +34,8 @@ namespace Xmdsp
 			ApplicationHeaderPane = new ApplicationHeaderPaneViewModel (this);
 			PlayerStatusMonitor = new PlayerStatusMonitorViewModel (this);
 			PlayTimeStatusMonitor = new PlayTimeStatusMonitorViewModel (this);
+			KeyOnMeter = new KeyOnMeterViewModel (this);
+			KeyOnMeterList = new KeyOnMeterListViewModel (this);
 			
 			MaxChannels = 16;
 		}
@@ -246,6 +251,43 @@ namespace Xmdsp
 			public int Height {
 				get { return ItemHeight * 5; }
 			}
+		}
+
+		public class KeyOnMeterListViewModel
+		{
+			ViewModel vm;
+			
+			public KeyOnMeterListViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+				
+				Width = vm.KeyOnMeter.Width * vm.MaxChannels;
+				Height = vm.KeyOnMeter.Height;
+			}
+
+			public int Width { get; private set; }
+			public int Height { get; private set; }
+		}
+
+		public class KeyOnMeterViewModel
+		{
+			ViewModel vm;
+			
+			public KeyOnMeterViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+				
+				Width = 22;
+				Height = 65;
+				MeterWidth = 18;
+				MeterHeight = 64;
+			}
+
+			public int Width { get; private set; }
+			public int Height { get; private set; }
+
+			public int MeterWidth { get; private set; }
+			public int MeterHeight { get; private set; }
 		}
 		
 		public class PalletteDefinition

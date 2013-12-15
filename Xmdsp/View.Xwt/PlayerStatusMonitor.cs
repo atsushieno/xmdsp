@@ -58,6 +58,12 @@ namespace Xmdsp
 				ctx.Stroke ();
 				};
 			
+			this.ButtonPressed += (object sender, ButtonEventArgs e) => {
+				if (e.Button != PointerButton.Left)
+					return;
+				if (new Rectangle (coordinates [PlayerState.FastForward], new Size (16, 16)).Contains (e.Position))
+					vm.Model.StartFastForward ();
+			};
 			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
 				if (e.Button != PointerButton.Left)
 					return;
@@ -66,7 +72,7 @@ namespace Xmdsp
 					if (new Rectangle (coordinates [stat], new Size (16, 16)).Contains (e.Position)) {
 						switch (stat) {
 						case PlayerState.Playing: vm.Model.Play (); break;
-						//case PlayerState.FastForward: vm.Model.StartFastForward (); break;
+						case PlayerState.FastForward: vm.Model.StopFastForward (); break;
 						case PlayerState.Paused: vm.Model.Pause (); break;
 						case PlayerState.Stopped: vm.Model.Stop (); break;
 						}

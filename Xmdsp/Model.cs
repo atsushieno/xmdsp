@@ -108,7 +108,7 @@ namespace Xmdsp
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
 			timer_resumed = DateTime.Now;
-			timer.Start ();
+			timer.Enabled = true;
 		}
 		
 		public void Pause ()
@@ -140,6 +140,7 @@ namespace Xmdsp
 				return; // ignore
 			if (current_player.State == PlayerState.Paused)
 				current_player.PlayAsync ();
+			tempo_ratio = 2.0;
 			current_player.SetTempoRatio (2.0);
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.FastForward);
@@ -149,6 +150,9 @@ namespace Xmdsp
 		{
 			if (current_player == null || current_player.State != PlayerState.Playing)
 				return; // ignore
+			tempo_ratio = 1.0;
+			timer_offset += GetTimerOffsetWithTempoRatio ();
+			timer_resumed = DateTime.Now;
 			current_player.SetTempoRatio (1.0);
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
@@ -156,7 +160,7 @@ namespace Xmdsp
 		
 		public event Action PlayTimerTick;
 		Timer timer;
-		const long timer_fps = 50;
+		const long timer_fps = 80;
 		DateTime timer_resumed;
 		TimeSpan timer_offset;
 		double tempo_ratio = 1.0;

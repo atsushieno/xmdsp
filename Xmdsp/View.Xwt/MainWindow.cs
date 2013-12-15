@@ -28,9 +28,11 @@ namespace Xmdsp
 			var rightPane = new VBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
 			rightPane.PackStart (new ApplicationHeaderPane (vm), false);
 			var rightSecondPane = new HBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
+			rightSecondPane.PackStart (new CircularProgressMeter (vm), false);
 			rightSecondPane.PackStart (new PlayerStatusMonitor (vm), false);
 			rightSecondPane.PackStart (new PlayTimeStatusMonitor (vm), false);
 			rightPane.PackStart (rightSecondPane, false);
+			rightPane.PackStart (new KeyOnMeterList (vm), false);
 			
 			mainPane.PackStart (new KeyboardList (vm), true);
 			mainPane.PackStart (rightPane, true);
