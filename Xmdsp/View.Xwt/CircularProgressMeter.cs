@@ -15,25 +15,13 @@ namespace Xmdsp
 			WidthRequest = 60;
 			HeightRequest = 60;
 			
-			// FIXME: this control causes native crash on gtk...
-			/*
-			vm.Model.PlayTimerTick += delegate {
-				var ts = DateTime.Now - last_updated;
-				var delta = 2000.0 / num_lines / vm.Model.Player.Bpm * 120;
-				if (delta > 0 && ts.TotalMilliseconds > delta) {
-					if (last_updated != DateTime.MinValue) {
-						current_position += (int) (ts.TotalMilliseconds / delta);
-						current_position %= num_lines;
-					}
-					last_updated += ts;
-					Console.WriteLine ("{0}, {1}", current_position, last_updated.Ticks);
-					QueueDraw ();
-				}
+			vm.Model.TickProgress += delegate {
+				current_position++;
+				current_position %= num_lines;
+				QueueDraw ();
 			};
-			*/
 		}
 		
-		DateTime last_updated = DateTime.MinValue;
 		int current_position;
 		const int num_lines = 18;
 		const double delta = 360 / num_lines;

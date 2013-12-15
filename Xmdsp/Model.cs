@@ -92,10 +92,7 @@ namespace Xmdsp
 				PlayerStateChanged (PlayerState.Playing);
 			
 			timer = new Timer (timer_fps);
-			timer.Elapsed += delegate {
-				if (PlayTimerTick != null)
-					PlayTimerTick ();
-			};
+			timer.Elapsed += OnTimerElapsed;
 			timer.Enabled = true;
 		}
 		
@@ -152,17 +149,36 @@ namespace Xmdsp
 				PlayerStateChanged (PlayerState.Playing);
 		}
 		
-		public event Action PlayTimerTick;
-		Timer timer;
-		const long timer_fps = 80;
-		
-		public DateTime PlayStartedTime { get; private set; }
-		
 		public void ProcessChangeTempoRatio (double ratio)
 		{
 			if (current_player == null)
 				return; // ignore
 			Player.SetTempoRatio (ratio);
+		}
+		
+		public event Action PlayTimerTick;
+		public event Action TickProgress;
+		
+		Timer timer;
+		const long timer_fps = 80;
+		
+		public DateTime PlayStartedTime { get; private set; }
+		
+		DateTime time_last_tick_based_progress = DateTime.MinValue;
+		const double tick_progress_ratio = 2000.0 / 16; // 16 events per 192 ticks (2 sec. on BPM 120)
+		
+		void OnTimerElapsed (object o, ElapsedEventArgs e)
+		{
+			if (PlayTimerTick != null)
+				PlayTimerTick ();
+			if (TickProgress == null)
+				return;
+			var ts = DateTime.Now - time_last_tick_based_progress;
+			var delta = tick_progress_ratio / (Player.Bpm * Player.TempoChangeRatio) * 120;
+			if (ts.TotalMilliseconds > delta) {
+				time_last_tick_based_progress = DateTime.Now;
+				TickProgress ();
+			}
 		}
 	}
 }
