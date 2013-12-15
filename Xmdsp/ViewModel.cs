@@ -19,7 +19,6 @@ namespace Xmdsp
 		public PlayTimeStatusMonitorViewModel PlayTimeStatusMonitor { get; private set; }
 
 		public KeyOnMeterListViewModel KeyOnMeterList { get; private set; }
-		public KeyOnMeterViewModel KeyOnMeter { get; private set; }
 
 		public event MidiEventAction MidiMessageReceived;
 		
@@ -34,7 +33,6 @@ namespace Xmdsp
 			ApplicationHeaderPane = new ApplicationHeaderPaneViewModel (this);
 			PlayerStatusMonitor = new PlayerStatusMonitorViewModel (this);
 			PlayTimeStatusMonitor = new PlayTimeStatusMonitorViewModel (this);
-			KeyOnMeter = new KeyOnMeterViewModel (this);
 			KeyOnMeterList = new KeyOnMeterListViewModel (this);
 			
 			MaxChannels = 16;
@@ -261,30 +259,20 @@ namespace Xmdsp
 			{
 				this.vm = vm;
 				
-				Width = vm.KeyOnMeter.Width * vm.MaxChannels;
-				Height = vm.KeyOnMeter.Height;
-			}
-
-			public int Width { get; private set; }
-			public int Height { get; private set; }
-		}
-
-		public class KeyOnMeterViewModel
-		{
-			ViewModel vm;
-			
-			public KeyOnMeterViewModel (ViewModel vm)
-			{
-				this.vm = vm;
+				Width = ItemWidth * vm.MaxChannels;
+				Height = ItemHeight;
 				
-				Width = 22;
-				Height = 65;
+				ItemWidth = 22;
+				ItemHeight = 70;
 				MeterWidth = 18;
 				MeterHeight = 64;
 			}
 
 			public int Width { get; private set; }
 			public int Height { get; private set; }
+
+			public int ItemWidth { get; private set; }
+			public int ItemHeight { get; private set; }
 
 			public int MeterWidth { get; private set; }
 			public int MeterHeight { get; private set; }

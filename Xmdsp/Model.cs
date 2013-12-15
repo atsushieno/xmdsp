@@ -123,6 +123,7 @@ namespace Xmdsp
 			current_player.Dispose ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Stopped);
+			current_player = null;
 			timer.Enabled = false;
 			timer.Dispose ();
 			timer = null;

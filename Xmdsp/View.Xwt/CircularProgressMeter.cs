@@ -18,7 +18,8 @@ namespace Xmdsp
 			vm.Model.TickProgress += delegate {
 				current_position++;
 				current_position %= num_lines;
-				QueueDraw ();
+				// FIXME: this cannot be enabled until the cause of native crasher gets resolved.
+				//QueueDraw ();
 			};
 		}
 		
@@ -26,15 +27,11 @@ namespace Xmdsp
 		const int num_lines = 18;
 		const double delta = 360 / num_lines;
 		
+		const int start = 4;
+		const int end = 18;
+		
 		protected override void OnDraw (Xwt.Drawing.Context ctx, Rectangle dirtyRect)
 		{
-			if (dirtyRect.Width < 0 || dirtyRect.Height < 0)
-				throw new Exception (string.Format ("Invalid dirtyRect: {0} {1}", dirtyRect.Width, dirtyRect.Height));
-			base.OnDraw (ctx, dirtyRect);
-			
-			int start = 4;
-			int end = 18;
-			
 			ctx.SetLineWidth (1);
 			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
 			ctx.Translate (32, 32);
