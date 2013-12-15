@@ -84,8 +84,7 @@ namespace Xmdsp
 					PlayerStateChanged (PlayerState.Stopped);
 			};
 			current_player.EventReceived += MidiMessageReceived;
-			timer_resumed = PlayStartedTime = DateTime.Now;
-			timer_offset = TimeSpan.Zero;
+			PlayStartedTime = DateTime.Now;
 			current_player.PlayAsync ();
 			if (PlayStarted != null)
 				PlayStarted ();
@@ -107,7 +106,6 @@ namespace Xmdsp
 			current_player.PlayAsync ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
-			timer_resumed = DateTime.Now;
 			timer.Enabled = true;
 		}
 		
@@ -116,7 +114,6 @@ namespace Xmdsp
 			if (current_player == null)
 				return; // ignore
 			current_player.PauseAsync ();
-			timer_offset += DateTime.Now - timer_resumed;
 			timer.Enabled = false;
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Paused);
@@ -140,7 +137,6 @@ namespace Xmdsp
 				return; // ignore
 			if (current_player.State == PlayerState.Paused)
 				current_player.PlayAsync ();
-			tempo_ratio = 2.0;
 			current_player.SetTempoRatio (2.0);
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.FastForward);
@@ -150,9 +146,7 @@ namespace Xmdsp
 		{
 			if (current_player == null || current_player.State != PlayerState.Playing)
 				return; // ignore
-			tempo_ratio = 1.0;
-			timer_offset += GetTimerOffsetWithTempoRatio ();
-			timer_resumed = DateTime.Now;
+			Player.SetTempoRatio (1.0);
 			current_player.SetTempoRatio (1.0);
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
@@ -161,25 +155,14 @@ namespace Xmdsp
 		public event Action PlayTimerTick;
 		Timer timer;
 		const long timer_fps = 80;
-		DateTime timer_resumed;
-		TimeSpan timer_offset;
-		double tempo_ratio = 1.0;
 		
 		public DateTime PlayStartedTime { get; private set; }
-		public TimeSpan PositionInTime {
-			get { return GetTimerOffsetWithTempoRatio () + timer_offset; }
-		}
-		
-		TimeSpan GetTimerOffsetWithTempoRatio ()
-		{
-			return TimeSpan.FromMilliseconds ((DateTime.Now - timer_resumed).TotalMilliseconds * tempo_ratio);
-		}
 		
 		public void ProcessChangeTempoRatio (double ratio)
 		{
-			timer_offset += GetTimerOffsetWithTempoRatio ();
-			timer_resumed = DateTime.Now;
-			tempo_ratio = ratio;
+			if (current_player == null)
+				return; // ignore
+			Player.SetTempoRatio (ratio);
 		}
 	}
 }

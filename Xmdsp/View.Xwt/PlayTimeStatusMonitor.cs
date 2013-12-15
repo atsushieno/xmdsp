@@ -73,7 +73,7 @@ namespace Xmdsp
 					total_time_string = TimeSpan.FromMilliseconds (((MidiPlayer) cached_player.Target).GetTotalPlayTimeMilliseconds ()).ToString ("mm\\:ss");
 				}
 				totalTime = "   " + total_time_string;
-				playTime = "   " + vm.Model.PositionInTime.ToString ("mm\\:ss");
+				playTime = "   " + vm.Model.Player.PositionInTime.ToString ("mm\\:ss");
 				ticks = vm.Model.Player.PlayDeltaTime.ToString ("D08");
 				tempo = "     " + vm.Model.Player.Bpm.ToString ("D03");
 				var data = vm.Model.Player.TimeSignature;
