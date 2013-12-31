@@ -1,6 +1,7 @@
 using System;
 using Gtk;
 using Commons.Music.Midi;
+using Gdk;
 using System.Threading;
 using Commons.Music.Midi.Player;
 using Cairo;
@@ -16,31 +17,30 @@ namespace Xmdsp
 		{
 			vm = viewModel;
 			keyboards = new KeyboardBlock [vm.MaxChannels];
-			//var font = this.Font.WithSize (vm.KeyboardParameterBlock.KeyBlockHeaderTextSize);
 			
 			for (int i = 0; i < vm.MaxChannels; i++)
-				keyboards [i] = new KeyboardBlock (vm, null/*font*/, i);
+				keyboards [i] = new KeyboardBlock (vm, /*font*/null, i);
+			
+			//GdkWindow.Background = vm.Pallette.KeyboardBackgroundColor.ToGdk ();
 			WidthRequest = vm.KeyboardList.Width;
 			HeightRequest = vm.KeyboardList.Height;
 				
-			vm.MidiMessageReceived += (SmfMessage m) => {
-				switch (m.MessageType) {
-				case SmfMessage.NoteOn:
+			vm.MidiMessageReceived += (SmfEvent m) => {
+				switch (m.EventType) {
+				case SmfEvent.NoteOn:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
-					dirty = true;
 					break;
-				case SmfMessage.NoteOff:
+				case SmfEvent.NoteOff:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
-					dirty = true;
 					break;
-				case SmfMessage.CC:
+				case SmfEvent.CC:
 					keyboards [m.Channel].KeyParameters.ProcessMidiMessage (m);
-					dirty = true;
 					break;
 				}
-			
-				if (dirty)
+				if (!dirty) {
+					dirty = true;
 					QueueDraw ();
+				}
 			};
 		}
 
@@ -48,43 +48,14 @@ namespace Xmdsp
 		ImageSurface surface1, surface2;
 		Context context1, context2;
 		
-		protected override bool OnExposeEvent (Gdk.EventExpose evnt)
-		{
-			var ctx = Gdk.CairoHelper.Create (GdkWindow);
-			GdkWindow.Background = vm.Pallette.KeyboardBackgroundColor.ToGdk ();
-			DrawAll (ctx);
-			/*
-			if (surface1 != null) {
-				ctx.SetSourceSurface (surface_flipped ? surface2 : surface1, 0, 0);
-				surface_flipped = !surface_flipped;
-			} else {
-				surface1 = new ImageSurface (Format.Argb32, this.WidthRequest, this.HeightRequest);
-				surface2 = new ImageSurface (Format.Argb32, this.WidthRequest, this.HeightRequest);
-				context1 = new Context (surface1);
-				context2 = new Context (surface2);
-				DrawAll (ctx);
-				new Thread (RunLoop).Start ();
-			}
-			*/
-			ctx.Dispose ();
-			return true; // ?
-		}
+		bool dirty = true;
+		DateTime last = DateTime.MinValue;
+		static readonly TimeSpan duration = TimeSpan.FromMilliseconds (50);
 		
-		/*
-		void RunLoop ()
+		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			while (true) {
-				Thread.Sleep (200);
-				if (!vm.Model.IsApplicationActive)
-					break;
-				if (dirty)
-					DrawAll (surface_flipped ? context2 : context1);
-			}
-		}
-		*/
-		
-		void DrawAll (Cairo.Context ctx)
-		{
+			var ctx = CairoHelper.Create (GdkWindow);
+			dirty = false;
 			int w, h;
 			GdkWindow.GetSize (out w, out h);
 			GdkWindow.BeginPaintRect (new Gdk.Rectangle (0, 0, w, h));
@@ -93,11 +64,9 @@ namespace Xmdsp
 				kb.KeyParameters.DoDraw (ctx);
 			}
 			GdkWindow.EndPaint ();
-			//QueueDraw ();
-			dirty = false;
+			ctx.Dispose ();
+			return true;
 		}
-		
-		bool dirty = true;
 	}
 }
 

@@ -24,12 +24,12 @@ namespace Xmdsp
 		
 		bool [] key_on_status;
 		
-		bool DrawMessage (Cairo.Context ctx, Rectangle dirtyRect, SmfMessage m)
+		bool DrawMessage (Cairo.Context ctx, Rectangle dirtyRect, SmfEvent m)
 		{
 			var vmk = vm.Keyboard;
 			if (vmk.IsBlackKey (m.Msb)) {
 				var rect = vmk.GetBlackKeyRect (m.Msb);
-				CairoHelper.SetSourceColor (ctx, (m.MessageType == SmfMessage.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.BlackKeyFillColor).ToGdk ());
+				CairoHelper.SetSourceColor (ctx, (m.EventType == SmfEvent.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.BlackKeyFillColor).ToGdk ());
 				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
 				ctx.Fill ();
 				CairoHelper.SetSourceColor (ctx, vm.Pallette.BlackKeyStrokeColor.ToGdk ());
@@ -37,7 +37,7 @@ namespace Xmdsp
 				ctx.Stroke ();
 			} else {
 				int x = vmk.GetWhiteKeyX (m.Msb);
-				CairoHelper.SetSourceColor (ctx, (m.MessageType == SmfMessage.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.WhiteKeyFillColor).ToGdk ());
+				CairoHelper.SetSourceColor (ctx, (m.EventType == SmfEvent.NoteOn ? vm.Pallette.NoteOnColor : vm.Pallette.WhiteKeyFillColor).ToGdk ());
 				ctx.NewPath ();
 				var x2 = x + vmk.WhiteKeyWidth;
 				var x3 = x + vmk.BlackKeyShiftWidth;
@@ -50,7 +50,7 @@ namespace Xmdsp
 				ctx.LineTo (x2, vmk.WhiteKeyHeight);
 				ctx.LineTo (x2, yd);
 				ctx.LineTo (x3, yd);
-				//path.LineTo (x3, 0);
+				//ctx.LineTo (x3, 0);
 				ctx.ClosePath ();
 				ctx.Fill ();
 				/*
@@ -66,14 +66,9 @@ namespace Xmdsp
 			}
 			return true;
 		}
-		
-		bool dirty = true;
 
 		internal void DoDraw (Cairo.Context ctx)
 		{
-//			if (!dirty)
-//				return;
-			
 			var vmk = vm.Keyboard;
 			
 			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height) + vm.KeyboardParameterBlock.Height;
@@ -118,22 +113,19 @@ namespace Xmdsp
 				n++;
 			}
 			ctx.Translate (0, -yOffset);
-			dirty = false;
 		}
 		
 		static readonly byte [] white_key_index_to_note = {0, 2, 4, 5, 7 ,9, 11};
 		static readonly byte [] black_key_index_to_note = {1, 3, 6, 8, 10};
 		
-		public void ProcessMidiMessage (SmfMessage m)
+		public void ProcessMidiMessage (SmfEvent m)
 		{
-			switch (m.MessageType) {
-			case SmfMessage.NoteOn:
+			switch (m.EventType) {
+			case SmfEvent.NoteOn:
 				key_on_status [m.Msb] = m.Lsb > 0;
-				dirty = true;
 				break;
-			case SmfMessage.NoteOff:
+			case SmfEvent.NoteOff:
 				key_on_status [m.Msb] = false;
-				dirty = true;
 				break;
 			}
 		}

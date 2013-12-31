@@ -1,3 +1,4 @@
+#define USE_RTMIDI
 using System;
 using System.IO;
 using System.Linq;
@@ -15,11 +16,19 @@ namespace Xmdsp
 		}
 		
 		public override IEnumerable<Model.MidiDeviceInfo> AllMidiDevices {
+#if USE_RTMIDI
+			get { return RtMidiSharp.MidiDeviceManager.AllDevices.Where (d => d.IsOutput).Select (d => new Model.MidiDeviceInfo () { ID = d.ID, Name = d.Name }); }
+#else
 			get { return PortMidiSharp.MidiDeviceManager.AllDevices.Where (d => d.IsOutput).Select (d => new Model.MidiDeviceInfo () { ID = d.ID, Name = d.Name }); }
+#endif
 		}
 		
+#if USE_RTMIDI
+		RtMidiSharp.RtMidiOutputDevice midi_output;
+#else
 		PortMidiSharp.MidiOutput midi_output;
-		int current_device;
+#endif
+		int current_device = -1;
 		
 		public override int MidiOutputDeviceIndex {
 			get { return current_device; }
@@ -35,19 +44,34 @@ namespace Xmdsp
 		{
 			if (midi_output != null)
 				midi_output.Close ();
-			midi_output = PortMidiSharp.MidiDeviceManager.OpenOutput (current_device);
+			int dev = current_device < 0 ? AllMidiDevices.First ().ID : current_device;
+#if USE_RTMIDI
+			midi_output = RtMidiSharp.MidiDeviceManager.OpenOutput (dev);
+#else
+			midi_output = PortMidiSharp.MidiDeviceManager.OpenOutput (dev);
+#endif
 		}
 		
 		public override MidiPlayer CreateMidiPlayer (SmfMusic music)
 		{
 			if (midi_output == null)
 				OpenOutputDevice ();
+#if USE_RTMIDI
+			return new RtMidiPlayer (midi_output, music);
+#else
 			return new PortMidiPlayer (midi_output, music);
+#endif
 		}
 		
 		public override void Shutdown ()
 		{
+#if USE_RTMIDI
+			if (midi_output != null)
+				midi_output.Close ();
+			midi_output = null;
+#else
 			// do particularly nothing (PortMidi shuts down at AppDomainUnload.
+#endif
 		}
 	}
 }

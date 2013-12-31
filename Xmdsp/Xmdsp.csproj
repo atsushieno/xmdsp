@@ -26,15 +26,15 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="Mono.Cairo" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +51,11 @@
     <Compile Include="View.Xwt\XwtViewModelExtensions.cs" />
     <Compile Include="View.Xwt\Program.cs" />
     <Compile Include="View.Xwt\MainWindow.cs" />
+    <Compile Include="View.Xwt\ApplicationHeaderPane.cs" />
+    <Compile Include="View.Xwt\PlayerStatusMonitor.cs" />
+    <Compile Include="View.Xwt\PlayTimeStatusMonitor.cs" />
+    <Compile Include="View.Xwt\CircularProgressMeter.cs" />
+    <Compile Include="View.Xwt\KeyOnMeterList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -62,6 +67,7 @@
   <ItemGroup>
     <Folder Include="PlatformDependent\" />
     <Folder Include="View.Xwt\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libportmidi.so">
@@ -72,5 +78,13 @@
       <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="librtmidi_c.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\xmdsp_icon.png">
+      <LogicalName>xmdsp_icon.png</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

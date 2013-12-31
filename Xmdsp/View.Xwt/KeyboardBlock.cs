@@ -1,7 +1,7 @@
 using System;
 using Gtk;
-using Gdk;
-using Pango;
+
+using FontFace = Pango.FontFace;
 
 namespace Xmdsp
 {
@@ -9,7 +9,7 @@ namespace Xmdsp
 	{
 		ViewModel vm;
 		
-		public KeyboardBlock (ViewModel viewModel, FontFace font, int channel)
+		public KeyboardBlock (ViewModel viewModel, Cairo.FontFace font, int channel)
 		{
 			vm = viewModel;
 			Keyboard = new Keyboard (vm, channel);
