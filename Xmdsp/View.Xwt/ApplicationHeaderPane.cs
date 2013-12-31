@@ -1,10 +1,10 @@
 ﻿using System;
-using Xwt;
-using Xwt.Drawing;
+using Gtk;
+using Gdk;
 
 namespace Xmdsp
 {
-	public class ApplicationHeaderPane : Canvas
+	public class ApplicationHeaderPane : DrawingArea
 	{
 		ViewModel vm;
 		
@@ -16,19 +16,17 @@ namespace Xmdsp
 			HeightRequest = vm.ApplicationHeaderPane.Height;
 		}
 		
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			base.OnDraw (ctx, dirtyRect);
+			var ctx = Gdk.CairoHelper.Create (GdkWindow);
 
-			ctx.SetLineWidth (1);
+			ctx.LineWidth = 1;
+
+			string appName = "XMDSP";
+			CairoHelper.SetSourceColor (ctx, vm.Pallette.CommonTextMiddle.ToGdk ());
+			DrawText (ctx, 18, appName);
 			
-			var appName = new TextLayout ();
-			appName.Text = "XMDSP";
-			appName.Font = Font.WithSize (18);
-			ctx.SetColor (vm.Pallette.CommonTextMiddle.ToXwt ());
-			ctx.DrawTextLayout (appName, 0, 0);
-			
-			int leftEnd = (int) appName.GetSize ().Width;
+			int leftEnd = (int) ctx.TextExtents (appName).Width;
 			
 			ctx.MoveTo (0, 26);
 			ctx.LineTo (leftEnd, 26);
@@ -36,23 +34,32 @@ namespace Xmdsp
 
 			int rightStart = leftEnd + 5;
 			
-			var appDesc = new TextLayout ();
-			appDesc.Text = "standard MIDI file visualizer and player";
-			appDesc.Font = Font.WithSize (8);
-			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
-			ctx.DrawTextLayout (appDesc, rightStart, 0);
+			string appDesc = "standard MIDI file visualizer and player";
+			CairoHelper.SetSourceColor (ctx, vm.Pallette.CommonTextDarkest.ToGdk ());
+			ctx.MoveTo (rightStart, 0);
+			DrawText (ctx, 8, appDesc);
 
-			var appDetails = new TextLayout ();
-			appDetails.Text = "version " + Model.VersionNumbers + " / with Xwt. (C)2013- atsushieno";
-			appDetails.Font = Font.WithSize (8);
-			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
-			ctx.DrawTextLayout (appDetails, rightStart, 11);
+			string appDetails = "version " + Model.VersionNumbers + " / with Xwt. (C)2013- atsushieno";
+			CairoHelper.SetSourceColor (ctx, vm.Pallette.CommonTextDarkest.ToGdk ());
+			ctx.MoveTo (rightStart, 11);
+			DrawText (ctx, 8, appDetails);
 			
-			int rightEnd = rightStart + (int) appDetails.GetSize ().Width;
+			int rightEnd = rightStart + (int) ctx.TextExtents (appDetails).Width;
 			
 			ctx.MoveTo (rightStart, 26);
 			ctx.LineTo (rightEnd, 26);
 			ctx.Stroke ();
+
+			ctx.Dispose ();
+			return true;
+		}
+		
+		void DrawText (Cairo.Context ctx, int size, string text)
+		{
+			ctx.SetFontSize (size);
+			ctx.Translate (0, size);
+			ctx.TextPath (text);
+			ctx.Translate (0, -size);
 		}
 	}
 }

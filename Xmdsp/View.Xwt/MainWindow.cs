@@ -1,6 +1,6 @@
 using System;
-using Xwt;
-using Xwt.Drawing;
+using System.Linq;
+using Gtk;
 using Commons.Music.Midi.Player;
 
 namespace Xmdsp
@@ -11,103 +11,135 @@ namespace Xmdsp
 		readonly ViewModel vm;
 		
 		public MainWindow ()
+			: base ("XMDSP")
 		{
 			model = new Model ();
 			vm = new ViewModel (model);
 			
 			Title = "xmdsp";
-			Width = 800;
-			Height = 600;
-			Padding = 0;
-			Icon = Image.FromResource (GetType ().Assembly, "xmdsp_icon.png");
-			SetupMenu ();
+			WidthRequest = 800;
+			HeightRequest = 660;
+			//Icon = Image.LoadFromResource (/*GetType ().Assembly,*/ "xmdsp_icon.png");
 			
-			this.CloseRequested += delegate { ShutdownApplication (); };
+			this.Destroyed += delegate { ShutdownApplication (); };
 			
-			var mainPane = new HBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			var rightPane = new VBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightPane.PackStart (new ApplicationHeaderPane (vm), false);
-			var rightSecondPane = new HBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightSecondPane.PackStart (new CircularProgressMeter (vm), false);
-			rightSecondPane.PackStart (new PlayerStatusMonitor (vm), false);
-			rightSecondPane.PackStart (new PlayTimeStatusMonitor (vm), false);
-			rightPane.PackStart (rightSecondPane, false);
-			rightPane.PackStart (new KeyOnMeterList (vm), false);
+			var menuPane = new VBox ();
+			Add (menuPane);
 			
-			mainPane.PackStart (new KeyboardList (vm), true);
-			mainPane.PackStart (rightPane, true);
-			Content = mainPane;
+			menuPane.PackStart (SetupMenu (), false, false, 0);
+			
+			var mainPane = new HBox ();
+			menuPane.PackStart (mainPane, true, true, 0);
+			
+			var rightPane = new VBox ();
+			//rightPane.ModifyBase (StateType.Normal, vm.Pallette.ApplicationBackgroundColor.ToGdk ());
+			rightPane.Add (new ApplicationHeaderPane (vm));
+			var rightSecondPane = new HBox ();
+			//rightSecondPane.ModifyBase (StateType.Normal, vm.Pallette.ApplicationBackgroundColor.ToGdk ());
+			rightSecondPane.Add (new CircularProgressMeter (vm));
+			rightSecondPane.Add (new PlayerStatusMonitor (vm));
+			rightSecondPane.Add (new PlayTimeStatusMonitor (vm, null, null));
+			rightPane.Add (rightSecondPane);
+			rightPane.Add (new KeyOnMeterList (vm));
+			
+			rightPane.ModifyBase (StateType.Normal, vm.Pallette.ApplicationBackgroundColor.ToGdk ());
+			rightPane.ModifyBg (StateType.Normal, vm.Pallette.ApplicationBackgroundColor.ToGdk ());
+			
+			mainPane.PackStart (new KeyboardList (vm), true, true, 0);
+			mainPane.PackStart (rightPane);
 		}
 		
 		void ShutdownApplication ()
 		{
 			model.Dispose ();
-			Application.Exit ();			
+			Application.Quit ();			
 		}
 		
-		void SetupMenu ()
+		Widget SetupMenu ()
 		{
-			Menu menu = new Menu ();
+			var mb = new MenuBar ();
 			
 			var file = new MenuItem ("_File");
-			file.SubMenu = new Menu ();
+			var fileMenu = new Menu ();
+			file.Submenu = fileMenu;
 			
-			MenuItem open = new MenuItem ("_Open");
-			open.Clicked += delegate {
-				var dlg = new OpenFileDialog ();
-				dlg.Filters.Add (new FileDialogFilter ("Standard MIDI Files", "*.mid", "*.MID", "*.Mid"));
-				dlg.Filters.Add (new FileDialogFilter ("All Files", "*"));
-				if (dlg.Run ()) {
-					model.LoadSmf (dlg.FileName);
+			var open = new MenuItem ("_Open");
+			open.Activated += delegate {
+				var dlg = new FileChooserDialog ("Select a Standard MIDI file to play", this, FileChooserAction.Open,
+					"Cancel", ResponseType.Cancel,
+					"OK", ResponseType.Ok);
+				var mid = new FileFilter () { Name = "Standard MIDI Files" };
+				foreach (string pattern in new String [] {"*.mid", "*.MID", "*.Mid"})
+					mid.AddPattern (pattern);
+				dlg.AddFilter (mid);
+				var all = new FileFilter () { Name = "All Files" };
+				all.AddPattern ("*");
+				dlg.AddFilter (all);
+				if (dlg.Run () == (int) ResponseType.Ok) {
+					model.LoadSmf (dlg.Filename);
 					model.Play ();
 				}
+				dlg.Destroy ();
 			};
-			file.SubMenu.Items.Add (open);
-			MenuItem close = new MenuItem ("_Close");
-			close.Clicked += delegate { ShutdownApplication (); };
-			file.SubMenu.Items.Add (close);
-			menu.Items.Add (file);
+			fileMenu.Add (open);
+			MenuItem close = new MenuItem ("_Quit");
+			close.Activated += delegate { ShutdownApplication (); };
+			fileMenu.Add (close);
 			
+			mb.Append (file);
+
 			var device = new MenuItem ("_Device");
-			device.SubMenu = new Menu ();
-			device.Clicked += delegate {
-				device.SubMenu.Items.Clear ();
+			var deviceMenu = new Menu ();
+			device.Submenu = deviceMenu;
+			device.Activated += delegate {
+				Console.WriteLine ("DeviceMenuClicked");
+				foreach (var c in deviceMenu.Children.ToArray ())
+					if (c is MenuItem)
+						deviceMenu.Remove (c);
+				int nDev = 0;
 				foreach (var dev in model.Platform.AllMidiDevices) {
-					var dmi = new MenuItem (dev.Name);
-					dmi.Clicked += delegate { model.Platform.MidiOutputDeviceIndex = dev.ID; };
-					device.SubMenu.Items.Add (dmi);
+					var dmi = new MenuItem (string.Format ("_{0}: {1}", nDev++, dev.Name));
+					dmi.Activated += delegate { model.Platform.MidiOutputDeviceIndex = dev.ID; };
+					deviceMenu.Add (dmi);
+					dmi.ShowAll ();
 				}
 			};
-			menu.Items.Add (device);
+			
+			mb.Append (device);
 			
 			var player = new MenuItem ("_Player");
-			player.SubMenu = new Menu ();
-			player.Clicked += delegate {
-				player.SubMenu.Items.Clear ();
+			var playerMenu = new Menu ();
+			player.Submenu = playerMenu;
+			player.Activated += delegate {
+				foreach (var c in playerMenu.Children.ToArray ())
+					if (c is MenuItem)
+						playerMenu.Remove (c);
 				var state = model.Player == null ? PlayerState.Stopped : model.Player.State;
 				switch (state) {
 				case PlayerState.Playing:
 				case PlayerState.FastForward:
 					MenuItem pause = new MenuItem ("_Pause");
-					pause.Clicked += delegate { model.Pause (); };
-					player.SubMenu.Items.Add (pause);
+					pause.Activated += delegate { model.Pause (); };
+					playerMenu.Add (pause);
 					break;
 				default:
 					MenuItem play = new MenuItem ("_Play");
-					play.Clicked += delegate { model.Play (); };
-					player.SubMenu.Items.Add (play);
+					play.Activated += delegate { model.Play (); };
+					playerMenu.Add (play);
 					break;
 				}
 				MenuItem stop = new MenuItem ("_Stop");
-				stop.Clicked += delegate { model.Stop (); };
-				player.SubMenu.Items.Add (stop);
+				stop.Activated += delegate { model.Stop (); };
+				playerMenu.Add (stop);
 				
-				foreach (var item in player.SubMenu.Items)
-					item.Sensitive = model.Player != null;
+				foreach (var c in playerMenu.Children.ToArray ())
+					if (c is MenuItem)
+						((MenuItem) c).Sensitive = model.Player != null;
 			};
-			menu.Items.Add (player);
 			
-			this.MainMenu = menu;
+			mb.Append (player);
+			
+			return mb;
 		}
 	}
 }

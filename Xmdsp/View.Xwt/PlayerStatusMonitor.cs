@@ -1,12 +1,12 @@
 ﻿using System;
-using Xwt;
-using Xwt.Drawing;
+using Gtk;
+using Gdk;
 using Commons.Music.Midi.Player;
 using System.Collections.Generic;
 
 namespace Xmdsp
 {
-	public class PlayerStatusMonitor : Canvas
+	public class PlayerStatusMonitor : DrawingArea
 	{
 		ViewModel vm;
 		PlayerState state_to_draw = PlayerState.Stopped;
@@ -34,7 +34,7 @@ namespace Xmdsp
 				ctx.Fill ();
 				};
 			actions [PlayerState.FastForward] = (ctx,active) => {
-				ctx.SetLineWidth (2);
+				ctx.LineWidth = 2;
 				ctx.MoveTo (3, 2);
 				ctx.LineTo (6, 6);
 				ctx.LineTo (3, 10);
@@ -44,7 +44,7 @@ namespace Xmdsp
 				ctx.Stroke ();
 				};
 			actions [PlayerState.Paused] = (ctx,active) => {
-				ctx.SetLineWidth (2);
+				ctx.LineWidth = 2;
 				ctx.MoveTo (4, 2);
 				ctx.LineTo (4, 10);
 				ctx.MoveTo (8, 2);
@@ -52,21 +52,20 @@ namespace Xmdsp
 				ctx.Stroke ();
 				};
 			actions [PlayerState.Stopped] = (ctx,active) => {
-				ctx.SetLineWidth (2);
+				ctx.LineWidth = 2;
 				ctx.MoveTo (2, 6);
 				ctx.LineTo (10, 6);
 				ctx.Stroke ();
 				};
 			
+			/*
 			this.ButtonPressed += (object sender, ButtonEventArgs e) => {
 				if (e.Button != PointerButton.Left)
 					return;
 				if (new Rectangle (coordinates [PlayerState.FastForward], new Size (16, 16)).Contains (e.Position))
 					vm.Model.StartFastForward ();
 			};
-			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
-				if (e.Button != PointerButton.Left)
-					return;
+			this.MnemonicActivated += (sender, e) => {
 				for (int i = 0; i < coordinates.Count; i++) {
 					var stat = states [i];
 					if (new Rectangle (coordinates [stat], new Size (16, 16)).Contains (e.Position)) {
@@ -80,50 +79,55 @@ namespace Xmdsp
 					}
 				}
 			};
+			*/
 		}
 
 		PlayerState [] states = new PlayerState[] {PlayerState.Playing, PlayerState.FastForward, PlayerState.Paused, PlayerState.Stopped};
 		Dictionary<PlayerState, Point> coordinates = new Dictionary<PlayerState, Point> ();
-		Dictionary<PlayerState, Action<Context,bool>> actions = new Dictionary<PlayerState, Action<Context,bool>> ();
-		
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		Dictionary<PlayerState, Action<Cairo.Context,bool>> actions = new Dictionary<PlayerState, Action<Cairo.Context,bool>> ();
+
+		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			base.OnDraw (ctx, dirtyRect);
+			var ctx = Gdk.CairoHelper.Create (GdkWindow);
 			
-			ctx.SetColor (vm.Pallette.ApplicationBackgroundColor.ToXwt ());
-			ctx.Rectangle (dirtyRect);
-			ctx.Fill ();
+			CairoHelper.SetSourceColor (ctx, vm.Pallette.ApplicationBackgroundColor.ToGdk ());
+			foreach (var rect in evnt.Region.GetRectangles ()) {
+				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
+				ctx.Fill ();
+			}
 			DrawItem (ctx, PlayerState.Playing);
 			DrawItem (ctx, PlayerState.FastForward);
 			DrawItem (ctx, PlayerState.Paused);
 			DrawItem (ctx, PlayerState.Stopped);
+			ctx.Dispose ();
+			return true;
 		}
 		
-		void DrawItem (Context ctx, PlayerState target)
+		void DrawItem (Cairo.Context ctx, PlayerState target)
 		{
 			var drawContent = actions [target];
 			var offset = coordinates [target];
 			bool active = state_to_draw == target;
 
-			ctx.SetLineWidth (1);
+			ctx.LineWidth = 1;
 
-			ctx.Translate (offset);
+			ctx.Translate (offset.X, offset.Y);
 			if (active) {
-				var outerRect = new Rectangle (0, 0, 16, 16);
+				var outerRect = new Cairo.Rectangle (0, 0, 16, 16);
 				ctx.Rectangle (outerRect);
 			}
 			
 			ctx.Translate (2, 2);
 
-			var rect = new Rectangle (0, 0, 12, 12);
-			ctx.SetColor (active ? vm.Pallette.PlayerStateActiveBackground.ToXwt () : vm.Pallette.PlayerStateInactiveBackground.ToXwt ());
+			var rect = new Cairo.Rectangle (0, 0, 12, 12);
+			CairoHelper.SetSourceColor (ctx, active ? vm.Pallette.PlayerStateActiveBackground.ToGdk () : vm.Pallette.PlayerStateInactiveBackground.ToGdk ());
 			ctx.Rectangle (rect);
 			ctx.Fill ();
-			ctx.SetColor (active ? vm.Pallette.PlayerStateActiveStroke.ToXwt () : vm.Pallette.PlayerStateInactiveStroke.ToXwt ());
+			CairoHelper.SetSourceColor (ctx, active ? vm.Pallette.PlayerStateActiveStroke.ToGdk () : vm.Pallette.PlayerStateInactiveStroke.ToGdk ());
 			ctx.Rectangle (rect);
 			ctx.Stroke ();
 			
-			ctx.SetColor (active ? vm.Pallette.PlayerStateActiveStroke.ToXwt () : vm.Pallette.PlayerStateInactiveStroke.ToXwt ());
+			CairoHelper.SetSourceColor (ctx, active ? vm.Pallette.PlayerStateActiveStroke.ToGdk () : vm.Pallette.PlayerStateInactiveStroke.ToGdk ());
 			drawContent (ctx, active);
 			
 			ctx.Translate (-2, -2);

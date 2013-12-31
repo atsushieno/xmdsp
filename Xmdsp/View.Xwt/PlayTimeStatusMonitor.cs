@@ -1,15 +1,17 @@
 ﻿using System;
-using Xwt;
-using Xwt.Drawing;
+using Gtk;
+using Gdk;
 using Commons.Music.Midi.Player;
+
+using FontFace = Pango.FontFace;
 
 namespace Xmdsp
 {
-	public class PlayTimeStatusMonitor : Canvas
+	public class PlayTimeStatusMonitor : DrawingArea
 	{
 		ViewModel vm;
 		
-		public PlayTimeStatusMonitor (ViewModel vm)
+		public PlayTimeStatusMonitor (ViewModel vm, FontFace font, FontFace monospaceFont)
 		{
 			this.vm = vm;
 			
@@ -22,48 +24,48 @@ namespace Xmdsp
 			vm.Model.PlayerStateChanged += delegate {
 				QueueDraw ();
 			};
+			this.font = font;
+			this.monospace_font = monospaceFont;
 		}
 		
-		Font font_label;
-		Font font_value;
+		FontFace font, monospace_font;
 		WeakReference cached_player;
 		string total_time_string;
 		
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		protected override bool OnExposeEvent (EventExpose evnt)
 		{
-			base.OnDraw (ctx, dirtyRect);
+			var ctx = CairoHelper.Create (GdkWindow);
 
-			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
-			ctx.SetLineWidth (1);
+			CairoHelper.SetSourceColor (ctx, vm.Pallette.CommonTextDarkest.ToGdk ());
+			ctx.LineWidth = 1;
 			for (int i = 0; i < 5; i++) {
 				ctx.MoveTo (0, 30 * i + 24 + 1);
 				ctx.LineTo (180, 30 * i + 24 + 1);
 				ctx.Stroke ();
 			}
 			
-			ctx.SetColor (vm.Pallette.CommonTextMiddle.ToXwt ());
+			CairoHelper.SetSourceColor (ctx, vm.Pallette.CommonTextMiddle.ToGdk ());
 			for (int i = 0; i < 5; i++) {
 				ctx.Rectangle (0, 30 * i, 5, 24);
 				ctx.Fill ();
 			}
 			
 			ctx.Translate (10, 0);
-			
-			font_label = font_label ?? this.Font.WithSize (10);
-			var font = font_label;
-			
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Passed" }, new Point (0, 0));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Time" }, new Point (10, 12));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Total" }, new Point (0, 30));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Time" }, new Point (10, 42));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Tick" }, new Point (0, 60));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Count" }, new Point (10, 72));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Tempo" }, new Point (0, 90));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Meter" }, new Point (0, 120));
+
+			//ctx.SetContextFontFace (font);
+			ctx.SetFontSize (10);
+			ctx.Translate (0, 10);
+			DrawTextLayout (ctx, "Passed", new Point (0, 0));
+			DrawTextLayout (ctx, "Time", new Point (10, 12));
+			DrawTextLayout (ctx, "Total", new Point (0, 30));
+			DrawTextLayout (ctx, "Time", new Point (10, 42));
+			DrawTextLayout (ctx, "Tick", new Point (0, 60));
+			DrawTextLayout (ctx, "Count", new Point (10, 72));
+			DrawTextLayout (ctx, "Tempo", new Point (0, 90));
+			DrawTextLayout (ctx, "Meter", new Point (0, 120));
+			ctx.Translate (0, -10);
 			
 			ctx.Translate (60, 0);
-			font_value = font_value ?? Font.SystemMonospaceFont.WithSize (16);
-			font = font_value;
 			
 			string playTime, totalTime, ticks, tempo, meter;
 			
@@ -86,16 +88,28 @@ namespace Xmdsp
 				meter = "     -/-";
 			}
 				
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = playTime }, new Point (0, 0));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = totalTime }, new Point (0, 30));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = ticks }, new Point (0, 60));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = tempo }, new Point (0, 90));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = meter }, new Point (0, 120));
+			//ctx.SetContextFontFace (monospace_font);
+			ctx.SetFontSize (16);
+			ctx.Translate (0, 16);
+			DrawTextLayout (ctx, playTime, new Point (0, 0));
+			DrawTextLayout (ctx, totalTime, new Point (0, 30));
+			DrawTextLayout (ctx, ticks, new Point (0, 60));
+			DrawTextLayout (ctx, tempo, new Point (0, 90));
+			DrawTextLayout (ctx, meter, new Point (0, 120));
+			ctx.Translate (0, -16);
 			
 			ctx.Translate (-70, 0);
 			
 			ctx.Stroke ();
+			
+			ctx.Dispose ();
+			return true;
+		}
+		
+		void DrawTextLayout (Cairo.Context ctx, string text, Point point)
+		{
+			ctx.MoveTo (point.X, point.Y);
+			ctx.TextPath (text);
 		}
 	}
 }
-

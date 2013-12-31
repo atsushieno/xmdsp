@@ -1,18 +1,20 @@
 using System;
-using Xwt;
-using Xwt.Drawing;
+using Gtk;
 using Commons.Music.Midi;
 using System.Collections.Generic;
+
+using FontFace = Pango.FontFace;
+using Gdk;
 
 namespace Xmdsp
 {
 	public class KeyboardParameterBlock
 	{
 		ViewModel vm;
-		int channel;		
-		Font font;
+		int channel;
+		Cairo.FontFace font;
 		
-		public KeyboardParameterBlock (ViewModel viewModel, Font font, int channel)
+		public KeyboardParameterBlock (ViewModel viewModel, Cairo.FontFace font, int channel)
 		{
 			vm = viewModel;
 			this.font = font;
@@ -34,11 +36,13 @@ namespace Xmdsp
 		public int? SoftPedal;
 		public int? Sostenuto;
 		
-		internal void DoDraw (Context ctx)
+		internal void DoDraw (Cairo.Context ctx)
 		{
 			var vmk = vm.KeyboardParameterBlock;
 			
-			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height);
+			var platform_text_shift = vm.KeyboardParameterBlock.KeyBlockParameterTextSize;
+			
+			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height) + platform_text_shift;
 			ctx.Translate (0, yOffset);
 			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
@@ -47,9 +51,11 @@ namespace Xmdsp
 			
 			var trackSize = DrawText (ctx, font, vmk.KeyBlockHeaderTextSize, vm.Pallette.CommonTextBlightest, "TRACK.", 0, row2Y);
 			
+			ctx.Translate (0, platform_text_shift);
 			DrawText (ctx, font, vmk.KeyBlockChannelNumberTextSize, vm.Pallette.CommonTextMiddle, (channel + 1).ToString ("D2"), Math.Max (midiSize.Width, trackSize.Width), 0);
+			ctx.Translate (0, -platform_text_shift);
 			
-			var size = DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "VOL:", 100, 0);
+			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "VOL:", 100, 0);
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "EXP:", 160, 0);
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "RSD:", 100, row2Y);
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "CSD:", 160, row2Y);
@@ -64,31 +70,31 @@ namespace Xmdsp
 		}
 		
 		// ok, it won't go more than 50. And no need to mess with Dictionary. Array is faster.
-		Font [] fonts_by_size = new Font [50];
-		
-		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
+		Cairo.TextExtents DrawText (Cairo.Context ctx, Cairo.FontFace font, int size, ViewModel.Color color, string text, double x, double y)
 		{
-			ctx.SetColor (color.ToXwt ());
-			if (fonts_by_size [size] == null)
-				fonts_by_size [size] = font.WithSize (size);
-			font = fonts_by_size [size];
-			var textLayout = new TextLayout () { Font = font, Text = text };
-			var numberSize = textLayout.GetSize ();
-			ctx.DrawTextLayout (textLayout, x, y);
+			CairoHelper.SetSourceColor (ctx, color.ToGdk ());
+			ctx.SetContextFontFace (font);
+			ctx.SetFontSize (size);
+			ctx.MoveTo (x, y);
+			ctx.TextPath (text);
 			ctx.Stroke ();
-			return textLayout.GetSize ();
+			return ctx.TextExtents (text);
 		}
 		
-		void DrawBoolSwitch (Context ctx, Font font, bool value, string label, int x, int y)
+		void DrawBoolSwitch (Cairo.Context ctx, Cairo.FontFace font, bool value, string label, int x, int y)
 		{
 			var vmk = vm.KeyboardParameterBlock;
-			ctx.SetColor ((value ? vm.Pallette.CommonTextMiddle : vm.Pallette.KeyParameterBackgroundColor).ToXwt ());
+			var platform_text_shift = vm.KeyboardParameterBlock.KeyBlockParameterTextSize;
+			
+			CairoHelper.SetSourceColor (ctx, (value ? vm.Pallette.CommonTextMiddle : vm.Pallette.KeyParameterBackgroundColor).ToGdk ());
+			ctx.Translate (0, -platform_text_shift);
 			ctx.Rectangle (x - 1, y, vmk.KeyBlockParameterTextSize + 2, vmk.KeyBlockParameterTextSize + 3);
+			ctx.Translate (0, platform_text_shift);
 			ctx.Fill ();
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, value ? vm.Pallette.CommonTextBlightest : vm.Pallette.CommonTextDarkest, label, x, y);
 		}
 		
-		internal void UpdateParameters (Context ctx, Font font)
+		internal void UpdateParameters (Cairo.Context ctx, Cairo.FontFace font)
 		{
 			var vmk = vm.KeyboardParameterBlock;			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;

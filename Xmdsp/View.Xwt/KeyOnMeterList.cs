@@ -1,12 +1,12 @@
 ﻿using System;
-using Xwt;
+using Gtk;
+using Gdk;
 using System.Collections.Generic;
-using Xwt.Drawing;
 using Commons.Music.Midi;
 
 namespace Xmdsp
 {
-	public class KeyOnMeterList : Canvas
+	public class KeyOnMeterList : DrawingArea
 	{
 		ViewModel vm;
 		int [] keyon_meter_progress;		
@@ -26,21 +26,21 @@ namespace Xmdsp
 				if (m.EventType == SmfEvent.NoteOn && m.Lsb > 0)
 					keyon_meter_progress [m.Channel] = current_progress = 0;
 			};
-			// FIXME: this cannot be enabled until the cause of native crasher gets resolved.
 			vm.Model.TickProgress += delegate {
-				//if (current_progress++ < progress_max)
-				//	QueueDraw ();
+				if (current_progress++ < progress_max)
+					QueueDraw ();
 			};
 			
 			WidthRequest = vm.KeyOnMeterList.Width;
 			HeightRequest = vm.KeyOnMeterList.Height;
 		}
 		
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		protected override bool OnExposeEvent (EventExpose evnt)
 		{
+			var ctx = CairoHelper.Create (GdkWindow);
 			var vmk = vm.KeyOnMeterList;
-			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
-			ctx.SetLineWidth (1);
+			CairoHelper.SetSourceColor (ctx, vm.Pallette.CommonTextDarkest.ToGdk ());
+			ctx.LineWidth = 1;
 			var lineHeight = vmk.MeterHeight / progress_max;
 			for (int i = 0; i < keyon_meter_progress.Length; i++) {
 				var x = (vmk.ItemWidth) * i;
@@ -56,6 +56,9 @@ namespace Xmdsp
 			for (int i = 0; i < keyon_meter_progress.Length; i++)
 				if (keyon_meter_progress [i] < progress_max)
 					keyon_meter_progress [i]++;
+			
+			ctx.Dispose ();
+			return true;
 		}
 	}
 }

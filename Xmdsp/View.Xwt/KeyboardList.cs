@@ -1,13 +1,13 @@
 using System;
-using Xwt;
+using Gtk;
 using Commons.Music.Midi;
-using Xwt.Drawing;
+using Gdk;
 using System.Threading;
 using Commons.Music.Midi.Player;
 
 namespace Xmdsp
 {
-	public class KeyboardList : Canvas
+	public class KeyboardList : DrawingArea
 	{
 		ViewModel vm;
 		KeyboardBlock [] keyboards;
@@ -16,13 +16,11 @@ namespace Xmdsp
 		{
 			vm = viewModel;
 			keyboards = new KeyboardBlock [vm.MaxChannels];
-			var font = this.Font.WithSize (vm.KeyboardParameterBlock.KeyBlockHeaderTextSize);
 			
 			for (int i = 0; i < vm.MaxChannels; i++)
-				keyboards [i] = new KeyboardBlock (vm, font, i);
+				keyboards [i] = new KeyboardBlock (vm, /*font*/null, i);
 			
-			Margin = 0;
-			this.BackgroundColor = vm.Pallette.KeyboardBackgroundColor.ToXwt ();
+			//GdkWindow.Background = vm.Pallette.KeyboardBackgroundColor.ToGdk ();
 			WidthRequest = vm.KeyboardList.Width;
 			HeightRequest = vm.KeyboardList.Height;
 				
@@ -48,14 +46,21 @@ namespace Xmdsp
 		bool dirty = true;
 		DateTime last = DateTime.MinValue;
 		static readonly TimeSpan duration = TimeSpan.FromMilliseconds (50);
-			
-		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
+		
+		protected override bool OnExposeEvent (EventExpose evnt)
 		{
+			var ctx = CairoHelper.Create (GdkWindow);
 			dirty = false;
+			int w, h;
+			GdkWindow.GetSize (out w, out h);
+			GdkWindow.BeginPaintRect (new Gdk.Rectangle (0, 0, w, h));
 			foreach (var kb in keyboards) {
 				kb.Keyboard.DoDraw (ctx);
 				kb.KeyParameters.DoDraw (ctx);
 			}
+			GdkWindow.EndPaint ();
+			ctx.Dispose ();
+			return true;
 		}
 	}
 }
