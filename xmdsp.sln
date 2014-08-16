@@ -13,12 +13,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp", "Xmdsp\Xmdsp.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi", "external\managed-midi\lib\Commons.Music.Midi.csproj", "{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.Gtk3", "external\xwt\Xwt.Gtk\Xwt.Gtk3.csproj", "{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.Release|Any CPU.ActiveCfg = Release|Any CPU

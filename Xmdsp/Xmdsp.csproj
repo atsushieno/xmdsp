@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A1DD7831-E3D8-4573-A150-C78FECC1B68E}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -57,13 +57,13 @@
       <Project>{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}</Project>
       <Name>Xwt</Name>
     </ProjectReference>
-    <ProjectReference Include="..\external\xwt\Xwt.Gtk\Xwt.Gtk.csproj">
-      <Project>{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}</Project>
-      <Name>Xwt.Gtk</Name>
-    </ProjectReference>
     <ProjectReference Include="..\external\managed-midi\lib\Commons.Music.Midi.csproj">
       <Project>{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}</Project>
       <Name>Commons.Music.Midi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\external\xwt\Xwt.Gtk\Xwt.Gtk3.csproj">
+      <Project>{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}</Project>
+      <Name>Xwt.Gtk3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
