@@ -18,8 +18,7 @@ namespace Xmdsp
 			vm.Model.TickProgress += delegate {
 				current_position++;
 				current_position %= num_lines;
-				// FIXME: this cannot be enabled until the cause of native crasher gets resolved.
-				//QueueDraw ();
+				QueueDraw ();
 			};
 		}
 		

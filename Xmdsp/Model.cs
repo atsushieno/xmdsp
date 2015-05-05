@@ -161,7 +161,7 @@ namespace Xmdsp
 		public event Action TickProgress;
 		
 		Timer timer;
-		const long timer_fps = 80;
+		const long timer_fps = 30;
 		
 		public DateTime PlayStartedTime { get; private set; }
 		
@@ -171,14 +171,14 @@ namespace Xmdsp
 		void OnTimerElapsed (object o, ElapsedEventArgs e)
 		{
 			if (PlayTimerTick != null)
-				PlayTimerTick ();
+				Xwt.Application.Invoke (PlayTimerTick);
 			if (TickProgress == null)
 				return;
 			var ts = DateTime.Now - time_last_tick_based_progress;
 			var delta = tick_progress_ratio / (Player.Bpm * Player.TempoChangeRatio) * 120;
 			if (ts.TotalMilliseconds > delta) {
 				time_last_tick_based_progress = DateTime.Now;
-				TickProgress ();
+				Xwt.Application.Invoke (TickProgress);
 			}
 		}
 	}
