@@ -258,14 +258,14 @@ namespace Xmdsp
 			public KeyOnMeterListViewModel (ViewModel vm)
 			{
 				this.vm = vm;
-				
-				Width = ItemWidth * vm.MaxChannels;
-				Height = ItemHeight;
-				
+
 				ItemWidth = 22;
 				ItemHeight = 70;
 				MeterWidth = 18;
 				MeterHeight = 64;
+
+				Width = ItemWidth * vm.MaxChannels;
+				Height = ItemHeight;
 			}
 
 			public int Width { get; private set; }
