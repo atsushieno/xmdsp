@@ -16,7 +16,8 @@ namespace Xmdsp
 			vm = new ViewModel (model);
 			
 			Title = "xmdsp";
-			Width = 800;
+			// FIXME: calculate sizes
+			Width = 840;
 			Height = 600;
 			Padding = 0;
 			Icon = Image.FromResource (GetType ().Assembly, "xmdsp_icon.png");

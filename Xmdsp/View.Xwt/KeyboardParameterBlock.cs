@@ -24,16 +24,20 @@ namespace Xmdsp
 			PortamentoSwitch = true;
 		}
 		
-		public int? Volume;
-		public int? Expression;
-		public int? Rsd;
-		public int? Csd;
-		public int? Dsd;
-		public bool? Hold;
-		public bool? PortamentoSwitch;
-		public int? SoftPedal;
-		public int? Sostenuto;
-		
+		int? Volume;
+		int? Expression;
+		int? Rsd;
+		int? Csd;
+		int? Dsd;
+		bool? Hold;
+		bool? PortamentoSwitch;
+		int? SoftPedal;
+		int? Sostenuto;
+
+		// This processing model is ugly when we consider MV* patterns.
+		// The intent of this "dispatch MIDI messages from VM and View preserves the state"
+		// was that it could cache the parameters and skip unnecessary text drawing.
+		// So far we draw everything so the entire nullable caching is unused.
 		internal void DoDraw (Context ctx)
 		{
 			var vmk = vm.KeyboardParameterBlock;
@@ -62,23 +66,12 @@ namespace Xmdsp
 			
 			ctx.Translate (0, -yOffset);
 		}
-		
-		// ok, it won't go more than 50. And no need to mess with Dictionary. Array is faster.
-		Font [] fonts_by_size = new Font [50];
-		
+
 		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
 		{
-			ctx.SetColor (color.ToXwt ());
-			if (fonts_by_size [size] == null)
-				fonts_by_size [size] = font.WithSize (size);
-			font = fonts_by_size [size];
-			var textLayout = new TextLayout () { Font = font, Text = text };
-			var numberSize = textLayout.GetSize ();
-			ctx.DrawTextLayout (textLayout, x, y);
-			ctx.Stroke ();
-			return textLayout.GetSize ();
+			return DrawingHelper.DrawText (ctx, font, size, color, text, x, y);
 		}
-		
+
 		void DrawBoolSwitch (Context ctx, Font font, bool value, string label, int x, int y)
 		{
 			var vmk = vm.KeyboardParameterBlock;
@@ -88,7 +81,7 @@ namespace Xmdsp
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, value ? vm.Pallette.CommonTextBlightest : vm.Pallette.CommonTextDarkest, label, x, y);
 		}
 		
-		internal void UpdateParameters (Context ctx, Font font)
+		void UpdateParameters (Context ctx, Font font)
 		{
 			var vmk = vm.KeyboardParameterBlock;			
 			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
@@ -103,7 +96,7 @@ namespace Xmdsp
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) Sostenuto).ToString ("D3"), 350, 0);
 			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
 		}
-		
+
 		public void ProcessMidiMessage (SmfEvent m)
 		{
 			switch (m.EventType) {

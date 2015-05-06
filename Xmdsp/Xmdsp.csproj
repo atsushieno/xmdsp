@@ -50,6 +50,7 @@
     <Compile Include="View.Xwt\PlayTimeStatusMonitor.cs" />
     <Compile Include="View.Xwt\CircularProgressMeter.cs" />
     <Compile Include="View.Xwt\KeyOnMeterList.cs" />
+    <Compile Include="View.Xwt\DrawingHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
