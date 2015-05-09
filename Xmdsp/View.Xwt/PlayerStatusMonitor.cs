@@ -10,10 +10,13 @@ namespace Xmdsp
 	{
 		ViewModel vm;
 		PlayerState state_to_draw = PlayerState.Stopped;
+		Font font;
 		
 		public PlayerStatusMonitor (ViewModel vm)
 		{
 			this.vm = vm;
+			font = this.Font.WithSize (vm.KeyOnMeterList.KeyOnMeterTextSize);
+
 			vm.Model.PlayerStateChanged += state => {
 				state_to_draw = state;
 				QueueDraw ();
@@ -21,11 +24,12 @@ namespace Xmdsp
 			
 			WidthRequest = vm.PlayerStatusMonitor.Width;
 			HeightRequest = vm.PlayerStatusMonitor.Height;
+			var textWidth = vm.PlayerStatusMonitor.TextSize * 6;
 
 			coordinates [PlayerState.Playing] = new Point (0, 0);
-			coordinates [PlayerState.FastForward] = new Point (20, 0);
-			coordinates [PlayerState.Paused] = new Point (40, 0);
-			coordinates [PlayerState.Stopped] = new Point (60, 0);
+			coordinates [PlayerState.FastForward] = new Point (textWidth, 0);
+			coordinates [PlayerState.Paused] = new Point (0, 20);
+			coordinates [PlayerState.Stopped] = new Point (textWidth, 20);
 			actions [PlayerState.Playing] = (ctx,active) => {
 				ctx.MoveTo (4, 2);
 				ctx.LineTo (9, 6);
@@ -89,16 +93,27 @@ namespace Xmdsp
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
 			base.OnDraw (ctx, dirtyRect);
-			
+			var vmp = vm.PlayerStatusMonitor;
+
 			ctx.SetColor (vm.Pallette.ApplicationBackgroundColor.ToXwt ());
 			ctx.Rectangle (dirtyRect);
 			ctx.Fill ();
-			DrawItem (ctx, PlayerState.Playing);
-			DrawItem (ctx, PlayerState.FastForward);
-			DrawItem (ctx, PlayerState.Paused);
-			DrawItem (ctx, PlayerState.Stopped);
+			Action<string,PlayerState> func = (label, state) => {
+				var co = coordinates [state];
+				DrawText (ctx, font, vmp.TextSize, vm.Pallette.CommonTextMiddle, label, co.X + vmp.BaseIconSize, co.Y);
+				DrawItem (ctx, state);
+			};
+			func ("Play", PlayerState.Playing);
+			func ("FF", PlayerState.FastForward);
+			func ("Pause", PlayerState.Paused);
+			func ("Stop", PlayerState.Stopped);
 		}
-		
+
+		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
+		{
+			return DrawingHelper.DrawText (ctx, font, size, color, text, x, y);
+		}
+
 		void DrawItem (Context ctx, PlayerState target)
 		{
 			var drawContent = actions [target];

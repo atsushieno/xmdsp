@@ -202,11 +202,13 @@ namespace Xmdsp
 
 			public int ApplicationNameTextSize { get; private set; }
 
-			public int Width {
+			public int Width
+			{
 				get { return 300; }
 			}
-			
-			public int Height {
+
+			public int Height
+			{
 				get { return ApplicationNameTextSize + 2 + 24; }
 			}
 		}
@@ -219,17 +221,22 @@ namespace Xmdsp
 			{
 				this.vm = vm;
 				BaseIconSize = 16;
+				TextSize = 9;
 			}
 
 			public int BaseIconSize { get; private set; }
 
-			public int Width {
+			public int Width
+			{
 				get { return Math.Max (140, (BaseIconSize + 4) * 4); }
 			}
 
-			public int Height {
+			public int Height
+			{
 				get { return BaseIconSize + 4; }
 			}
+
+			public int TextSize { get; private set; }
 		}
 
 		public class PlayTimeStatusMonitorViewModel
@@ -244,11 +251,13 @@ namespace Xmdsp
 
 			public int ItemHeight { get; set; }
 
-			public int Width {
+			public int Width
+			{
 				get { return 200; }
 			}
 
-			public int Height {
+			public int Height
+			{
 				get { return ItemHeight * 5; }
 			}
 		}
@@ -269,13 +278,18 @@ namespace Xmdsp
 				MetersOffset = KeyOnMeterTextSize * 3;
 				MeterWidth = 18;
 				MeterHeight = 64;
+				PanpotOuterRadius = 8;
+				PanpotInnerObjectRadius = 6;
+				PanpotOffset = 4;
 			}
 
-			public int Width {
+			public int Width
+			{
 				get { return MetersOffset + ItemWidth * vm.MaxChannels; }
 			}
-			public int Height {
-				get { return ItemHeight + KeyOnMeterTextSize * 2 + LineGapSize; }
+			public int Height
+			{
+				get { return ItemHeight + KeyOnMeterTextSize * 2 + LineGapSize + PanpotOuterRadius * 2 + PanpotOffset; }
 			}
 
 			public int ItemWidth { get; private set; }
@@ -286,6 +300,9 @@ namespace Xmdsp
 			public int MeterHeight { get; private set; }
 			public int KeyOnMeterTextSize { get; private set; }
 			public int LineGapSize { get; private set; }
+			public int PanpotOuterRadius { get; private set; }
+			public int PanpotInnerObjectRadius { get; private set; }
+			public int PanpotOffset { get; private set; }
 		}
 
 		public class PalletteDefinition
