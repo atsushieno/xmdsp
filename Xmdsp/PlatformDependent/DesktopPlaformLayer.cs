@@ -15,7 +15,7 @@ namespace Xmdsp
 		}
 		
 		public override IEnumerable<Model.MidiDeviceInfo> AllMidiDevices {
-			get { return MidiAccessManager.Default.Outputs.Select (d => new Model.MidiDeviceInfo () { Id = d.Details.Id, Name = d.Details.Name }); }
+			get { return MidiAccessManager.Default.Outputs.Select (d => new Model.MidiDeviceInfo () { Id = d.Id, Name = d.Name }); }
 		}
 
 		IMidiOutput midi_output;
@@ -36,7 +36,7 @@ namespace Xmdsp
 			if (midi_output != null)
 				midi_output.CloseAsync ().Wait ();
 			string dev = current_device == null ? AllMidiDevices.Last ().Id : current_device;
-			midi_output = MidiAccessManager.Default.Outputs.First (d => d.Details.Id == dev);
+			midi_output = MidiAccessManager.Default.OpenOutputAsync (dev).Result;
 		}
 		
 		public override MidiPlayer CreateMidiPlayer (SmfMusic music)
