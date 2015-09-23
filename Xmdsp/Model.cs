@@ -1,7 +1,6 @@
 using System;
 using Commons.Music.Midi;
 using System.Collections.Generic;
-using Commons.Music.Midi.Player;
 using System.Timers;
 
 namespace Xmdsp
@@ -12,7 +11,7 @@ namespace Xmdsp
 		
 		public class MidiDeviceInfo
 		{
-			public int ID { get; set; }
+			public string Id { get; set; }
 			public string Name { get; set; }
 		}
 		
@@ -57,11 +56,8 @@ namespace Xmdsp
 		public void LoadSmf (string filename)
 		{
 			EnsurePlayerStopped ();
-			using (var stream = Platform.GetResourceStream (filename)) {
-				var r = new SmfReader (stream);
-				r.Parse ();
-				current_music = r.Music;
-			}
+			using (var stream = Platform.GetResourceStream (filename))
+				current_music = SmfMusic.Read (stream);
 		}
 
 		// either play or resume

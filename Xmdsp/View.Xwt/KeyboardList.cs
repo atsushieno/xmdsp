@@ -2,8 +2,6 @@ using System;
 using Xwt;
 using Commons.Music.Midi;
 using Xwt.Drawing;
-using System.Threading;
-using Commons.Music.Midi.Player;
 
 namespace Xmdsp
 {

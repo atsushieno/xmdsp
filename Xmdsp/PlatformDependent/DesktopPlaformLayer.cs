@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Linq;
 using Commons.Music.Midi;
-using Commons.Music.Midi.Player;
 using System.Collections.Generic;
 
 namespace Xmdsp
@@ -16,26 +15,18 @@ namespace Xmdsp
 		}
 		
 		public override IEnumerable<Model.MidiDeviceInfo> AllMidiDevices {
-#if USE_RTMIDI
-			get { return RtMidiSharp.MidiDeviceManager.AllDevices.Where (d => d.IsOutput).Select (d => new Model.MidiDeviceInfo () { ID = d.ID, Name = d.Name }); }
-#else
-			get { return PortMidiSharp.MidiDeviceManager.AllDevices.Where (d => d.IsOutput).Select (d => new Model.MidiDeviceInfo () { ID = d.ID, Name = d.Name }); }
-#endif
+			get { return MidiAccessManager.Default.Outputs.Select (d => new Model.MidiDeviceInfo () { Id = d.Details.Id, Name = d.Details.Name }); }
 		}
+
+		IMidiOutput midi_output;
+		string current_device = null;
 		
-#if USE_RTMIDI
-		RtMidiSharp.RtMidiOutputDevice midi_output;
-#else
-		PortMidiSharp.MidiOutput midi_output;
-#endif
-		int current_device = -1;
-		
-		public override int MidiOutputDeviceIndex {
+		public override string MidiOutputDeviceId {
 			get { return current_device; }
 			set {
 				current_device = value;
 				if (midi_output != null)
-					midi_output.Close ();
+					midi_output.CloseAsync ().Wait ();
 				midi_output = null;
 			}
 		}
@@ -43,35 +34,23 @@ namespace Xmdsp
 		void OpenOutputDevice ()
 		{
 			if (midi_output != null)
-				midi_output.Close ();
-			int dev = current_device < 0 ? AllMidiDevices.First ().ID : current_device;
-#if USE_RTMIDI
-			midi_output = RtMidiSharp.MidiDeviceManager.OpenOutput (dev);
-#else
-			midi_output = PortMidiSharp.MidiDeviceManager.OpenOutput (dev);
-#endif
+				midi_output.CloseAsync ().Wait ();
+			string dev = current_device == null ? AllMidiDevices.Last ().Id : current_device;
+			midi_output = MidiAccessManager.Default.Outputs.First (d => d.Details.Id == dev);
 		}
 		
 		public override MidiPlayer CreateMidiPlayer (SmfMusic music)
 		{
 			if (midi_output == null)
 				OpenOutputDevice ();
-#if USE_RTMIDI
-			return new RtMidiPlayer (midi_output, music);
-#else
-			return new PortMidiPlayer (midi_output, music);
-#endif
+			return new MidiPlayer (music, midi_output);
 		}
 		
 		public override void Shutdown ()
 		{
-#if USE_RTMIDI
 			if (midi_output != null)
-				midi_output.Close ();
+				midi_output.CloseAsync ().Wait ();
 			midi_output = null;
-#else
-			// do particularly nothing (PortMidi shuts down at AppDomainUnload.
-#endif
 		}
 	}
 }

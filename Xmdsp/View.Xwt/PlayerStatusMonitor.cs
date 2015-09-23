@@ -1,8 +1,8 @@
 ﻿using System;
 using Xwt;
 using Xwt.Drawing;
-using Commons.Music.Midi.Player;
 using System.Collections.Generic;
+using Commons.Music.Midi;
 
 namespace Xmdsp
 {

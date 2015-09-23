@@ -1,6 +1,6 @@
 ﻿using System;
+using Commons.Music.Midi;
 using Xwt;
-using Commons.Music.Midi.Player;
 
 namespace Xmdsp
 {

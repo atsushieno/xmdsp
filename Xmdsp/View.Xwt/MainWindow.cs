@@ -1,7 +1,7 @@
 using System;
+using Commons.Music.Midi;
 using Xwt;
 using Xwt.Drawing;
-using Commons.Music.Midi.Player;
 
 namespace Xmdsp
 {
@@ -75,7 +75,7 @@ namespace Xmdsp
 				device.SubMenu.Items.Clear ();
 				foreach (var dev in model.Platform.AllMidiDevices) {
 					var dmi = new MenuItem (dev.Name);
-					dmi.Clicked += delegate { model.Platform.MidiOutputDeviceIndex = dev.ID; };
+					dmi.Clicked += delegate { model.Platform.MidiOutputDeviceId = dev.Id; };
 					device.SubMenu.Items.Add (dmi);
 				}
 			};
