@@ -18,7 +18,7 @@ namespace Xmdsp
 			this.vm = viewModel;
 			this.channel = channel;
 			var vmk = vm.Keyboard;
-			int octaves = vmk.MaxKeys / 12;
+			int octaves = vmk.VisibleOctaves;
 			key_on_status = new bool [vm.Keyboard.MaxKeys];
 		}
 		
@@ -75,7 +75,6 @@ namespace Xmdsp
 			Color blackKeyFillColor = vm.Pallette.BlackKeyFillColor.ToXwt ();
 			Color blackKeyStrokeColor = vm.Pallette.BlackKeyStrokeColor.ToXwt ();
 
-			int octaves = vmk.MaxKeys / 12;
 			int wwidth = vmk.WhiteKeyWidth;
 			int wheight = vmk.WhiteKeyHeight;
 			ctx.SetLineWidth (1);
@@ -115,12 +114,13 @@ namespace Xmdsp
 		
 		public void ProcessMidiMessage (SmfEvent m)
 		{
+			var n = m.Msb - vm.Keyboard.VisibleMinOctave * 12;
 			switch (m.EventType) {
 			case SmfEvent.NoteOn:
-				key_on_status [m.Msb] = m.Lsb > 0;
+				key_on_status [n] = m.Lsb > 0;
 				break;
 			case SmfEvent.NoteOff:
-				key_on_status [m.Msb] = false;
+				key_on_status [n] = false;
 				break;
 			}
 		}

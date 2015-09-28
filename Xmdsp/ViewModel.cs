@@ -74,7 +74,8 @@ namespace Xmdsp
 			{
 				this.vm = vm;
 				MaxKeys = 128;
-				VisibleOctaves = (MaxKeys / 12) - 0;
+				VisibleOctaves = (MaxKeys / 12) - 3;
+				VisibleMinOctave = 1;
 
 				WhiteKeyWidth = 7;
 				WhiteKeyHeight = 18;
@@ -95,6 +96,7 @@ namespace Xmdsp
 
 			public int MaxKeys { get; private set; }
 			public int VisibleOctaves { get; private set; }
+			public int VisibleMinOctave { get; private set; }
 
 			public int WhiteKeyWidth { get; private set; }
 			public int BlackKeyWidth { get; private set; }
