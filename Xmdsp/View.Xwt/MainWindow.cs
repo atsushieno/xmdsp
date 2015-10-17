@@ -71,14 +71,16 @@ namespace Xmdsp
 			
 			var device = new MenuItem ("_Device");
 			device.SubMenu = new Menu ();
-			device.Clicked += delegate {
+			// FIXME: Xwt is incapable of handling on-the-fly menu item creation,
+			// so I disabled dynamic device detection.
+			//device.Clicked += delegate {
 				device.SubMenu.Items.Clear ();
 				foreach (var dev in model.Platform.AllMidiDevices) {
 					var dmi = new MenuItem (dev.Name);
 					dmi.Clicked += delegate { model.Platform.MidiOutputDeviceId = dev.Id; };
 					device.SubMenu.Items.Add (dmi);
 				}
-			};
+			//};
 			menu.Items.Add (device);
 			
 			var player = new MenuItem ("_Player");
