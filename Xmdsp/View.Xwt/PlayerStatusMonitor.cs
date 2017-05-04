@@ -19,7 +19,7 @@ namespace Xmdsp
 
 			vm.Model.PlayerStateChanged += state => {
 				state_to_draw = state;
-				QueueDraw ();
+				Application.Invoke (() => QueueDraw ());
 			};
 			
 			WidthRequest = vm.PlayerStatusMonitor.Width;

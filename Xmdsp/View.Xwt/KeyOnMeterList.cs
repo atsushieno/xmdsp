@@ -51,19 +51,19 @@ namespace Xmdsp
 				case SmfEvent.Program:
 					program [m.Channel] = m.Msb;
 					dirty_prog = true;
-					QueueDraw (new Rectangle (0, prog_bnk_offset_y, vmk.Width, prog_bnk_height));
+					Application.Invoke (() => QueueDraw (new Rectangle (0, prog_bnk_offset_y, vmk.Width, prog_bnk_height)));
 					break;
 				case SmfEvent.CC:
 					switch (m.Msb) {
 					case SmfCC.Pan:
 						pan [m.Channel] = m.Lsb;
 						dirty_pan = true;
-						QueueDraw (new Rectangle (0, panpot_offset_y, vmk.Width, panpot_height));
+						Application.Invoke (() => QueueDraw (new Rectangle (0, panpot_offset_y, vmk.Width, panpot_height)));
 						break;
 					case SmfCC.BankSelectLsb:
 						bank_select [m.Channel] = m.Lsb;
 						dirty_prog = true;
-						QueueDraw (new Rectangle (0, prog_bnk_offset_y, vmk.Width, prog_bnk_height));
+						Application.Invoke (() => QueueDraw (new Rectangle (0, prog_bnk_offset_y, vmk.Width, prog_bnk_height)));
 						break;
 					}
 					break;
@@ -78,7 +78,7 @@ namespace Xmdsp
 					dirty_keyon = true;
 					// FIXME: enable this once I figured out why the other QueueDraw() overload doesn't work.
 //					QueueDraw (new Rectangle (0, 0, vmk.Width, vmk.MeterHeight));
-					QueueDraw ();
+					Application.Invoke (() => QueueDraw ());
 				}
 			};
 		}

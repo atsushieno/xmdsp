@@ -17,10 +17,10 @@ namespace Xmdsp
 			HeightRequest = vm.PlayTimeStatusMonitor.Height;
 			
 			vm.Model.PlayTimerTick += delegate {
-				QueueDraw ();
+				Application.Invoke (() => QueueDraw ());
 			};
 			vm.Model.PlayerStateChanged += delegate {
-				QueueDraw ();
+				Application.Invoke (() => QueueDraw ());
 			};
 		}
 		
