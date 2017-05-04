@@ -9,11 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.WPF", "external\xwt\Xwt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp", "Xmdsp\Xmdsp.csproj", "{A1DD7831-E3D8-4573-A150-C78FECC1B68E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi", "external\managed-midi\lib\Commons.Music.Midi.csproj", "{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.Gtk3", "external\xwt\Xwt.Gtk\Xwt.Gtk3.csproj", "{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.Mac", "external\xwt\Xwt.Mac\Xwt.Mac.csproj", "{5F8E0511-7210-487F-90A1-EC3E74467617}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi", "external\managed-midi\Commons.Music.Midi\Commons.Music.Midi.csproj", "{2A0A4AA1-D455-48B4-ABD0-07217568264E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.Desktop", "external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj", "{59EEFB0D-3957-43FC-8272-C3B460F7FF84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,16 +51,22 @@ Global
 		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
 		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.DebugWin|Any CPU.Build.0 = DebugWin|Any CPU
-		{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
-		{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}.DebugWin|Any CPU.Build.0 = DebugWin|Any CPU
 		{5F8E0511-7210-487F-90A1-EC3E74467617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F8E0511-7210-487F-90A1-EC3E74467617}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F8E0511-7210-487F-90A1-EC3E74467617}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F8E0511-7210-487F-90A1-EC3E74467617}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
+		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Xmdsp\Xmdsp.csproj

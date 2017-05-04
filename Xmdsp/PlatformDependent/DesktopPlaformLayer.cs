@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Commons.Music.Midi;
 using System.Collections.Generic;
+using Commons.Music.Midi.RtMidi;
 
 namespace Xmdsp
 {
@@ -13,9 +14,11 @@ namespace Xmdsp
 		{
 			return File.OpenRead (identifier);
 		}
+
+		IMidiAccess midi_access = new RtMidiAccess ();
 		
 		public override IEnumerable<Model.MidiDeviceInfo> AllMidiDevices {
-			get { return MidiAccessManager.Default.Outputs.Select (d => new Model.MidiDeviceInfo () { Id = d.Id, Name = d.Name }); }
+			get { return midi_access.Outputs.Select (d => new Model.MidiDeviceInfo () { Id = d.Id, Name = d.Name }); }
 		}
 
 		IMidiOutput midi_output;
@@ -36,7 +39,7 @@ namespace Xmdsp
 			if (midi_output != null)
 				midi_output.CloseAsync ().Wait ();
 			string dev = current_device == null ? AllMidiDevices.Last ().Id : current_device;
-			midi_output = MidiAccessManager.Default.OpenOutputAsync (dev).Result;
+			midi_output = midi_access.OpenOutputAsync (dev).Result;
 		}
 		
 		public override MidiPlayer CreateMidiPlayer (SmfMusic music)

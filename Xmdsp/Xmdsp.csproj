@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Xmdsp</RootNamespace>
     <AssemblyName>Xmdsp</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -85,13 +85,17 @@
       <Project>{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}</Project>
       <Name>Xwt</Name>
     </ProjectReference>
-    <ProjectReference Include="..\external\managed-midi\lib\Commons.Music.Midi.csproj">
-      <Project>{D2FFA1EE-91DD-477D-8965-1E43CB0CBB69}</Project>
-      <Name>Commons.Music.Midi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\external\xwt\Xwt.Gtk\Xwt.Gtk.csproj">
       <Project>{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}</Project>
       <Name>Xwt.Gtk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi\Commons.Music.Midi.csproj">
+      <Project>{2A0A4AA1-D455-48B4-ABD0-07217568264E}</Project>
+      <Name>Commons.Music.Midi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj">
+      <Project>{59EEFB0D-3957-43FC-8272-C3B460F7FF84}</Project>
+      <Name>Commons.Music.Midi.Desktop</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

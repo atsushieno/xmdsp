@@ -131,7 +131,7 @@ namespace Xmdsp
 				return; // ignore
 			if (current_player.State == PlayerState.Paused)
 				current_player.PlayAsync ();
-			current_player.SetTempoRatio (2.0);
+			current_player.TempoChangeRatio = 2.0;
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.FastForward);
 		}
@@ -140,8 +140,8 @@ namespace Xmdsp
 		{
 			if (current_player == null || current_player.State != PlayerState.Playing)
 				return; // ignore
-			Player.SetTempoRatio (1.0);
-			current_player.SetTempoRatio (1.0);
+			Player.TempoChangeRatio = 1.0;
+			current_player.TempoChangeRatio = 1.0;
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
 		}
@@ -150,7 +150,7 @@ namespace Xmdsp
 		{
 			if (current_player == null)
 				return; // ignore
-			Player.SetTempoRatio (ratio);
+			Player.TempoChangeRatio = ratio;
 		}
 		
 		public event Action PlayTimerTick;
