@@ -1,17 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt", "external\xwt\Xwt\Xwt.csproj", "{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.Gtk", "external\xwt\Xwt.Gtk\Xwt.Gtk.csproj", "{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.WPF", "external\xwt\Xwt.WPF\Xwt.WPF.csproj", "{C93D746E-1586-4D4F-B411-BF5A966E6A08}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp", "Xmdsp\Xmdsp.csproj", "{A1DD7831-E3D8-4573-A150-C78FECC1B68E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.Gtk3", "external\xwt\Xwt.Gtk\Xwt.Gtk3.csproj", "{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xwt.Mac", "external\xwt\Xwt.Mac\Xwt.Mac.csproj", "{5F8E0511-7210-487F-90A1-EC3E74467617}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi", "external\managed-midi\Commons.Music.Midi\Commons.Music.Midi.csproj", "{2A0A4AA1-D455-48B4-ABD0-07217568264E}"
 EndProject
@@ -24,37 +14,12 @@ Global
 		DebugWin|Any CPU = DebugWin|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B25FD1F-CEBA-4450-8893-DC330FDB56A7}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
-		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
-		{92494904-35FA-4DC9-BDE9-3A3E87AC49D3}.DebugWin|Any CPU.Build.0 = DebugWin|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.DebugWin|Any CPU.Build.0 = DebugWin|Any CPU
-		{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3887A93-B2BD-4097-8E2F-3A063EFF32FD}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
-		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
-		{C93D746E-1586-4D4F-B411-BF5A966E6A08}.DebugWin|Any CPU.Build.0 = DebugWin|Any CPU
-		{5F8E0511-7210-487F-90A1-EC3E74467617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F8E0511-7210-487F-90A1-EC3E74467617}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F8E0511-7210-487F-90A1-EC3E74467617}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F8E0511-7210-487F-90A1-EC3E74467617}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
 		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A0A4AA1-D455-48B4-ABD0-07217568264E}.Release|Any CPU.ActiveCfg = Release|Any CPU

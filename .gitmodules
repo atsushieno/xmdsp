@@ -1,6 +1,3 @@
-[submodule "external/xwt"]
-	path = external/xwt
-	url = https://github.com/mono/xwt.git
 [submodule "external/managed-midi"]
 	path = external/managed-midi
 	url = git@github.com:atsushieno/managed-midi.git
