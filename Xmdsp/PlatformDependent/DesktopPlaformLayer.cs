@@ -5,6 +5,7 @@ using System.Linq;
 using Commons.Music.Midi;
 using System.Collections.Generic;
 using Commons.Music.Midi.RtMidi;
+using Commons.Music.Midi.WinMM;
 
 namespace Xmdsp
 {
@@ -15,7 +16,7 @@ namespace Xmdsp
 			return File.OpenRead (identifier);
 		}
 
-		IMidiAccess midi_access = new RtMidiAccess ();
+		IMidiAccess midi_access = Environment.OSVersion.Platform == PlatformID.Unix ? (IMidiAccess) new RtMidiAccess () : new WinMMMidiAccess ();
 		
 		public override IEnumerable<Model.MidiDeviceInfo> AllMidiDevices {
 			get { return midi_access.Outputs.Select (d => new Model.MidiDeviceInfo () { Id = d.Id, Name = d.Name }); }
