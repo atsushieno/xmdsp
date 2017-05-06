@@ -94,10 +94,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi\Commons.Music.Midi.csproj">
-      <Project>{2A0A4AA1-D455-48B4-ABD0-07217568264E}</Project>
-      <Name>Commons.Music.Midi</Name>
-    </ProjectReference>
     <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj">
       <Project>{59EEFB0D-3957-43FC-8272-C3B460F7FF84}</Project>
       <Name>Commons.Music.Midi.Desktop</Name>
