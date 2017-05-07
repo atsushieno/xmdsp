@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{2571D4BC-FC34-4A91-B3BA-B76E58AA6EE7}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Xmdsp.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)libportmidi.so">
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)librtmidi_c.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)packages.config" />
+    <None Include="$(MSBuildThisFileDirectory)portmidi.dll">
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Model.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformLayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModel.DrawingSupplements.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformDependent\DesktopPlaformLayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\ApplicationHeaderPane.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\CircularProgressMeter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\DrawingHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Keyboard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardParameterBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyOnMeterList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\MainWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayerStatusMonitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayTimeStatusMonitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Program.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\XwtViewModelExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)PlatformDependent\" />
+    <Folder Include="$(MSBuildThisFileDirectory)View.Xwt\" />
+  </ItemGroup>
+</Project>

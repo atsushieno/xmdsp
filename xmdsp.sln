@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.Desktop"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Commons.Music.Midi.Shared", "external\managed-midi\Commons.Music.Midi.Shared\Commons.Music.Midi.Shared.shproj", "{8742663D-9BB6-43D5-887D-0668E550652F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xmdsp.Shared", "Xmdsp.Shared\Xmdsp.Shared.shproj", "{2571D4BC-FC34-4A91-B3BA-B76E58AA6EE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
