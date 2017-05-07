@@ -21,9 +21,8 @@ namespace Xmdsp
 				state_to_draw = state;
 				Application.Invoke (() => QueueDraw ());
 			};
-			
-			WidthRequest = vm.PlayerStatusMonitor.Width;
-			HeightRequest = vm.PlayerStatusMonitor.Height;
+
+			vm.ScaleChanged += SetSize;
 			var textWidth = vm.PlayerStatusMonitor.TextSize * 6;
 
 			coordinates [PlayerState.Playing] = new Point (0, 0);
@@ -86,6 +85,12 @@ namespace Xmdsp
 			};
 		}
 
+		internal void SetSize ()
+		{
+			WidthRequest = vm.PlayerStatusMonitor.Width * vm.Scale;
+			HeightRequest = vm.PlayerStatusMonitor.Height * vm.Scale;
+		}
+
 		PlayerState [] states = new PlayerState[] {PlayerState.Playing, PlayerState.FastForward, PlayerState.Paused, PlayerState.Stopped};
 		Dictionary<PlayerState, Point> coordinates = new Dictionary<PlayerState, Point> ();
 		Dictionary<PlayerState, Action<Context,bool>> actions = new Dictionary<PlayerState, Action<Context,bool>> ();
@@ -93,6 +98,7 @@ namespace Xmdsp
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
 			base.OnDraw (ctx, dirtyRect);
+			ctx.Scale (vm.Scale, vm.Scale);
 			var vmp = vm.PlayerStatusMonitor;
 
 			ctx.SetColor (vm.Pallette.ApplicationBackgroundColor.ToXwt ());

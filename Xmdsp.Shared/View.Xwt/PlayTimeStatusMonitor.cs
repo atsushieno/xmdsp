@@ -12,16 +12,21 @@ namespace Xmdsp
 		public PlayTimeStatusMonitor (ViewModel vm)
 		{
 			this.vm = vm;
-			
-			WidthRequest = vm.PlayTimeStatusMonitor.Width;
-			HeightRequest = vm.PlayTimeStatusMonitor.Height;
-			
+
+			vm.ScaleChanged += SetSize;
+
 			vm.Model.PlayTimerTick += delegate {
 				Application.Invoke (() => QueueDraw ());
 			};
 			vm.Model.PlayerStateChanged += delegate {
 				Application.Invoke (() => QueueDraw ());
 			};
+		}
+
+		internal void SetSize ()
+		{
+			WidthRequest = vm.PlayTimeStatusMonitor.Width * vm.Scale;
+			HeightRequest = vm.PlayTimeStatusMonitor.Height * vm.Scale;
 		}
 		
 		Font font_label;
@@ -32,6 +37,7 @@ namespace Xmdsp
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
 			base.OnDraw (ctx, dirtyRect);
+			ctx.Scale (vm.Scale, vm.Scale);
 
 			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
 			ctx.SetLineWidth (1);

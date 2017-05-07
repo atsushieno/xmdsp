@@ -28,12 +28,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel.DrawingSupplements.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformDependent\DesktopPlaformLayer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\ApplicationHeaderPane.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\CircularProgressMeter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\DrawingHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Keyboard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardBlock.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardParameterBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyOnMeterList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\MainWindow.cs" />
@@ -41,6 +38,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayTimeStatusMonitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\XwtViewModelExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\ApplicationHeaderPane.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\CircularProgressMeter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)PlatformDependent\" />

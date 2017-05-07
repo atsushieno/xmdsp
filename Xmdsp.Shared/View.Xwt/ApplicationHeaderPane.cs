@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using Xwt;
 using Xwt.Drawing;
 
@@ -11,14 +11,19 @@ namespace Xmdsp
 		public ApplicationHeaderPane (ViewModel vm)
 		{
 			this.vm = vm;
-			
-			WidthRequest = vm.ApplicationHeaderPane.Width;
-			HeightRequest = vm.ApplicationHeaderPane.Height;
+			vm.ScaleChanged += SetSize;
+		}
+
+		internal void SetSize ()
+		{
+			WidthRequest = vm.ApplicationHeaderPane.Width * vm.Scale;
+			HeightRequest = vm.ApplicationHeaderPane.Height * vm.Scale;
 		}
 		
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
 			base.OnDraw (ctx, dirtyRect);
+			ctx.Scale (vm.Scale, vm.Scale);
 
 			ctx.SetLineWidth (1);
 			

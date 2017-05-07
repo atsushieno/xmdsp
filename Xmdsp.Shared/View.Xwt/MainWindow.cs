@@ -14,12 +14,15 @@ namespace Xmdsp
 		{
 			model = new Model ();
 			vm = new ViewModel (model);
-			
+			var vmw = vm.MainWindow;
+
+			double initialWidth, initialHeight;
+
 			Title = "xmdsp";
 			// FIXME: calculate sizes
-			Width = 840;
-			Height = 600;
-			Padding = 0;
+			initialWidth = Width = vmw.Width * vm.Scale;
+			initialHeight = Height = vmw.Height * vm.Scale;
+			Padding = vmw.Padding * vm.Scale;
 			Icon = Image.FromResource (GetType ().Assembly, "xmdsp_icon.png");
 			SetupMenu ();
 			
@@ -38,6 +41,8 @@ namespace Xmdsp
 			mainPane.PackStart (new KeyboardList (vm), true);
 			mainPane.PackStart (rightPane, true);
 			Content = mainPane;
+
+			this.BoundsChanged += (sender, e) => vm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
 		}
 		
 		void ShutdownApplication ()

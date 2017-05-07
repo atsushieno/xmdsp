@@ -42,6 +42,8 @@ namespace Xmdsp
 			panpot_offset_y = vmk.MeterHeight + (vmk.KeyOnMeterTextSize + vmk.LineGapSize) * 2;
 			panpot_height = vmk.PanpotOuterRadius * 2;
 
+			vm.ScaleChanged += SetSize;
+
 			vm.Model.MidiMessageReceived += m => {
 				switch (m.EventType) {
 				case SmfEvent.NoteOn:
@@ -70,9 +72,6 @@ namespace Xmdsp
 				}
 			};
 
-			WidthRequest = vmk.Width;
-			HeightRequest = vmk.Height;
-
 			vm.Model.TickProgress += delegate {
 				if (!dirty_keyon && current_progress++ < progress_max) {
 					dirty_keyon = true;
@@ -81,6 +80,13 @@ namespace Xmdsp
 					Application.Invoke (() => QueueDraw ());
 				}
 			};
+		}
+
+		internal void SetSize ()
+		{
+			WidthRequest = vm.KeyOnMeterList.Width * vm.Scale;
+			HeightRequest = vm.KeyOnMeterList.Height * vm.Scale;
+
 		}
 
 		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
@@ -92,6 +98,7 @@ namespace Xmdsp
 
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
+			ctx.Scale (vm.Scale, vm.Scale);
 			//if (dirty_keyon)
 				DrawKeyOn (ctx);
 			//if (dirty_prog)

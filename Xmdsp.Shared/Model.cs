@@ -7,7 +7,7 @@ namespace Xmdsp
 {
 	public class Model : IDisposable
 	{
-		public const string VersionNumbers = "0.04";
+		public const string VersionNumbers = "0.1.0";
 		
 		public class MidiDeviceInfo
 		{

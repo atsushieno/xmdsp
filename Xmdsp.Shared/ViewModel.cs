@@ -9,6 +9,7 @@ namespace Xmdsp
 	{
 		public int MaxChannels { get; set; }
 
+		public MainWindowViewModel MainWindow { get; private set; }
 		public PalletteDefinition Pallette { get; private set; }
 		public KeyboardListViewModel KeyboardList { get; private set; }
 		public KeyboardViewModel Keyboard { get; private set; }
@@ -19,6 +20,7 @@ namespace Xmdsp
 		public PlayTimeStatusMonitorViewModel PlayTimeStatusMonitor { get; private set; }
 
 		public KeyOnMeterListViewModel KeyOnMeterList { get; private set; }
+		public CircularProgressMeterViewModel CircularProgressMeter { get; private set; }
 
 		public event MidiEventAction MidiMessageReceived;
 
@@ -26,7 +28,8 @@ namespace Xmdsp
 		{
 			Model = model;
 			model.MidiMessageReceived += OnMessageReceived;
-			Pallette = new PalletteDefinition ();
+			MainWindow = new MainWindowViewModel (this);
+			Pallette = new PalletteDefinition (this);
 			Keyboard = new KeyboardViewModel (this);
 			KeyboardParameterBlock = new KeyboardParameterBlockViewModel (this);
 			KeyboardList = new KeyboardListViewModel (this);
@@ -34,16 +37,44 @@ namespace Xmdsp
 			PlayerStatusMonitor = new PlayerStatusMonitorViewModel (this);
 			PlayTimeStatusMonitor = new PlayTimeStatusMonitorViewModel (this);
 			KeyOnMeterList = new KeyOnMeterListViewModel (this);
+			CircularProgressMeter = new CircularProgressMeterViewModel (this);
 
 			MaxChannels = 16;
+
+			Scale = 1.0;
 		}
 
 		public Model Model { get; private set; }
+		double scale;
+		public double Scale {
+			get { return scale; }
+			set {
+				scale = value;
+				if (ScaleChanged != null)
+					ScaleChanged ();
+			}
+		}
+
+		public event Action ScaleChanged;
 
 		void OnMessageReceived (SmfEvent m)
 		{
 			if (MidiMessageReceived != null)
 				MidiMessageReceived (m);
+		}
+
+		public class MainWindowViewModel
+		{
+			ViewModel vm;
+
+			public MainWindowViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+			}
+
+			public int Width => 840;
+			public int Height => 600;
+			public int Padding => 0;
 		}
 
 		public class KeyboardListViewModel
@@ -204,15 +235,9 @@ namespace Xmdsp
 
 			public int ApplicationNameTextSize { get; private set; }
 
-			public int Width
-			{
-				get { return 300; }
-			}
+			public int Width => 250;
 
-			public int Height
-			{
-				get { return ApplicationNameTextSize + 2 + 24; }
-			}
+			public int Height => ApplicationNameTextSize + 2 + 24;
 		}
 
 		public class PlayerStatusMonitorViewModel
@@ -255,7 +280,7 @@ namespace Xmdsp
 
 			public int Width
 			{
-				get { return 200; }
+				get { return 180; }
 			}
 
 			public int Height
@@ -307,10 +332,28 @@ namespace Xmdsp
 			public int PanpotOffset { get; private set; }
 		}
 
+		public class CircularProgressMeterViewModel
+		{
+			private ViewModel vm;
+
+			public CircularProgressMeterViewModel (ViewModel vm)
+			{
+				this.vm = vm;
+			}
+
+			public int Width => 60;
+			public int Height => 60;
+
+			public int Padding = 32;
+		}
+
 		public class PalletteDefinition
 		{
-			public PalletteDefinition ()
+			private ViewModel vm;
+
+			public PalletteDefinition (ViewModel vm)
 			{
+				this.vm = vm;
 				ApplicationBackgroundColor = Color.Black;
 				KeyboardBackgroundColor = Color.Transparent;
 				WhiteKeyFillColor = Color.White;
