@@ -46,4 +46,9 @@
     <Folder Include="$(MSBuildThisFileDirectory)PlatformDependent\" />
     <Folder Include="$(MSBuildThisFileDirectory)View.Xwt\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xmdsp_icon.png">
+      <LogicalName>xmdsp_icon.png</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

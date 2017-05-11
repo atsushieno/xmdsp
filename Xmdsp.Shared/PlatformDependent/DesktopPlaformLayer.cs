@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using Commons.Music.Midi;
 using System.Collections.Generic;
-using Commons.Music.Midi.RtMidi;
-using Commons.Music.Midi.WinMM;
+using Commons.Music.Midi.CoreMidiApi;
 
 namespace Xmdsp
 {
@@ -13,7 +12,7 @@ namespace Xmdsp
 	{
 		public override IMidiAccess CreateMidiAccess ()
 		{
-			return Environment.OSVersion.Platform == PlatformID.Unix ? (IMidiAccess) new RtMidiAccess () : new WinMMMidiAccess ();
+			return new CoreMidiAccess ();
 		}
 
 		public override Stream GetResourceStream (string identifier)

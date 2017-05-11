@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\external\managed-midi\Commons.Music.Midi.Shared\Commons.Music.Midi.Shared.projitems" Label="Shared" Condition="Exists('..\external\managed-midi\Commons.Music.Midi.Shared\Commons.Music.Midi.Shared.projitems')" />
   <Import Project="..\Xmdsp.Shared\Xmdsp.Shared.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Shared\Xmdsp.Shared.projitems')" />
   <Import Project="..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props" Condition="Exists('..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props')" />
   <PropertyGroup>
@@ -59,35 +60,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Xwt">
-      <HintPath>..\packages\Xwt.0.2.14\lib\net40\Xwt.dll</HintPath>
-    </Reference>
     <Reference Include="Xwt.WPF">
       <HintPath>..\packages\Xwt.WPF.0.2.14\lib\net40\Xwt.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Xwt.XamMac">
-      <HintPath>..\packages\Xwt.XamMac.0.2.14\lib\net40\Xwt.XamMac.dll</HintPath>
     </Reference>
     <Reference Include="Xwt.Gtk">
       <HintPath>..\packages\Xwt.Gtk.0.2.14\lib\net40\Xwt.Gtk.dll</HintPath>
     </Reference>
+    <Reference Include="Xwt">
+      <HintPath>..\packages\Xwt.0.2.17\lib\net40\Xwt.dll</HintPath>
+    </Reference>
+    <Reference Include="Xwt.XamMac">
+      <HintPath>..\packages\Xwt.XamMac.0.2.17\lib\net40\Xwt.XamMac.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj">
-      <Project>{59EEFB0D-3957-43FC-8272-C3B460F7FF84}</Project>
-      <Name>Commons.Music.Midi.Desktop</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\xmdsp_icon.png">
-      <LogicalName>xmdsp_icon.png</LogicalName>
-    </EmbeddedResource>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
