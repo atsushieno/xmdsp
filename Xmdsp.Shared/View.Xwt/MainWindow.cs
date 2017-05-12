@@ -8,41 +8,41 @@ namespace Xmdsp
 	public class MainWindow : Window
 	{
 		readonly Model model;
-		readonly ViewModel vm;
+		readonly Presenter pm;
 		
 		public MainWindow ()
 		{
 			model = new Model ();
-			vm = new ViewModel (model);
-			var vmw = vm.MainWindow;
+			pm = new Presenter (model);
+			var pmw = pm.MainWindow;
 
 			double initialWidth, initialHeight;
 
 			Title = "xmdsp";
 			// FIXME: calculate sizes
-			initialWidth = Width = vmw.Width * vm.Scale;
-			initialHeight = Height = vmw.Height * vm.Scale;
-			Padding = vmw.Padding * vm.Scale;
+			initialWidth = Width = pmw.Width * pm.Scale;
+			initialHeight = Height = pmw.Height * pm.Scale;
+			Padding = pmw.Padding * pm.Scale;
 			Icon = Image.FromResource (GetType ().Assembly, "xmdsp_icon.png");
 			SetupMenu ();
 			
 			this.CloseRequested += delegate { ShutdownApplication (); };
 			
-			var mainPane = new HBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			var rightPane = new VBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightPane.PackStart (new ApplicationHeaderPane (vm), false);
-			var rightSecondPane = new HBox () { BackgroundColor = vm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightSecondPane.PackStart (new CircularProgressMeter (vm), false);
-			rightSecondPane.PackStart (new PlayerStatusMonitor (vm), false);
-			rightSecondPane.PackStart (new PlayTimeStatusMonitor (vm), false);
+			var mainPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
+			var rightPane = new VBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
+			rightPane.PackStart (new ApplicationHeaderPane (pm), false);
+			var rightSecondPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
+			rightSecondPane.PackStart (new CircularProgressMeter (pm), false);
+			rightSecondPane.PackStart (new PlayerStatusMonitor (pm), false);
+			rightSecondPane.PackStart (new PlayTimeStatusMonitor (pm), false);
 			rightPane.PackStart (rightSecondPane, false);
-			rightPane.PackStart (new KeyOnMeterList (vm), false);
+			rightPane.PackStart (new KeyOnMeterList (pm), false);
 			
-			mainPane.PackStart (new KeyboardList (vm), true);
+			mainPane.PackStart (new KeyboardList (pm), true);
 			mainPane.PackStart (rightPane, true);
 			Content = mainPane;
 
-			this.BoundsChanged += (sender, e) => vm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
+			this.BoundsChanged += (sender, e) => pm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
 		}
 		
 		void ShutdownApplication ()

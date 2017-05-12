@@ -8,13 +8,13 @@ namespace Xmdsp
 {
 	public class KeyboardParameterBlock
 	{
-		ViewModel vm;
+		Presenter pm;
 		int channel;		
 		Font font;
 		
-		public KeyboardParameterBlock (ViewModel viewModel, Font font, int channel)
+		public KeyboardParameterBlock (Presenter pm, Font font, int channel)
 		{
-			vm = viewModel;
+			this.pm = pm;
 			this.font = font;
 			
 			this.channel = channel;
@@ -40,61 +40,61 @@ namespace Xmdsp
 		// So far we draw everything so the entire nullable caching is unused.
 		internal void DoDraw (Context ctx)
 		{
-			var vmk = vm.KeyboardParameterBlock;
+			var pmk = pm.KeyboardParameterBlock;
 			
-			int yOffset = this.channel * (vmk.Height + vm.KeyboardParameterBlock.Height);
+			int yOffset = this.channel * (pmk.Height + pm.KeyboardParameterBlock.Height);
 			ctx.Translate (0, yOffset);
 			
-			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
+			int row2Y = pmk.KeyBlockHeaderTextSize + 1;
 			
-			var midiSize = DrawText (ctx, font, vmk.KeyBlockHeaderTextSize, vm.Pallette.CommonTextDarkest, "MIDI", 0, 0);
+			var midiSize = DrawText (ctx, font, pmk.KeyBlockHeaderTextSize, pm.Pallette.CommonTextDarkest, "MIDI", 0, 0);
 			
-			var trackSize = DrawText (ctx, font, vmk.KeyBlockHeaderTextSize, vm.Pallette.CommonTextBlightest, "TRACK.", 0, row2Y);
+			var trackSize = DrawText (ctx, font, pmk.KeyBlockHeaderTextSize, pm.Pallette.CommonTextBlightest, "TRACK.", 0, row2Y);
 			
-			DrawText (ctx, font, vmk.KeyBlockChannelNumberTextSize, vm.Pallette.CommonTextMiddle, (channel + 1).ToString ("D2"), Math.Max (midiSize.Width, trackSize.Width), 0);
+			DrawText (ctx, font, pmk.KeyBlockChannelNumberTextSize, pm.Pallette.CommonTextMiddle, (channel + 1).ToString ("D2"), Math.Max (midiSize.Width, trackSize.Width), 0);
 			
-			var size = DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "VOL:", 100, 0);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "EXP:", 160, 0);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "RSD:", 100, row2Y);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "CSD:", 160, row2Y);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "DSD:", 220, row2Y);
+			var size = DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "VOL:", 100, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "EXP:", 160, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "RSD:", 100, row2Y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "CSD:", 160, row2Y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "DSD:", 220, row2Y);
 			
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "So:", 320, 0);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextDarkest, "SP:", 320, row2Y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "So:", 320, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "SP:", 320, row2Y);
 			
 			UpdateParameters (ctx, font);
 			
 			ctx.Translate (0, -yOffset);
 		}
 
-		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
+		Size DrawText (Context ctx, Font font, int size, Presenter.Color color, string text, double x, double y)
 		{
 			return DrawingHelper.DrawText (ctx, font, size, color, text, x, y);
 		}
 
 		void DrawBoolSwitch (Context ctx, Font font, bool value, string label, int x, int y)
 		{
-			var vmk = vm.KeyboardParameterBlock;
-			ctx.SetColor ((value ? vm.Pallette.CommonTextMiddle : vm.Pallette.KeyParameterBackgroundColor).ToXwt ());
-			ctx.Rectangle (x - 1, y, vmk.KeyBlockParameterTextSize + 2, vmk.KeyBlockParameterTextSize + 3);
+			var pmk = pm.KeyboardParameterBlock;
+			ctx.SetColor ((value ? pm.Pallette.CommonTextMiddle : pm.Pallette.KeyParameterBackgroundColor).ToXwt ());
+			ctx.Rectangle (x - 1, y, pmk.KeyBlockParameterTextSize + 2, pmk.KeyBlockParameterTextSize + 3);
 			ctx.Fill ();
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, value ? vm.Pallette.CommonTextBlightest : vm.Pallette.CommonTextDarkest, label, x, y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, value ? pm.Pallette.CommonTextBlightest : pm.Pallette.CommonTextDarkest, label, x, y);
 		}
 		
 		void UpdateParameters (Context ctx, Font font)
 		{
-			var vmk = vm.KeyboardParameterBlock;			
-			int row2Y = vmk.KeyBlockHeaderTextSize + 1;
+			var pmk = pm.KeyboardParameterBlock;			
+			int row2Y = pmk.KeyBlockHeaderTextSize + 1;
 			
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) Volume).ToString ("D3"), 130, 0);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) Expression).ToString ("D3"), 190, 0);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) Rsd).ToString ("D3"), 130, row2Y);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) Csd).ToString ("D3"), 190, row2Y);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) Dsd).ToString ("D3"), 250, row2Y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Volume).ToString ("D3"), 130, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Expression).ToString ("D3"), 190, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Rsd).ToString ("D3"), 130, row2Y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Csd).ToString ("D3"), 190, row2Y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Dsd).ToString ("D3"), 250, row2Y);
 			DrawBoolSwitch (ctx, font, (bool) Hold, "H", 300, 0);
 			DrawBoolSwitch (ctx, font, (bool) PortamentoSwitch, "P", 300, row2Y);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) Sostenuto).ToString ("D3"), 350, 0);
-			DrawText (ctx, font, vmk.KeyBlockParameterTextSize, vm.Pallette.CommonTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Sostenuto).ToString ("D3"), 350, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
 		}
 
 		public void ProcessMidiMessage (SmfEvent m)

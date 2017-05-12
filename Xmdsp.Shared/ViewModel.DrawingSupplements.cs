@@ -2,7 +2,7 @@ using System;
 
 namespace Xmdsp
 {
-	public partial class ViewModel
+	public partial class Presenter
 	{
 		public struct Color
 		{

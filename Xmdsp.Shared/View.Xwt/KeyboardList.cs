@@ -7,23 +7,23 @@ namespace Xmdsp
 {
 	public class KeyboardList : Canvas
 	{
-		ViewModel vm;
+		Presenter pm;
 		KeyboardBlock [] keyboards;
 		
-		public KeyboardList (ViewModel viewModel)
+		public KeyboardList (Presenter pm)
 		{
-			vm = viewModel;
-			keyboards = new KeyboardBlock [vm.MaxChannels];
-			var font = this.Font.WithSize (vm.KeyboardParameterBlock.KeyBlockHeaderTextSize);
+			this.pm = pm;
+			keyboards = new KeyboardBlock [pm.MaxChannels];
+			var font = this.Font.WithSize (pm.KeyboardParameterBlock.KeyBlockHeaderTextSize);
 			
-			for (int i = 0; i < vm.MaxChannels; i++)
-				keyboards [i] = new KeyboardBlock (vm, font, i);
+			for (int i = 0; i < pm.MaxChannels; i++)
+				keyboards [i] = new KeyboardBlock (pm, font, i);
 			
 			Margin = 0;
-			this.BackgroundColor = vm.Pallette.KeyboardBackgroundColor.ToXwt ();
-			vm.ScaleChanged += SetSize;
+			this.BackgroundColor = pm.Pallette.KeyboardBackgroundColor.ToXwt ();
+			pm.ScaleChanged += SetSize;
 
-			vm.MidiMessageReceived += (SmfEvent m) => {
+			pm.MidiMessageReceived += (SmfEvent m) => {
 				switch (m.EventType) {
 				case SmfEvent.NoteOn:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
@@ -44,8 +44,8 @@ namespace Xmdsp
 
 		internal void SetSize ()
 		{
-			WidthRequest = vm.KeyboardList.Width * vm.Scale;
-			HeightRequest = vm.KeyboardList.Height * vm.Scale;
+			WidthRequest = pm.KeyboardList.Width * pm.Scale;
+			HeightRequest = pm.KeyboardList.Height * pm.Scale;
 		}
 
 		bool dirty = true;
@@ -55,7 +55,7 @@ namespace Xmdsp
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
 			dirty = false;
-			ctx.Scale (vm.Scale, vm.Scale);
+			ctx.Scale (pm.Scale, pm.Scale);
 			foreach (var kb in keyboards) {
 				kb.Keyboard.DoDraw (ctx);
 				kb.KeyParameters.DoDraw (ctx);

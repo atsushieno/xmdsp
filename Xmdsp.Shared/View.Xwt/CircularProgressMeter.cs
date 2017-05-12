@@ -6,16 +6,16 @@ namespace Xmdsp
 {
 	public class CircularProgressMeter : Canvas
 	{
-		readonly ViewModel vm;
-		readonly ViewModel.CircularProgressMeterViewModel vmc;
+		readonly Presenter pm;
+		readonly Presenter.CircularProgressMeterPresenter pmc;
 		
-		public CircularProgressMeter (ViewModel vm)
+		public CircularProgressMeter (Presenter pm)
 		{
-			this.vm = vm;
-			this.vmc = vm.CircularProgressMeter;
-			vm.ScaleChanged += SetSize;
+			this.pm = pm;
+			this.pmc = pm.CircularProgressMeter;
+			pm.ScaleChanged += SetSize;
 
-			vm.Model.TickProgress += delegate {
+			pm.Model.TickProgress += delegate {
 				current_position++;
 				current_position %= num_lines;
 				QueueDraw ();
@@ -24,8 +24,8 @@ namespace Xmdsp
 
 		internal void SetSize ()
 		{
-			WidthRequest = vmc.Width * vm.Scale;
-			HeightRequest = vmc.Height * vm.Scale;
+			WidthRequest = pmc.Width * pm.Scale;
+			HeightRequest = pmc.Height * pm.Scale;
 		}
 		
 		int current_position;
@@ -37,10 +37,10 @@ namespace Xmdsp
 		
 		protected override void OnDraw (Xwt.Drawing.Context ctx, Rectangle dirtyRect)
 		{
-			ctx.Scale (vm.Scale, vm.Scale);
+			ctx.Scale (pm.Scale, pm.Scale);
 			ctx.SetLineWidth (1);
-			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
-			ctx.Translate (vmc.Padding, vmc.Padding);
+			ctx.SetColor (pm.Pallette.CommonTextDarkest.ToXwt ());
+			ctx.Translate (pmc.Padding, pmc.Padding);
 			for (int i = 0; i < num_lines; i++) {
 				ctx.MoveTo ((int) (Math.Sin (2 * Math.PI / num_lines * i) * start), (int) (Math.Cos (2 * Math.PI / num_lines * i) * start));
 				ctx.LineTo ((int) (Math.Sin (2 * Math.PI / num_lines * i) * end), (int) (Math.Cos (2 * Math.PI / num_lines * i) * end));
@@ -48,11 +48,11 @@ namespace Xmdsp
 			
 			ctx.Stroke ();
 			
-			if (vm.Model.Player != null) {
-				switch (vm.Model.Player.State) {
+			if (pm.Model.Player != null) {
+				switch (pm.Model.Player.State) {
 				case PlayerState.Playing:
 				case PlayerState.FastForward:
-					ctx.SetColor (vm.Pallette.CommonTextMiddle.ToXwt ());
+					ctx.SetColor (pm.Pallette.CommonTextMiddle.ToXwt ());
 					var p = -current_position;
 					ctx.MoveTo ((int) (Math.Sin (2 * Math.PI / num_lines * p) * start), (int) (Math.Cos (2 * Math.PI / num_lines * p) * start));
 					ctx.LineTo ((int) (Math.Sin (2 * Math.PI / num_lines * p) * end), (int) (Math.Cos (2 * Math.PI / num_lines * p) * end));
@@ -61,7 +61,7 @@ namespace Xmdsp
 				}
 			}
 			
-			ctx.Translate (-vmc.Padding, -vmc.Padding);
+			ctx.Translate (-pmc.Padding, -pmc.Padding);
 		}
 	}
 }

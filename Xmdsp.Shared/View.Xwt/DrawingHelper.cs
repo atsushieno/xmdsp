@@ -9,7 +9,7 @@ namespace Xmdsp
 		// ok, it won't go more than 50. And no need to mess with Dictionary. Array is faster.
 		static Font [] fonts_by_size = new Font [50];
 
-		public static Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
+		public static Size DrawText (Context ctx, Font font, int size, Presenter.Color color, string text, double x, double y)
 		{
 			ctx.SetColor (color.ToXwt ());
 			if (fonts_by_size [size] == null)

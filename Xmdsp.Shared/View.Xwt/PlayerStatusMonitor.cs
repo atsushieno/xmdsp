@@ -8,21 +8,21 @@ namespace Xmdsp
 {
 	public class PlayerStatusMonitor : Canvas
 	{
-		ViewModel vm;
+		Presenter pm;
 		PlayerState state_to_draw = PlayerState.Stopped;
 		Font font;
 		
-		public PlayerStatusMonitor (ViewModel vm)
+		public PlayerStatusMonitor (Presenter pm)
 		{
-			this.vm = vm;
-			font = this.Font.WithSize (vm.KeyOnMeterList.KeyOnMeterTextSize);
+			this.pm = pm;
+			font = this.Font.WithSize (pm.KeyOnMeterList.KeyOnMeterTextSize);
 
-			vm.Model.PlayerStateChanged += state => {
+			pm.Model.PlayerStateChanged += state => {
 				state_to_draw = state;
 				Application.Invoke (() => QueueDraw ());
 			};
 
-			vm.ScaleChanged += SetSize;
+			pm.ScaleChanged += SetSize;
 
 			actions [PlayerState.Playing] = (ctx,active) => {
 				ctx.MoveTo (4, 2);
@@ -60,7 +60,7 @@ namespace Xmdsp
 				if (e.Button != PointerButton.Left)
 					return;
 				if (new Rectangle (coordinates [PlayerState.FastForward], GetButtonSize ()).Contains (e.Position))
-					vm.Model.StartFastForward ();
+					pm.Model.StartFastForward ();
 			};
 			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
 				if (e.Button != PointerButton.Left)
@@ -69,10 +69,10 @@ namespace Xmdsp
 					var stat = states [i];
 					if (new Rectangle (coordinates [stat], GetButtonSize ()).Contains (GetScaledPosition (e.Position))) {
 						switch (stat) {
-						case PlayerState.Playing: vm.Model.Play (); break;
-						case PlayerState.FastForward: vm.Model.StopFastForward (); break;
-						case PlayerState.Paused: vm.Model.Pause (); break;
-						case PlayerState.Stopped: vm.Model.Stop (); break;
+						case PlayerState.Playing: pm.Model.Play (); break;
+						case PlayerState.FastForward: pm.Model.StopFastForward (); break;
+						case PlayerState.Paused: pm.Model.Pause (); break;
+						case PlayerState.Stopped: pm.Model.Stop (); break;
 						}
 						break;
 					}
@@ -82,23 +82,23 @@ namespace Xmdsp
 
 		internal void SetSize ()
 		{
-			WidthRequest = vm.PlayerStatusMonitor.Width * vm.Scale;
-			HeightRequest = vm.PlayerStatusMonitor.Height * vm.Scale;
-			var textWidth = vm.PlayerStatusMonitor.TextSize * 6;
+			WidthRequest = pm.PlayerStatusMonitor.Width * pm.Scale;
+			HeightRequest = pm.PlayerStatusMonitor.Height * pm.Scale;
+			var textWidth = pm.PlayerStatusMonitor.TextSize * 6;
 			coordinates [PlayerState.Playing] = new Point (0, 0);
-			coordinates [PlayerState.FastForward] = new Point (textWidth * vm.Scale, 0);
-			coordinates [PlayerState.Paused] = new Point (0, 20 * vm.Scale);
-			coordinates [PlayerState.Stopped] = new Point (textWidth * vm.Scale, 20 * vm.Scale);
+			coordinates [PlayerState.FastForward] = new Point (textWidth * pm.Scale, 0);
+			coordinates [PlayerState.Paused] = new Point (0, 20 * pm.Scale);
+			coordinates [PlayerState.Stopped] = new Point (textWidth * pm.Scale, 20 * pm.Scale);
 		}
 
 		Size GetButtonSize ()
 		{
-			return new Size (16 * vm.Scale, 16 * vm.Scale);
+			return new Size (16 * pm.Scale, 16 * pm.Scale);
 		}
 
 		Point GetScaledPosition (Point point)
 		{
-			return new Point (point.X * vm.Scale, point.Y * vm.Scale); 
+			return new Point (point.X * pm.Scale, point.Y * pm.Scale); 
 		}
 
 		PlayerState [] states = new PlayerState[] {PlayerState.Playing, PlayerState.FastForward, PlayerState.Paused, PlayerState.Stopped};
@@ -114,15 +114,15 @@ namespace Xmdsp
 			//	return;
 			last_state = state_to_draw;
 			
-			ctx.Scale (vm.Scale, vm.Scale);
-			var vmp = vm.PlayerStatusMonitor;
+			ctx.Scale (pm.Scale, pm.Scale);
+			var pmp = pm.PlayerStatusMonitor;
 
-			ctx.SetColor (vm.Pallette.ApplicationBackgroundColor.ToXwt ());
+			ctx.SetColor (pm.Pallette.ApplicationBackgroundColor.ToXwt ());
 			ctx.Rectangle (dirtyRect);
 			ctx.Fill ();
 			Action<string,PlayerState> func = (label, state) => {
 				var co = coordinates [state];
-				DrawText (ctx, font, vmp.TextSize, vm.Pallette.CommonTextMiddle, label, co.X + vmp.BaseIconSize, co.Y);
+				DrawText (ctx, font, pmp.TextSize, pm.Pallette.CommonTextMiddle, label, co.X + pmp.BaseIconSize, co.Y);
 				DrawItem (ctx, state);
 			};
 			func ("Play", PlayerState.Playing);
@@ -131,7 +131,7 @@ namespace Xmdsp
 			func ("Stop", PlayerState.Stopped);
 		}
 
-		Size DrawText (Context ctx, Font font, int size, ViewModel.Color color, string text, double x, double y)
+		Size DrawText (Context ctx, Font font, int size, Presenter.Color color, string text, double x, double y)
 		{
 			return DrawingHelper.DrawText (ctx, font, size, color, text, x, y);
 		}
@@ -153,14 +153,14 @@ namespace Xmdsp
 			ctx.Translate (2, 2);
 
 			var rect = new Rectangle (0, 0, 12, 12);
-			ctx.SetColor (active ? vm.Pallette.PlayerStateActiveBackground.ToXwt () : vm.Pallette.PlayerStateInactiveBackground.ToXwt ());
+			ctx.SetColor (active ? pm.Pallette.PlayerStateActiveBackground.ToXwt () : pm.Pallette.PlayerStateInactiveBackground.ToXwt ());
 			ctx.Rectangle (rect);
 			ctx.Fill ();
-			ctx.SetColor (active ? vm.Pallette.PlayerStateActiveStroke.ToXwt () : vm.Pallette.PlayerStateInactiveStroke.ToXwt ());
+			ctx.SetColor (active ? pm.Pallette.PlayerStateActiveStroke.ToXwt () : pm.Pallette.PlayerStateInactiveStroke.ToXwt ());
 			ctx.Rectangle (rect);
 			ctx.Stroke ();
 			
-			ctx.SetColor (active ? vm.Pallette.PlayerStateActiveStroke.ToXwt () : vm.Pallette.PlayerStateInactiveStroke.ToXwt ());
+			ctx.SetColor (active ? pm.Pallette.PlayerStateActiveStroke.ToXwt () : pm.Pallette.PlayerStateInactiveStroke.ToXwt ());
 			drawContent (ctx, active);
 			
 			ctx.Translate (-2, -2);

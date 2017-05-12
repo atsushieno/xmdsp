@@ -7,26 +7,26 @@ namespace Xmdsp
 {
 	public class PlayTimeStatusMonitor : Canvas
 	{
-		ViewModel vm;
+		Presenter pm;
 		
-		public PlayTimeStatusMonitor (ViewModel vm)
+		public PlayTimeStatusMonitor (Presenter pm)
 		{
-			this.vm = vm;
+			this.pm = pm;
 
-			vm.ScaleChanged += SetSize;
+			pm.ScaleChanged += SetSize;
 
-			vm.Model.PlayTimerTick += delegate {
+			pm.Model.PlayTimerTick += delegate {
 				Application.Invoke (() => QueueDraw ());
 			};
-			vm.Model.PlayerStateChanged += delegate {
+			pm.Model.PlayerStateChanged += delegate {
 				Application.Invoke (() => QueueDraw ());
 			};
 		}
 
 		internal void SetSize ()
 		{
-			WidthRequest = vm.PlayTimeStatusMonitor.Width * vm.Scale;
-			HeightRequest = vm.PlayTimeStatusMonitor.Height * vm.Scale;
+			WidthRequest = pm.PlayTimeStatusMonitor.Width * pm.Scale;
+			HeightRequest = pm.PlayTimeStatusMonitor.Height * pm.Scale;
 		}
 		
 		Font font_label;
@@ -37,9 +37,9 @@ namespace Xmdsp
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
 			base.OnDraw (ctx, dirtyRect);
-			ctx.Scale (vm.Scale, vm.Scale);
+			ctx.Scale (pm.Scale, pm.Scale);
 
-			ctx.SetColor (vm.Pallette.CommonTextDarkest.ToXwt ());
+			ctx.SetColor (pm.Pallette.CommonTextDarkest.ToXwt ());
 			ctx.SetLineWidth (1);
 			for (int i = 0; i < 5; i++) {
 				ctx.MoveTo (0, 30 * i + 24 + 1);
@@ -47,7 +47,7 @@ namespace Xmdsp
 				ctx.Stroke ();
 			}
 			
-			ctx.SetColor (vm.Pallette.CommonTextMiddle.ToXwt ());
+			ctx.SetColor (pm.Pallette.CommonTextMiddle.ToXwt ());
 			for (int i = 0; i < 5; i++) {
 				ctx.Rectangle (0, 30 * i, 5, 24);
 				ctx.Fill ();
@@ -73,16 +73,16 @@ namespace Xmdsp
 			
 			string playTime, totalTime, ticks, tempo, meter;
 			
-			if (vm.Model.Player != null) {
+			if (pm.Model.Player != null) {
 				if (cached_player == null || !cached_player.IsAlive) {
-					cached_player = new WeakReference (vm.Model.Player);
+					cached_player = new WeakReference (pm.Model.Player);
 					total_time_string = TimeSpan.FromMilliseconds (((MidiPlayer) cached_player.Target).GetTotalPlayTimeMilliseconds ()).ToString ("mm\\:ss");
 				}
 				totalTime = "   " + total_time_string;
-				playTime = "   " + vm.Model.Player.PositionInTime.ToString ("mm\\:ss");
-				ticks = vm.Model.Player.PlayDeltaTime.ToString ("D08");
-				tempo = "     " + vm.Model.Player.Bpm.ToString ("D03");
-				var data = vm.Model.Player.TimeSignature;
+				playTime = "   " + pm.Model.Player.PositionInTime.ToString ("mm\\:ss");
+				ticks = pm.Model.Player.PlayDeltaTime.ToString ("D08");
+				tempo = "     " + pm.Model.Player.Bpm.ToString ("D03");
+				var data = pm.Model.Player.TimeSignature;
 				meter = "     " + data [0] + "/" + Math.Pow (2, data [1]);
 			} else {
 				playTime = "   --:--";

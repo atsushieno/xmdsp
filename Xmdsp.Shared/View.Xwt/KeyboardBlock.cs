@@ -6,13 +6,13 @@ namespace Xmdsp
 {
 	public class KeyboardBlock
 	{
-		ViewModel vm;
+		Presenter pm;
 		
-		public KeyboardBlock (ViewModel viewModel, Font font, int channel)
+		public KeyboardBlock (Presenter pm, Font font, int channel)
 		{
-			vm = viewModel;
-			Keyboard = new Keyboard (vm, channel);
-			KeyParameters = new KeyboardParameterBlock (vm, font, channel);
+			this.pm = pm;
+			Keyboard = new Keyboard (pm, channel);
+			KeyParameters = new KeyboardParameterBlock (pm, font, channel);
 		}
 
 		public Keyboard Keyboard { get; private set; }

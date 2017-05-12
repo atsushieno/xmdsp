@@ -5,40 +5,40 @@ using Commons.Music.Midi;
 
 namespace Xmdsp
 {
-	public partial class ViewModel
+	public partial class Presenter
 	{
 		public int MaxChannels { get; set; }
 
-		public MainWindowViewModel MainWindow { get; private set; }
+		public MainWindowPresenter MainWindow { get; private set; }
 		public PalletteDefinition Pallette { get; private set; }
-		public KeyboardListViewModel KeyboardList { get; private set; }
-		public KeyboardViewModel Keyboard { get; private set; }
-		public KeyboardParameterBlockViewModel KeyboardParameterBlock { get; private set; }
+		public KeyboardListPresenter KeyboardList { get; private set; }
+		public KeyboardPresenter Keyboard { get; private set; }
+		public KeyboardParameterBlockPresenter KeyboardParameterBlock { get; private set; }
 
-		public ApplicationHeaderPaneViewModel ApplicationHeaderPane { get; private set; }
-		public PlayerStatusMonitorViewModel PlayerStatusMonitor { get; private set; }
-		public PlayTimeStatusMonitorViewModel PlayTimeStatusMonitor { get; private set; }
+		public ApplicationHeaderPanePresenter ApplicationHeaderPane { get; private set; }
+		public PlayerStatusMonitorPresenter PlayerStatusMonitor { get; private set; }
+		public PlayTimeStatusMonitorPresenter PlayTimeStatusMonitor { get; private set; }
 
-		public KeyOnMeterListViewModel KeyOnMeterList { get; private set; }
-		public CircularProgressMeterViewModel CircularProgressMeter { get; private set; }
-		public PseudoSpectrumAnalyzerViewModel PseudoSpectrumAnalyzer { get; private set; }
+		public KeyOnMeterListPresenter KeyOnMeterList { get; private set; }
+		public CircularProgressMeterPresenter CircularProgressMeter { get; private set; }
+		public PseudoSpectrumAnalyzerPresenter PseudoSpectrumAnalyzer { get; private set; }
 
 		public event MidiEventAction MidiMessageReceived;
 
-		public ViewModel (Model model)
+		public Presenter (Model model)
 		{
 			Model = model;
 			model.MidiMessageReceived += OnMessageReceived;
-			MainWindow = new MainWindowViewModel (this);
+			MainWindow = new MainWindowPresenter (this);
 			Pallette = new PalletteDefinition (this);
-			Keyboard = new KeyboardViewModel (this);
-			KeyboardParameterBlock = new KeyboardParameterBlockViewModel (this);
-			KeyboardList = new KeyboardListViewModel (this);
-			ApplicationHeaderPane = new ApplicationHeaderPaneViewModel (this);
-			PlayerStatusMonitor = new PlayerStatusMonitorViewModel (this);
-			PlayTimeStatusMonitor = new PlayTimeStatusMonitorViewModel (this);
-			KeyOnMeterList = new KeyOnMeterListViewModel (this);
-			CircularProgressMeter = new CircularProgressMeterViewModel (this);
+			Keyboard = new KeyboardPresenter (this);
+			KeyboardParameterBlock = new KeyboardParameterBlockPresenter (this);
+			KeyboardList = new KeyboardListPresenter (this);
+			ApplicationHeaderPane = new ApplicationHeaderPanePresenter (this);
+			PlayerStatusMonitor = new PlayerStatusMonitorPresenter (this);
+			PlayTimeStatusMonitor = new PlayTimeStatusMonitorPresenter (this);
+			KeyOnMeterList = new KeyOnMeterListPresenter (this);
+			CircularProgressMeter = new CircularProgressMeterPresenter (this);
 
 			MaxChannels = 16;
 
@@ -64,13 +64,13 @@ namespace Xmdsp
 				MidiMessageReceived (m);
 		}
 
-		public class MainWindowViewModel
+		public class MainWindowPresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public MainWindowViewModel (ViewModel vm)
+			public MainWindowPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 			}
 
 			public int Width => 840;
@@ -78,33 +78,33 @@ namespace Xmdsp
 			public int Padding => 0;
 		}
 
-		public class KeyboardListViewModel
+		public class KeyboardListPresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public KeyboardListViewModel (ViewModel vm)
+			public KeyboardListPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 			}
 
 			public int Width
 			{
-				get { return Math.Max (vm.Keyboard.Width, vm.KeyboardParameterBlock.Width); }
+				get { return Math.Max (pm.Keyboard.Width, pm.KeyboardParameterBlock.Width); }
 			}
 
 			public int Height
 			{
-				get { return vm.MaxChannels * (vm.Keyboard.Height + vm.KeyboardParameterBlock.Height); }
+				get { return pm.MaxChannels * (pm.Keyboard.Height + pm.KeyboardParameterBlock.Height); }
 			}
 		}
 
-		public class KeyboardViewModel
+		public class KeyboardPresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public KeyboardViewModel (ViewModel vm)
+			public KeyboardPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 				MaxKeys = 128;
 				VisibleOctaves = (MaxKeys / 12) - 3;
 				VisibleMinOctave = 1;
@@ -195,13 +195,13 @@ namespace Xmdsp
 			}
 		}
 
-		public class KeyboardParameterBlockViewModel
+		public class KeyboardParameterBlockPresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public KeyboardParameterBlockViewModel (ViewModel vm)
+			public KeyboardParameterBlockPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 				KeyBlockHeaderTextSize = 8;
 				KeyBlockParameterTextSize = 8;
 				KeyBlockChannelNumberTextSize = 14;
@@ -224,13 +224,13 @@ namespace Xmdsp
 			public int [] ColumnPositions = { 0, 100, 160, 220, 320, 360 };
 		}
 
-		public class ApplicationHeaderPaneViewModel
+		public class ApplicationHeaderPanePresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public ApplicationHeaderPaneViewModel (ViewModel vm)
+			public ApplicationHeaderPanePresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 				ApplicationNameTextSize = 24;
 			}
 
@@ -241,13 +241,13 @@ namespace Xmdsp
 			public int Height => ApplicationNameTextSize + 2 + 12;
 		}
 
-		public class PlayerStatusMonitorViewModel
+		public class PlayerStatusMonitorPresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public PlayerStatusMonitorViewModel (ViewModel vm)
+			public PlayerStatusMonitorPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 				BaseIconSize = 16;
 				TextSize = 9;
 			}
@@ -267,13 +267,13 @@ namespace Xmdsp
 			public int TextSize { get; private set; }
 		}
 
-		public class PlayTimeStatusMonitorViewModel
+		public class PlayTimeStatusMonitorPresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public PlayTimeStatusMonitorViewModel (ViewModel vm)
+			public PlayTimeStatusMonitorPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 				ItemHeight = 30;
 			}
 
@@ -290,13 +290,13 @@ namespace Xmdsp
 			}
 		}
 
-		public class KeyOnMeterListViewModel
+		public class KeyOnMeterListPresenter
 		{
-			ViewModel vm;
+			Presenter pm;
 
-			public KeyOnMeterListViewModel (ViewModel vm)
+			public KeyOnMeterListPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 
 				KeyOnMeterTextSize = 8;
 				LineGapSize = 2;
@@ -315,7 +315,7 @@ namespace Xmdsp
 
 			public int Width
 			{
-				get { return MetersOffset + ItemWidth * vm.MaxChannels; }
+				get { return MetersOffset + ItemWidth * pm.MaxChannels; }
 			}
 
 			public int Height
@@ -336,13 +336,13 @@ namespace Xmdsp
 			public int PanpotOffset { get; private set; }
 		}
 
-		public class CircularProgressMeterViewModel
+		public class CircularProgressMeterPresenter
 		{
-			private ViewModel vm;
+			private Presenter pm;
 
-			public CircularProgressMeterViewModel (ViewModel vm)
+			public CircularProgressMeterPresenter (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 			}
 
 			public int Width => 60;
@@ -351,7 +351,7 @@ namespace Xmdsp
 			public int Padding = 32;
 		}
 
-		public class PseudoSpectrumAnalyzerViewModel
+		public class PseudoSpectrumAnalyzerPresenter
 		{
 			public int Width => 300;
 			public int Height => 240;
@@ -363,11 +363,11 @@ namespace Xmdsp
 
 		public class PalletteDefinition
 		{
-			private ViewModel vm;
+			private Presenter pm;
 
-			public PalletteDefinition (ViewModel vm)
+			public PalletteDefinition (Presenter pm)
 			{
-				this.vm = vm;
+				this.pm = pm;
 				ApplicationBackgroundColor = Color.Black;
 				KeyboardBackgroundColor = Color.Transparent;
 				WhiteKeyFillColor = Color.White;
