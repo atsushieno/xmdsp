@@ -21,6 +21,7 @@ namespace Xmdsp
 
 		public KeyOnMeterListViewModel KeyOnMeterList { get; private set; }
 		public CircularProgressMeterViewModel CircularProgressMeter { get; private set; }
+		public PseudoSpectrumAnalyzerViewModel PseudoSpectrumAnalyzer { get; private set; }
 
 		public event MidiEventAction MidiMessageReceived;
 
@@ -237,7 +238,7 @@ namespace Xmdsp
 
 			public int Width => 250;
 
-			public int Height => ApplicationNameTextSize + 2 + 24;
+			public int Height => ApplicationNameTextSize + 2 + 12;
 		}
 
 		public class PlayerStatusMonitorViewModel
@@ -310,10 +311,13 @@ namespace Xmdsp
 				PanpotOffset = 4;
 			}
 
+			public int TotalProgressSteps => 16;
+
 			public int Width
 			{
 				get { return MetersOffset + ItemWidth * vm.MaxChannels; }
 			}
+
 			public int Height
 			{
 				get { return ItemHeight + KeyOnMeterTextSize * 2 + LineGapSize + PanpotOuterRadius * 2 + PanpotOffset; }
@@ -345,6 +349,16 @@ namespace Xmdsp
 			public int Height => 60;
 
 			public int Padding = 32;
+		}
+
+		public class PseudoSpectrumAnalyzerViewModel
+		{
+			public int Width => 300;
+			public int Height => 240;
+
+			public int LineThickness => 1;
+			public int CellWidth => 16;
+			public int CellHeight => 8;
 		}
 
 		public class PalletteDefinition

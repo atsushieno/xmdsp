@@ -20,6 +20,10 @@ namespace Xmdsp
 			var vmk = vm.Keyboard;
 			int octaves = vmk.VisibleOctaves;
 			key_on_status = new bool [vm.Keyboard.MaxKeys];
+			vm.Model.PlayerStateChanged += state => {
+				if (state == PlayerState.Stopped)
+					ResetKeyOnStatuses ();
+			};
 		}
 		
 		bool [] key_on_status;
@@ -123,6 +127,12 @@ namespace Xmdsp
 				key_on_status [n] = false;
 				break;
 			}
+		}
+
+		void ResetKeyOnStatuses ()
+		{
+			for (int i = 0; i < key_on_status.Length; i++)
+				key_on_status [i] = false;
 		}
 	}
 }

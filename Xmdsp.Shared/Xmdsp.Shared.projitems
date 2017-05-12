@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\ApplicationHeaderPane.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\CircularProgressMeter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PseudoSpectrumAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)PlatformDependent\" />

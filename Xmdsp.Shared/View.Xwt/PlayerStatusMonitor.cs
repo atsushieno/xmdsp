@@ -23,12 +23,7 @@ namespace Xmdsp
 			};
 
 			vm.ScaleChanged += SetSize;
-			var textWidth = vm.PlayerStatusMonitor.TextSize * 6;
 
-			coordinates [PlayerState.Playing] = new Point (0, 0);
-			coordinates [PlayerState.FastForward] = new Point (textWidth, 0);
-			coordinates [PlayerState.Paused] = new Point (0, 20);
-			coordinates [PlayerState.Stopped] = new Point (textWidth, 20);
 			actions [PlayerState.Playing] = (ctx,active) => {
 				ctx.MoveTo (4, 2);
 				ctx.LineTo (9, 6);
@@ -64,7 +59,7 @@ namespace Xmdsp
 			this.ButtonPressed += (object sender, ButtonEventArgs e) => {
 				if (e.Button != PointerButton.Left)
 					return;
-				if (new Rectangle (coordinates [PlayerState.FastForward], new Size (16, 16)).Contains (e.Position))
+				if (new Rectangle (coordinates [PlayerState.FastForward], GetButtonSize ()).Contains (e.Position))
 					vm.Model.StartFastForward ();
 			};
 			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
@@ -72,7 +67,7 @@ namespace Xmdsp
 					return;
 				for (int i = 0; i < coordinates.Count; i++) {
 					var stat = states [i];
-					if (new Rectangle (coordinates [stat], new Size (16, 16)).Contains (e.Position)) {
+					if (new Rectangle (coordinates [stat], GetButtonSize ()).Contains (GetScaledPosition (e.Position))) {
 						switch (stat) {
 						case PlayerState.Playing: vm.Model.Play (); break;
 						case PlayerState.FastForward: vm.Model.StopFastForward (); break;
@@ -89,15 +84,36 @@ namespace Xmdsp
 		{
 			WidthRequest = vm.PlayerStatusMonitor.Width * vm.Scale;
 			HeightRequest = vm.PlayerStatusMonitor.Height * vm.Scale;
+			var textWidth = vm.PlayerStatusMonitor.TextSize * 6;
+			coordinates [PlayerState.Playing] = new Point (0, 0);
+			coordinates [PlayerState.FastForward] = new Point (textWidth * vm.Scale, 0);
+			coordinates [PlayerState.Paused] = new Point (0, 20 * vm.Scale);
+			coordinates [PlayerState.Stopped] = new Point (textWidth * vm.Scale, 20 * vm.Scale);
+		}
+
+		Size GetButtonSize ()
+		{
+			return new Size (16 * vm.Scale, 16 * vm.Scale);
+		}
+
+		Point GetScaledPosition (Point point)
+		{
+			return new Point (point.X * vm.Scale, point.Y * vm.Scale); 
 		}
 
 		PlayerState [] states = new PlayerState[] {PlayerState.Playing, PlayerState.FastForward, PlayerState.Paused, PlayerState.Stopped};
 		Dictionary<PlayerState, Point> coordinates = new Dictionary<PlayerState, Point> ();
 		Dictionary<PlayerState, Action<Context,bool>> actions = new Dictionary<PlayerState, Action<Context,bool>> ();
-		
+
+		PlayerState last_state = PlayerState.Playing; // which is not true at startup
+
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
 			base.OnDraw (ctx, dirtyRect);
+			//if (last_state == state_to_draw)
+			//	return;
+			last_state = state_to_draw;
+			
 			ctx.Scale (vm.Scale, vm.Scale);
 			var vmp = vm.PlayerStatusMonitor;
 

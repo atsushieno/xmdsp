@@ -20,8 +20,6 @@ namespace Xmdsp
 		int prog_bnk_height;
 		int panpot_height;
 		
-		const int progress_max = 16;
-		
 		public KeyOnMeterList (ViewModel vm)
 		{
 			this.vm = vm;
@@ -33,7 +31,7 @@ namespace Xmdsp
 			pan = new int [vm.MaxChannels];
 
 			for (int i = 0; i < vm.MaxChannels; i++) {
-				keyon_meter_progress [i] = progress_max;
+				keyon_meter_progress [i] = vmk.TotalProgressSteps;
 				pan [i] = 64;
 			}
 			
@@ -73,7 +71,7 @@ namespace Xmdsp
 			};
 
 			vm.Model.TickProgress += delegate {
-				if (!dirty_keyon && current_progress++ < progress_max) {
+				if (!dirty_keyon && current_progress++ < vmk.TotalProgressSteps) {
 					dirty_keyon = true;
 					// FIXME: enable this once I figured out why the other QueueDraw() overload doesn't work.
 //					QueueDraw (new Rectangle (0, 0, vmk.Width, vmk.MeterHeight));
@@ -154,11 +152,12 @@ namespace Xmdsp
 
 			ctx.SetColor (vm.Pallette.CommonTextMiddle.ToXwt ());
 			ctx.SetLineWidth (1);
-			var lineHeight = vmk.MeterHeight / progress_max;
+			var steps = vmk.TotalProgressSteps;
+			var lineHeight = vmk.MeterHeight / steps;
 			for (int i = 0; i < keyon_meter_progress.Length; i++) {
 				var x = (vmk.ItemWidth) * i + vmk.MetersOffset;
 				ctx.Rectangle (x, 0, vmk.MeterWidth, vmk.MeterHeight);
-				for (int p = keyon_meter_progress [i]; p < progress_max; p++) {
+				for (int p = keyon_meter_progress [i]; p < steps; p++) {
 					var y = p * lineHeight;
 					ctx.MoveTo (x, y);
 					ctx.LineTo (x + vmk.MeterWidth, y);
@@ -167,7 +166,7 @@ namespace Xmdsp
 			ctx.Stroke ();
 
 			for (int i = 0; i < keyon_meter_progress.Length; i++)
-				if (keyon_meter_progress [i] < progress_max)
+				if (keyon_meter_progress [i] < steps)
 					keyon_meter_progress [i]++;
 		}
 	}
