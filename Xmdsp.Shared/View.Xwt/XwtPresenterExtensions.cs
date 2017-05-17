@@ -3,7 +3,7 @@ using Xwt;
 
 namespace Xmdsp
 {
-	public static class XwtViewModelExtensions
+	public static class XwtPresenterExtensions
 	{
 		public static Xwt.Drawing.Color ToXwt (this Presenter.Color color)
 		{

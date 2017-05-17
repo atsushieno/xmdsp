@@ -42,7 +42,7 @@ namespace Xmdsp
 		
 		public PlatformLayer Platform { get; private set; }
 
-		SmfMusic current_music;
+		MidiMusic current_music;
 		MidiPlayer current_player;
 		
 		public event Action<PlayerState> PlayerStateChanged;
@@ -57,7 +57,7 @@ namespace Xmdsp
 		{
 			EnsurePlayerStopped ();
 			using (var stream = Platform.GetResourceStream (filename))
-				current_music = SmfMusic.Read (stream);
+				current_music = MidiMusic.Read (stream);
 		}
 
 		// either play or resume

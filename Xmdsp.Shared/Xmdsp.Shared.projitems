@@ -37,7 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayerStatusMonitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayTimeStatusMonitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Program.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\XwtViewModelExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\XwtPresenterExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\ApplicationHeaderPane.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\CircularProgressMeter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardList.cs" />

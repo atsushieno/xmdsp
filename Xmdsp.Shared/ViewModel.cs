@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commons.Music.Midi;
@@ -58,7 +58,7 @@ namespace Xmdsp
 
 		public event Action ScaleChanged;
 
-		void OnMessageReceived (SmfEvent m)
+		void OnMessageReceived (MidiEvent m)
 		{
 			if (MidiMessageReceived != null)
 				MidiMessageReceived (m);

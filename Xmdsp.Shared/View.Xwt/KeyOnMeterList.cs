@@ -44,23 +44,23 @@ namespace Xmdsp
 
 			pm.Model.MidiMessageReceived += m => {
 				switch (m.EventType) {
-				case SmfEvent.NoteOn:
+				case MidiEvent.NoteOn:
 					if (m.Lsb > 0)
 						keyon_meter_progress [m.Channel] = current_progress = 0;
 					break;
-				case SmfEvent.Program:
+				case MidiEvent.Program:
 					program [m.Channel] = m.Msb;
 					dirty_prog = true;
 					Application.Invoke (() => QueueDraw (new Rectangle (0, prog_bnk_offset_y, pmk.Width, prog_bnk_height)));
 					break;
-				case SmfEvent.CC:
+				case MidiEvent.CC:
 					switch (m.Msb) {
-					case SmfCC.Pan:
+					case MidiCC.Pan:
 						pan [m.Channel] = m.Lsb;
 						dirty_pan = true;
 						Application.Invoke (() => QueueDraw (new Rectangle (0, panpot_offset_y, pmk.Width, panpot_height)));
 						break;
-					case SmfCC.BankSelectLsb:
+					case MidiCC.BankSelectLsb:
 						bank_select [m.Channel] = m.Lsb;
 						dirty_prog = true;
 						Application.Invoke (() => QueueDraw (new Rectangle (0, prog_bnk_offset_y, pmk.Width, prog_bnk_height)));

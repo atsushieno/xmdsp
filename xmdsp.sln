@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp", "Xmdsp\Xmdsp.csproj", "{A1DD7831-E3D8-4573-A150-C78FECC1B68E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp.Desktop", "Xmdsp\Xmdsp.Desktop.csproj", "{A1DD7831-E3D8-4573-A150-C78FECC1B68E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.Desktop", "external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj", "{59EEFB0D-3957-43FC-8272-C3B460F7FF84}"
 EndProject
@@ -9,9 +9,9 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Commons.Music.Midi.Shared",
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xmdsp.Shared", "Xmdsp.Shared\Xmdsp.Shared.shproj", "{2571D4BC-FC34-4A91-B3BA-B76E58AA6EE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.CoreMidi", "external\managed-midi\Commons.Music.Midi.CoreMidi\Commons.Music.Midi.CoreMidi.csproj", "{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp.XamMac", "Xmdsp.XamMac\Xmdsp.XamMac.csproj", "{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.CoreMidi", "external\managed-midi\Commons.Music.Midi.CoreMidi\Commons.Music.Midi.CoreMidi.csproj", "{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,18 +32,18 @@ Global
 		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Xmdsp\Xmdsp.csproj

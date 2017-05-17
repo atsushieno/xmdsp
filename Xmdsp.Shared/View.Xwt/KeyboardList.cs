@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Xwt;
 using Commons.Music.Midi;
 using Xwt.Drawing;
@@ -23,15 +23,15 @@ namespace Xmdsp
 			this.BackgroundColor = pm.Pallette.KeyboardBackgroundColor.ToXwt ();
 			pm.ScaleChanged += SetSize;
 
-			pm.MidiMessageReceived += (SmfEvent m) => {
+			pm.MidiMessageReceived += (MidiEvent m) => {
 				switch (m.EventType) {
-				case SmfEvent.NoteOn:
+				case MidiEvent.NoteOn:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
 					break;
-				case SmfEvent.NoteOff:
+				case MidiEvent.NoteOff:
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
 					break;
-				case SmfEvent.CC:
+				case MidiEvent.CC:
 					keyboards [m.Channel].KeyParameters.ProcessMidiMessage (m);
 					break;
 				}

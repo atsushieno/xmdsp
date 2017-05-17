@@ -1,4 +1,4 @@
-using System;
+﻿﻿using System;
 using Xwt;
 using Xwt.Drawing;
 using Commons.Music.Midi;
@@ -97,36 +97,36 @@ namespace Xmdsp
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) SoftPedal).ToString ("D3"), 350, row2Y);
 		}
 
-		public void ProcessMidiMessage (SmfEvent m)
+		public void ProcessMidiMessage (MidiEvent m)
 		{
 			switch (m.EventType) {
-			case SmfEvent.CC:
+			case MidiEvent.CC:
 				switch (m.Msb) {
-				case SmfCC.Volume:
+				case MidiCC.Volume:
 					Volume = m.Lsb;
 					break;
-				case SmfCC.Expression:
+				case MidiCC.Expression:
 					Expression = m.Lsb;
 					break;
-				case SmfCC.Effect1:
+				case MidiCC.Effect1:
 					Rsd = m.Lsb;
 					break;
-				case SmfCC.Effect2:
+				case MidiCC.Effect2:
 					Csd = m.Lsb;
 					break;
-				case SmfCC.Effect3:
+				case MidiCC.Effect3:
 					Dsd = m.Lsb;
 					break;
-				case SmfCC.Hold:
+				case MidiCC.Hold:
 					Hold = m.Lsb > 63;
 					break;
-				case SmfCC.PortamentoSwitch:
+				case MidiCC.PortamentoSwitch:
 					PortamentoSwitch = m.Lsb > 63;
 					break;
-				case SmfCC.Sostenuto:
+				case MidiCC.Sostenuto:
 					Sostenuto = m.Lsb;
 					break;
-				case SmfCC.SoftPedal:
+				case MidiCC.SoftPedal:
 					SoftPedal = m.Lsb;
 					break;
 				}

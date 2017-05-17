@@ -42,7 +42,7 @@ namespace Xmdsp
 			midi_output = MidiAccess.OpenOutputAsync (dev).Result;
 		}
 
-		public virtual MidiPlayer CreateMidiPlayer (SmfMusic music)
+		public virtual MidiPlayer CreateMidiPlayer (MidiMusic music)
 		{
 			if (midi_output == null)
 				OpenOutputDevice ();

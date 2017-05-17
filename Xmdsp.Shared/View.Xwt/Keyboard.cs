@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Xwt;
 using Xwt.Drawing;
@@ -28,12 +28,12 @@ namespace Xmdsp
 		
 		bool [] key_on_status;
 		
-		bool DrawMessage (Context ctx, Rectangle dirtyRect, SmfEvent m)
+		bool DrawMessage (Context ctx, Rectangle dirtyRect, MidiEvent m)
 		{
 			var pmk = pm.Keyboard;
 			if (pmk.IsBlackKey (m.Msb)) {
 				var rect = pmk.GetBlackKeyRect (m.Msb);
-				ctx.SetColor ((m.EventType == SmfEvent.NoteOn ? pm.Pallette.NoteOnColor : pm.Pallette.BlackKeyFillColor).ToXwt ());
+				ctx.SetColor ((m.EventType == MidiEvent.NoteOn ? pm.Pallette.NoteOnColor : pm.Pallette.BlackKeyFillColor).ToXwt ());
 				ctx.Rectangle (rect.X, rect.Y, rect.Width, rect.Height);
 				ctx.Fill ();
 				ctx.SetColor (pm.Pallette.BlackKeyStrokeColor.ToXwt ());
@@ -41,7 +41,7 @@ namespace Xmdsp
 				ctx.Stroke ();
 			} else {
 				int x = pmk.GetWhiteKeyX (m.Msb);
-				ctx.SetColor ((m.EventType == SmfEvent.NoteOn ? pm.Pallette.NoteOnColor : pm.Pallette.WhiteKeyFillColor).ToXwt ());
+				ctx.SetColor ((m.EventType == MidiEvent.NoteOn ? pm.Pallette.NoteOnColor : pm.Pallette.WhiteKeyFillColor).ToXwt ());
 				ctx.NewPath ();
 				var path = new DrawingPath ();
 				var x2 = x + pmk.WhiteKeyWidth;
@@ -116,14 +116,14 @@ namespace Xmdsp
 		static readonly byte [] white_key_index_to_note = {0, 2, 4, 5, 7 ,9, 11};
 		static readonly byte [] black_key_index_to_note = {1, 3, 6, 8, 10};
 		
-		public void ProcessMidiMessage (SmfEvent m)
+		public void ProcessMidiMessage (MidiEvent m)
 		{
 			var n = m.Msb - pm.Keyboard.VisibleMinOctave * 12;
 			switch (m.EventType) {
-			case SmfEvent.NoteOn:
+			case MidiEvent.NoteOn:
 				key_on_status [n] = m.Lsb > 0;
 				break;
-			case SmfEvent.NoteOff:
+			case MidiEvent.NoteOff:
 				key_on_status [n] = false;
 				break;
 			}
