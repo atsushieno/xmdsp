@@ -9,18 +9,7 @@
     <Import_RootNamespace>Xmdsp.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)libportmidi.so">
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)librtmidi_c.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)packages.config" />
-    <None Include="$(MSBuildThisFileDirectory)portmidi.dll">
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Model.cs" />
