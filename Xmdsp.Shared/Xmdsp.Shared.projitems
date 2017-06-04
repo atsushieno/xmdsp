@@ -16,25 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlatformLayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel.DrawingSupplements.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PlatformDependent\DesktopPlaformLayer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\DrawingHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Keyboard.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardBlock.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardParameterBlock.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyOnMeterList.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\MainWindow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayerStatusMonitor.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayTimeStatusMonitor.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Program.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\XwtPresenterExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\ApplicationHeaderPane.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\CircularProgressMeter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\KeyboardList.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PseudoSpectrumAnalyzer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)PlatformDependent\" />
-    <Folder Include="$(MSBuildThisFileDirectory)View.Xwt\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\xmdsp_icon.png">

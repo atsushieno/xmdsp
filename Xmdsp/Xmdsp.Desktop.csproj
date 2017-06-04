@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\Xmdsp.Xwt\Xmdsp.Xwt.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Xwt\Xmdsp.Xwt.projitems')" />
   <Import Project="..\Xmdsp.Shared\Xmdsp.Shared.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Shared\Xmdsp.Shared.projitems')" />
   <Import Project="..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props" Condition="Exists('..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props')" />
   <PropertyGroup>

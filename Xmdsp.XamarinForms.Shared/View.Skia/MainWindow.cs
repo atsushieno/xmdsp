@@ -1,58 +1,59 @@
 using System;
 using Commons.Music.Midi;
-using Xwt;
-using Xwt.Drawing;
+using Xamarin.Forms;
 
 namespace Xmdsp
 {
-	public class MainWindow : Window
+	public class MainWindow : ContentPage
 	{
 		readonly Model model;
 		readonly Presenter pm;
 		
 		public MainWindow ()
 		{
-			model = new Model ();
+			model = new Model (new FormsPlatformLayer ());
 			pm = new Presenter (model);
 			var pmw = pm.MainWindow;
 
-			double initialWidth, initialHeight;
+			//double initialWidth, initialHeight;
 
 			Title = "xmdsp";
 			// FIXME: calculate sizes
+			/*
 			initialWidth = Width = pmw.Width * pm.Scale;
 			initialHeight = Height = pmw.Height * pm.Scale;
 			Padding = pmw.Padding * pm.Scale;
 			Icon = Image.FromResource (GetType ().Assembly, "xmdsp_icon.png");
+			*/
 			SetupMenu ();
 			
-			this.CloseRequested += delegate { ShutdownApplication (); };
+			//this.CloseRequested += delegate { ShutdownApplication (); };
 			
-			var mainPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			var rightPane = new VBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightPane.PackStart (new ApplicationHeaderPane (pm), false);
-			var rightSecondPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightSecondPane.PackStart (new CircularProgressMeter (pm), false);
-			rightSecondPane.PackStart (new PlayerStatusMonitor (pm), false);
-			rightSecondPane.PackStart (new PlayTimeStatusMonitor (pm), false);
-			rightPane.PackStart (rightSecondPane, false);
-			rightPane.PackStart (new KeyOnMeterList (pm), false);
+			var mainPane = new StackLayout () { Orientation = StackOrientation.Horizontal, BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToForms () };
+			var rightPane = new StackLayout () { Orientation = StackOrientation.Vertical, BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToForms () };
+			rightPane.Children.Add (new ApplicationHeaderPane (pm));
+			var rightSecondPane = new StackLayout () { Orientation = StackOrientation.Horizontal, BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToForms () };
+			rightSecondPane.Children.Add (new CircularProgressMeter (pm));
+			rightSecondPane.Children.Add (new PlayerStatusMonitor (pm));
+			rightSecondPane.Children.Add (new PlayTimeStatusMonitor (pm));
+			rightPane.Children.Add (rightSecondPane);
+			rightPane.Children.Add (new KeyOnMeterList (pm));
 			
-			mainPane.PackStart (new KeyboardList (pm), true);
-			mainPane.PackStart (rightPane, true);
+			mainPane.Children.Add (new KeyboardList (pm));
+			mainPane.Children.Add (rightPane);
 			Content = mainPane;
 
-			this.BoundsChanged += (sender, e) => pm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
+			//this.BoundsChanged += (sender, e) => pm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
 		}
 		
 		void ShutdownApplication ()
 		{
 			model.Dispose ();
-			Application.Exit ();			
 		}
 		
 		void SetupMenu ()
 		{
+			/*
 			Menu menu = new Menu ();
 			
 			var file = new MenuItem ("_File");
@@ -116,6 +117,7 @@ namespace Xmdsp
 			menu.Items.Add (player);
 			
 			this.MainMenu = menu;
+			*/
 		}
 	}
 }

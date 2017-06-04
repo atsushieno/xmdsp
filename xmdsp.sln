@@ -13,6 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp.XamMac", "Xmdsp.XamMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.CoreMidi", "external\managed-midi\Commons.Music.Midi.CoreMidi\Commons.Music.Midi.CoreMidi.csproj", "{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xmdsp.Xwt", "Xmdsp.Xwt\Xmdsp.Xwt.shproj", "{A041A841-2DB4-4674-B951-47E72A88B1AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp.XamarinForms.Droid", "Xmdsp.XamarinForms\Droid\Xmdsp.XamarinForms.Droid.csproj", "{F524DA35-78FF-45B3-B581-4AE60148CD0B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Xmdsp.XamarinForms.Shared", "Xmdsp.XamarinForms.Shared\Xmdsp.XamarinForms.Shared.shproj", "{BB4BCBA0-27C7-4C31-8BAD-669A46993289}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.Android", "external\managed-midi\Commons.Music.Midi.Android\Commons.Music.Midi.Android.csproj", "{8C6AF32A-3692-43B3-A907-9395564DB067}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +52,18 @@ Global
 		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Xmdsp\Xmdsp.csproj

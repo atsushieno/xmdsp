@@ -1,7 +1,7 @@
 using System;
 using Commons.Music.Midi;
 using System.Collections.Generic;
-using System.Timers;
+using System.Threading;
 
 namespace Xmdsp
 {
@@ -15,10 +15,10 @@ namespace Xmdsp
 			public string Name { get; set; }
 		}
 		
-		public Model ()
+		public Model (PlatformLayer platformLayer)
 		{
 			//MidiMachine = new MidiMachine ();
-			Platform = new DesktopPlatformLayer ();
+			Platform = platformLayer;
 			IsApplicationActive = true;
 		}
 		
@@ -44,9 +44,14 @@ namespace Xmdsp
 
 		MidiMusic current_music;
 		MidiPlayer current_player;
-		
+
 		public event Action<PlayerState> PlayerStateChanged;
-				
+
+		public Action<long,Action> StartTimer;
+		public Action PauseTimer;
+		public Action ResumeTimer;
+		public Action StopTimer;
+
 		void EnsurePlayerStopped ()
 		{
 			if (current_player != null)
@@ -86,12 +91,10 @@ namespace Xmdsp
 				PlayStarted ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
-			
-			timer = new Timer (timer_fps);
-			timer.Elapsed += OnTimerElapsed;
-			timer.Enabled = true;
+
+			StartTimer (timer_fps, OnTimerElapsed);
 		}
-		
+
 		public void Resume ()
 		{
 			if (current_player == null)
@@ -99,19 +102,19 @@ namespace Xmdsp
 			current_player.PlayAsync ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
-			timer.Enabled = true;
+			ResumeTimer ();
 		}
-		
+
 		public void Pause ()
 		{
 			if (current_player == null)
 				return; // ignore
 			current_player.PauseAsync ();
-			timer.Enabled = false;
+			PauseTimer ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Paused);
 		}
-		
+
 		public void Stop ()
 		{
 			if (current_player == null)
@@ -120,11 +123,9 @@ namespace Xmdsp
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Stopped);
 			current_player = null;
-			timer.Enabled = false;
-			timer.Dispose ();
-			timer = null;
+			StopTimer ();
 		}
-		
+
 		public void StartFastForward ()
 		{
 			if (current_player == null)
@@ -156,7 +157,6 @@ namespace Xmdsp
 		public event Action PlayTimerTick;
 		public event Action TickProgress;
 		
-		Timer timer;
 		const long timer_fps = 30;
 		
 		public DateTime PlayStartedTime { get; private set; }
@@ -164,19 +164,18 @@ namespace Xmdsp
 		DateTime time_last_tick_based_progress = DateTime.MinValue;
 		const double tick_progress_ratio = 2000.0 / 16; // 16 events per 192 ticks (2 sec. on BPM 120)
 		
-		void OnTimerElapsed (object o, ElapsedEventArgs e)
+		void OnTimerElapsed ()
 		{
 			if (PlayTimerTick != null)
-				Xwt.Application.Invoke (PlayTimerTick);
+				SynchronizationContext.Current.Post (null, PlayTimerTick);
 			if (TickProgress == null)
 				return;
 			var ts = DateTime.Now - time_last_tick_based_progress;
 			var delta = tick_progress_ratio / (Player.Bpm * Player.TempoChangeRatio) * 120;
 			if (ts.TotalMilliseconds > delta) {
 				time_last_tick_based_progress = DateTime.Now;
-				Xwt.Application.Invoke (TickProgress);
+				SynchronizationContext.Current.Post (null, TickProgress);
 			}
 		}
 	}
 }
-
