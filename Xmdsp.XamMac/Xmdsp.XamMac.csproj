@@ -93,7 +93,6 @@
       <DependentUpon>MainWindowController.cs</DependentUpon>
     </Compile>
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="DesktopPlaformLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainMenu.xib" />

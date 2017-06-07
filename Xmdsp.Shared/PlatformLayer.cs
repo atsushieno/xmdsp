@@ -8,13 +8,12 @@ namespace Xmdsp
 {
 	public abstract class PlatformLayer
 	{
-		public abstract IMidiAccess CreateMidiAccess ();
 		public abstract Stream GetResourceStream (string identfier);
 
 		IMidiAccess midi_access;
 
 		IMidiAccess MidiAccess {
-			get { return midi_access = midi_access ?? CreateMidiAccess (); }
+			get { return midi_access = midi_access ?? MidiAccessManager.Default; }
 		}
 
 		public virtual IEnumerable<Model.MidiDeviceInfo> AllMidiDevices {

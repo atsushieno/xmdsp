@@ -14,11 +14,6 @@ namespace Xmdsp
 			throw new NotImplementedException ();
 			//return File.OpenRead (identifier);
 		}
-
-		public override IMidiAccess CreateMidiAccess ()
-		{
-			return new Commons.Music.Midi.AndroidExtensions.AndroidMidiAccess (Android.App.Application.Context);
-		}
 	}
 }
 
