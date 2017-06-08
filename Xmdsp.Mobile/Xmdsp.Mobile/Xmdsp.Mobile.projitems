@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>35a03332-182a-49e4-a910-c47896d4c193</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Xmdsp.Mobile</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformDependent\FormsPlaformLayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\Application.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\ApplicationHeaderPane.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\CircularProgressMeter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\DrawingHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\Keyboard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\KeyboardBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\KeyboardList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\KeyboardParameterBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\KeyOnMeterList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\MainWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\PlayerStatusMonitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\PlayTimeStatusMonitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Skia\PresenterExtensions.cs" />
+  </ItemGroup>
+</Project>
