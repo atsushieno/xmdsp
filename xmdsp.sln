@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp.Desktop", "Xmdsp\Xmdsp.Desktop.csproj", "{A1DD7831-E3D8-4573-A150-C78FECC1B68E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.Desktop", "external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj", "{59EEFB0D-3957-43FC-8272-C3B460F7FF84}"
@@ -22,48 +24,65 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.Android", "external\managed-midi\Commons.Music.Midi.Android\Commons.Music.Midi.Android.csproj", "{8C6AF32A-3692-43B3-A907-9395564DB067}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Xmdsp.Shared\Xmdsp.Shared.projitems*{2571d4bc-fc34-4a91-b3ba-b76e58aa6ee7}*SharedItemsImports = 13
+		external\managed-midi\Commons.Music.Midi.Shared\Commons.Music.Midi.Shared.projitems*{59eefb0d-3957-43fc-8272-c3b460f7ff84}*SharedItemsImports = 4
+		external\managed-midi\Commons.Music.Midi.Shared\Commons.Music.Midi.Shared.projitems*{8742663d-9bb6-43d5-887d-0668e550652f}*SharedItemsImports = 13
+		external\managed-midi\Commons.Music.Midi.Shared\Commons.Music.Midi.Shared.projitems*{8c6af32a-3692-43b3-a907-9395564db067}*SharedItemsImports = 4
+		external\managed-midi\Commons.Music.Midi.Shared\Commons.Music.Midi.Shared.projitems*{8d8311af-0fc7-4bbf-842b-79cc0313faae}*SharedItemsImports = 4
+		Xmdsp.Xwt\Xmdsp.Xwt.projitems*{a041a841-2db4-4674-b951-47e72a88b1ad}*SharedItemsImports = 13
+		Xmdsp.Shared\Xmdsp.Shared.projitems*{a1dd7831-e3d8-4573-a150-c78fecc1b68e}*SharedItemsImports = 4
+		Xmdsp.Xwt\Xmdsp.Xwt.projitems*{a1dd7831-e3d8-4573-a150-c78fecc1b68e}*SharedItemsImports = 4
+		Xmdsp.XamarinForms.Shared\Xmdsp.XamarinForms.Shared.projitems*{bb4bcba0-27c7-4c31-8bad-669a46993289}*SharedItemsImports = 13
+		Xmdsp.Shared\Xmdsp.Shared.projitems*{edaf788e-a690-4496-8d6e-ff35d13cb5d4}*SharedItemsImports = 4
+		Xmdsp.Shared\Xmdsp.Shared.projitems*{f524da35-78ff-45b3-b581-4ae60148cd0b}*SharedItemsImports = 4
+		Xmdsp.XamarinForms.Shared\Xmdsp.XamarinForms.Shared.projitems*{f524da35-78ff-45b3-b581-4ae60148cd0b}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
 		DebugWin|Any CPU = DebugWin|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.DebugWin|Any CPU.ActiveCfg = DebugWin|Any CPU
 		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.DebugWin|Any CPU.Build.0 = DebugWin|Any CPU
+		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1DD7831-E3D8-4573-A150-C78FECC1B68E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDAF788E-A690-4496-8D6E-FF35D13CB5D4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F524DA35-78FF-45B3-B581-4AE60148CD0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C6AF32A-3692-43B3-A907-9395564DB067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C6AF32A-3692-43B3-A907-9395564DB067}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8C6AF32A-3692-43B3-A907-9395564DB067}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8C6AF32A-3692-43B3-A907-9395564DB067}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C6AF32A-3692-43B3-A907-9395564DB067}.DebugWin|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C6AF32A-3692-43B3-A907-9395564DB067}.DebugWin|Any CPU.Build.0 = Debug|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C6AF32A-3692-43B3-A907-9395564DB067}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Xmdsp\Xmdsp.csproj

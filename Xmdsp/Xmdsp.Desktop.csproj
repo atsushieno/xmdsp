@@ -60,32 +60,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Xwt.WPF">
-      <HintPath>..\packages\Xwt.WPF.0.2.14\lib\net40\Xwt.WPF.dll</HintPath>
+    <Reference Include="Xwt, Version=0.2.18.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xwt.0.2.18\lib\net40\Xwt.dll</HintPath>
     </Reference>
     <Reference Include="Xwt.Gtk">
       <HintPath>..\packages\Xwt.Gtk.0.2.14\lib\net40\Xwt.Gtk.dll</HintPath>
     </Reference>
-    <Reference Include="Xwt">
-      <HintPath>..\packages\Xwt.0.2.17\lib\net40\Xwt.dll</HintPath>
-    </Reference>
-    <Reference Include="Xwt.XamMac">
-      <HintPath>..\packages\Xwt.XamMac.0.2.17\lib\net40\Xwt.XamMac.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xwt.WPF, Version=0.2.18.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xwt.WPF.0.2.18\lib\net40\Xwt.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Xwt.XamMac, Version=0.2.18.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xwt.XamMac.0.2.18\lib\net40\Xwt.XamMac.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj">
       <Project>{59EEFB0D-3957-43FC-8272-C3B460F7FF84}</Project>
       <Name>Commons.Music.Midi.Desktop</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
