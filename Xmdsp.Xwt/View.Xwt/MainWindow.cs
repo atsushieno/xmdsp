@@ -55,9 +55,11 @@ namespace Xmdsp
 			Application.Exit ();			
 		}
 
-		void StartTimer (long fps, Action onTimerElapsed)
+		const long timer_fps = 30;
+
+		void StartTimer (Action onTimerElapsed)
 		{
-			timer = new Timer (1000.0 / fps);
+			timer = new Timer (1000.0 / timer_fps);
 			timer.Elapsed += (o, e) => onTimerElapsed ();
 			timer.Enabled = true;
 		}

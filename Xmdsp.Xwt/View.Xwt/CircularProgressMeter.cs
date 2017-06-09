@@ -18,7 +18,7 @@ namespace Xmdsp
 			pm.Model.TickProgress += delegate {
 				current_position++;
 				current_position %= num_lines;
-				QueueDraw ();
+				Application.Invoke (QueueDraw);
 			};
 		}
 

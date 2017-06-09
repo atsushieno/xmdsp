@@ -47,7 +47,7 @@ namespace Xmdsp
 
 		public event Action<PlayerState> PlayerStateChanged;
 
-		public Action<long,Action> StartTimer;
+		public Action<Action> StartTimer;
 		public Action PauseTimer;
 		public Action ResumeTimer;
 		public Action StopTimer;
@@ -92,7 +92,7 @@ namespace Xmdsp
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
 
-			StartTimer (timer_fps, OnTimerElapsed);
+			StartTimer (OnTimerElapsed);
 		}
 
 		public void Resume ()
@@ -157,8 +157,6 @@ namespace Xmdsp
 		public event Action PlayTimerTick;
 		public event Action TickProgress;
 		
-		const long timer_fps = 30;
-		
 		public DateTime PlayStartedTime { get; private set; }
 		
 		DateTime time_last_tick_based_progress = DateTime.MinValue;
@@ -166,15 +164,14 @@ namespace Xmdsp
 		
 		void OnTimerElapsed ()
 		{
-			if (PlayTimerTick != null)
-				SynchronizationContext.Current.Post (null, PlayTimerTick);
+			PlayTimerTick ();
 			if (TickProgress == null)
 				return;
 			var ts = DateTime.Now - time_last_tick_based_progress;
 			var delta = tick_progress_ratio / (Player.Bpm * Player.TempoChangeRatio) * 120;
 			if (ts.TotalMilliseconds > delta) {
 				time_last_tick_based_progress = DateTime.Now;
-				SynchronizationContext.Current.Post (null, TickProgress);
+				TickProgress ();
 			}
 		}
 	}
