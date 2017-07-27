@@ -59,7 +59,7 @@ namespace Xmdsp
 			this.ButtonPressed += (object sender, ButtonEventArgs e) => {
 				if (e.Button != PointerButton.Left)
 					return;
-				if (new Rectangle (coordinates [PlayerState.FastForward], GetButtonSize ()).Contains (e.Position))
+				if (new Rectangle (GetScaledPosition (coordinates [PlayerState.FastForward]), GetButtonSize ()).Contains (e.Position))
 					pm.Model.StartFastForward ();
 			};
 			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
@@ -67,7 +67,7 @@ namespace Xmdsp
 					return;
 				for (int i = 0; i < coordinates.Count; i++) {
 					var stat = states [i];
-					if (new Rectangle (coordinates [stat], GetButtonSize ()).Contains (GetScaledPosition (e.Position))) {
+					if (new Rectangle (GetScaledPosition (coordinates [stat]), GetButtonSize ()).Contains (e.Position)) {
 						switch (stat) {
 						case PlayerState.Playing: pm.Model.Play (); break;
 						case PlayerState.FastForward: pm.Model.StopFastForward (); break;
