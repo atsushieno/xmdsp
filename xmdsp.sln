@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp.Mobile.UWP", "Xmdsp.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons.Music.Midi.Uwp", "external\managed-midi\Commons.Music.Midi.Uwp\Commons.Music.Midi.Uwp.csproj", "{DDAD7F20-40BE-446C-BED1-E770DD7A0503}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "managed-midi", "managed-midi", "{993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Xmdsp.Mobile\Xmdsp.Mobile\Xmdsp.Mobile.projitems*{07c7866e-137e-42b2-b066-e5cbcb6028d5}*SharedItemsImports = 4
@@ -659,5 +661,12 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Xmdsp\Xmdsp.csproj
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8C6AF32A-3692-43B3-A907-9395564DB067} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
+		{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
+		{59EEFB0D-3957-43FC-8272-C3B460F7FF84} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
+		{8742663D-9BB6-43D5-887D-0668E550652F} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
+		{DDAD7F20-40BE-446C-BED1-E770DD7A0503} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
 	EndGlobalSection
 EndGlobal
