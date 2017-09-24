@@ -5,8 +5,8 @@ namespace Xmdsp
 {
 	class MainClass
 	{
-        [STAThread]
-        public static void Main (string[] args)
+	        [STAThread]
+	        public static void Main (string[] args)
 		{
 			Application.Initialize ();
 			
