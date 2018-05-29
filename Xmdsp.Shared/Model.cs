@@ -110,7 +110,8 @@ namespace Xmdsp
 			if (current_player == null)
 				return; // ignore
 			current_player.PauseAsync ();
-			PauseTimer ();
+			if (PauseTimer != null)
+				PauseTimer ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Paused);
 		}
@@ -123,7 +124,8 @@ namespace Xmdsp
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Stopped);
 			current_player = null;
-			StopTimer ();
+			if (StopTimer != null)
+				StopTimer ();
 		}
 
 		public void StartFastForward ()
