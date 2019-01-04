@@ -44,6 +44,27 @@ namespace Xmdsp
 			
 			mainPane.PackStart (new KeyboardList (pm), true);
 			mainPane.PackStart (rightPane, true);
+
+			mainPane.SetDragDropTarget (TransferDataType.Uri);
+			mainPane.DragOver += (sender, e) => {
+				if (e.Action == DragDropAction.All)
+					e.AllowedAction = DragDropAction.Move;
+				else
+					e.AllowedAction = e.Action;
+			};
+			mainPane.DragDrop += (sender, e) => {
+				if (e.Data.Uris != null) {
+					foreach (var uri in e.Data.Uris) {
+						if (uri.IsFile) {
+							e.Success = true;
+							model.LoadSmf (uri.LocalPath);
+							model.Play ();
+							break;
+						}
+					}
+				}
+			};
+
 			Content = mainPane;
 
 			this.BoundsChanged += (sender, e) => pm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
