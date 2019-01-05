@@ -32,6 +32,7 @@ namespace Xmdsp
 					keyboards [m.Channel].Keyboard.ProcessMidiMessage (m);
 					break;
 				case MidiEvent.CC:
+				case MidiEvent.Pitch:
 					keyboards [m.Channel].KeyParameters.ProcessMidiMessage (m);
 					break;
 				}

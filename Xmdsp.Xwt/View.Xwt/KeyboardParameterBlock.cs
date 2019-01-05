@@ -18,14 +18,16 @@ namespace Xmdsp
 			this.font = font;
 			
 			this.channel = channel;
-			
-			Volume = Expression = Rsd = Csd = Dsd = SoftPedal = Sostenuto = 127;
+
+			Volume = Expression = 127; 
+			PitchBend = Rsd = Csd = Dsd = SoftPedal = Sostenuto = 0;
 			Hold = false;
 			PortamentoSwitch = true;
 		}
 		
 		int? Volume;
 		int? Expression;
+		int? PitchBend;
 		int? Rsd;
 		int? Csd;
 		int? Dsd;
@@ -55,6 +57,7 @@ namespace Xmdsp
 			
 			var size = DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "VOL:", 100, 0);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "EXP:", 160, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "PB:", 220, 0);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "RSD:", 100, row2Y);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "CSD:", 160, row2Y);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextDarkest, "DSD:", 220, row2Y);
@@ -88,6 +91,7 @@ namespace Xmdsp
 			
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Volume).ToString ("D3"), 130, 0);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Expression).ToString ("D3"), 190, 0);
+			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) PitchBend).ToString ("D05"), 238, 0);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Rsd).ToString ("D3"), 130, row2Y);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Csd).ToString ("D3"), 190, row2Y);
 			DrawText (ctx, font, pmk.KeyBlockParameterTextSize, pm.Pallette.CommonTextMiddle, ((int) Dsd).ToString ("D3"), 250, row2Y);
@@ -130,6 +134,9 @@ namespace Xmdsp
 					SoftPedal = m.Lsb;
 					break;
 				}
+				break;
+			case MidiEvent.Pitch:
+				PitchBend = m.Lsb * 0x80 + m.Msb - 0x2000;
 				break;
 			}
 		}

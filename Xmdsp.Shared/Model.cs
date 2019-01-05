@@ -120,6 +120,7 @@ namespace Xmdsp
 		{
 			if (current_player == null)
 				return; // ignore
+			current_player.PauseAsync ();
 			current_player.Dispose ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Stopped);

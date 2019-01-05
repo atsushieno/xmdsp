@@ -72,6 +72,7 @@ namespace Xmdsp
 		
 		void ShutdownApplication ()
 		{
+			model.Stop ();
 			model.Dispose ();
 			Application.Exit ();			
 		}
