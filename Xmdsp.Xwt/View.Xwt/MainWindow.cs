@@ -121,7 +121,7 @@ namespace Xmdsp
 				}
 			};
 			file.SubMenu.Items.Add (open);
-			var watchUnwatch = new CheckBoxMenuItem ("_Watch and restart for file change");
+			var watchUnwatch = new CheckBoxMenuItem ("_Watch and restart for file change") { Checked = true };
 			watchUnwatch.Clicked += (sender, e) => model.Platform.WatchFileChanges = watchUnwatch.Checked;
 			file.SubMenu.Items.Add (watchUnwatch);
 			MenuItem close = new MenuItem ("_Close");

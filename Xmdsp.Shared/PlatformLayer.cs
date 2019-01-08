@@ -57,7 +57,7 @@ namespace Xmdsp
 			midi_output = null;
 		}
 
-		public bool WatchFileChanges { get; set; }
+		public bool WatchFileChanges { get; set; } = true;
 
 		FileSystemWatcher fs_watcher;
 
