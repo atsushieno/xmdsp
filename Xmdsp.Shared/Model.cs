@@ -67,10 +67,8 @@ namespace Xmdsp
 			};
 			Platform.StartWatchingFile (filename, delegate {
 				doLoadSmf ();
-				if (current_player.State == PlayerState.Playing) {
-					Stop ();
-					Play ();
-				}
+				Stop ();
+				Play ();
 			});
 			doLoadSmf ();
 		}
