@@ -143,7 +143,7 @@ namespace Xmdsp
 				return; // ignore
 			if (current_player.State == PlayerState.Paused)
 				current_player.PlayAsync ();
-			current_player.TempoChangeRatio = 2.0;
+			current_player.TempoChangeRatio = 4.0;
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.FastForward);
 		}
