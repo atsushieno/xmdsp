@@ -30,7 +30,7 @@ namespace Xmdsp
 		}
 
 		public bool IsApplicationActive { get; set; }
-		
+
 		public event Action PlayStarted;
 		
 		public event MidiEventAction MidiMessageReceived;
@@ -57,12 +57,22 @@ namespace Xmdsp
 			if (current_player != null)
 				current_player.Dispose ();
 		}
-		
+
 		public void LoadSmf (string filename)
 		{
 			EnsurePlayerStopped ();
-			using (var stream = Platform.GetResourceStream (filename))
-				current_music = MidiMusic.Read (stream);
+			Action doLoadSmf = () => {
+				using (var stream = Platform.GetResourceStream (filename))
+					current_music = MidiMusic.Read (stream);
+			};
+			Platform.StartWatchingFile (filename, delegate {
+				doLoadSmf ();
+				if (current_player.State == PlayerState.Playing) {
+					Stop ();
+					Play ();
+				}
+			});
+			doLoadSmf ();
 		}
 
 		// either play or resume

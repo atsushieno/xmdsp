@@ -121,11 +121,15 @@ namespace Xmdsp
 				}
 			};
 			file.SubMenu.Items.Add (open);
+			var watchUnwatch = new CheckBoxMenuItem ("_Watch and restart for file change");
+			watchUnwatch.Clicked += (sender, e) => model.Platform.WatchFileChanges = watchUnwatch.Checked;
+			file.SubMenu.Items.Add (watchUnwatch);
 			MenuItem close = new MenuItem ("_Close");
 			close.Clicked += delegate { ShutdownApplication (); };
 			file.SubMenu.Items.Add (close);
 			menu.Items.Add (file);
-			
+			menu.Items.Add (file);
+
 			var device = new MenuItem ("_Device");
 			device.SubMenu = new Menu ();
 			// FIXME: Xwt is incapable of handling on-the-fly menu item creation,

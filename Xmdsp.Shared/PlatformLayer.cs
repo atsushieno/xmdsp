@@ -50,9 +50,35 @@ namespace Xmdsp
 
 		public virtual void Shutdown ()
 		{
+			StopWatchingFile ();
+
 			if (midi_output != null)
 				midi_output.CloseAsync ().Wait ();
 			midi_output = null;
+		}
+
+		public bool WatchFileChanges { get; set; }
+
+		FileSystemWatcher fs_watcher;
+
+		public virtual void StartWatchingFile (string file, Action action)
+		{
+			StopWatchingFile ();
+			fs_watcher = new FileSystemWatcher ();
+			var fp = Path.GetFullPath (file);
+			fs_watcher.Path = Path.GetDirectoryName (fp);
+			fs_watcher.Changed += (o, e) => {
+				if (WatchFileChanges)
+				if (e.FullPath == fp)
+					action ();
+			};
+			fs_watcher.EnableRaisingEvents = true;
+		}
+
+		public virtual void StopWatchingFile ()
+		{
+			if (fs_watcher != null)
+				fs_watcher.Dispose ();
 		}
 	}
 }
