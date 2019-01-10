@@ -66,8 +66,8 @@ namespace Xmdsp
 					current_music = MidiMusic.Read (stream);
 			};
 			Platform.StartWatchingFile (filename, delegate {
-				doLoadSmf ();
 				Stop ();
+				doLoadSmf ();
 				Play ();
 			});
 			doLoadSmf ();
