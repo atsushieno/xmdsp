@@ -129,9 +129,16 @@ namespace Xmdsp
 			if (current_player == null)
 				return; // ignore
 			current_player.PauseAsync ();
-			current_player.Dispose ();
+			int iter = 0;
+			// is it hacky...?
+			while (current_player.State != PlayerState.Stopped) {
+				Thread.SpinWait (10000);
+				if (iter++ > 100)
+					break;
+			}
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Stopped);
+			current_player.Dispose ();
 			current_player = null;
 			if (StopTimer != null)
 				StopTimer ();
