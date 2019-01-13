@@ -2,6 +2,8 @@ using System;
 using Commons.Music.Midi;
 using System.Collections.Generic;
 using System.Threading;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace Xmdsp
 {
@@ -20,6 +22,11 @@ namespace Xmdsp
 			//MidiMachine = new MidiMachine ();
 			Platform = platformLayer;
 			IsApplicationActive = true;
+			DefaultConfiguration = new LoadableConfiguration (this);
+			LoadDefault ();
+			Platform.MidiOutputDeviceId = DefaultConfiguration.LastSelectedDevice;
+			if (!string.IsNullOrEmpty (DefaultConfiguration.LastPlayedFile))
+				LoadSmf (DefaultConfiguration.LastPlayedFile);
 		}
 		
 		public void Dispose ()
@@ -28,6 +35,64 @@ namespace Xmdsp
 			EnsurePlayerStopped ();
 			Platform.Shutdown ();
 		}
+
+		public class LoadableConfiguration
+		{
+			public LoadableConfiguration (Model parentModel)
+			{
+				model = parentModel;
+			}
+
+			Model model;
+
+			string last_played_file, last_selected_device;
+
+			internal bool OnLoading { get; set; }
+
+			public string LastPlayedFile {
+				get => last_played_file;
+				set {
+					last_played_file = value;
+					if (!OnLoading)
+						Save ();
+				}
+			}
+			public string LastSelectedDevice {
+				get => last_selected_device;
+				set {
+					last_selected_device = value;
+					if (!OnLoading)
+						Save ();
+				}
+			}
+
+			void Save ()
+			{
+				var doc = new XDocument (
+					new XElement ("config",
+						new XElement ("last-played-file", last_played_file),
+						new XElement ("last-selected-device", last_selected_device)));
+				model.Platform.SaveConfigurationString (doc.ToString ());
+			}
+		}
+
+		public void LoadDefault ()
+		{
+			try {
+				var xml = Platform.LoadConfigurationString ();
+				var doc = string.IsNullOrEmpty (xml) ? null : XDocument.Parse (xml);
+				DefaultConfiguration.OnLoading = true;
+				DefaultConfiguration.LastPlayedFile = doc?.XPathSelectElement ("/config/last-played-file")?.Value;
+				DefaultConfiguration.LastSelectedDevice = doc?.XPathSelectElement ("/config/last-selected-device")?.Value;
+				DefaultConfiguration.OnLoading = false;
+			} catch (Exception ex) {
+				// FIXME: we need some error reporting system
+				Console.WriteLine ($"Error while loading default settings: {ex.Message}");
+				Console.WriteLine ("Details: " + ex);
+			}
+		}
+
+		public LoadableConfiguration DefaultConfiguration { get; private set; }
 
 		public bool IsApplicationActive { get; set; }
 
@@ -62,8 +127,15 @@ namespace Xmdsp
 		{
 			EnsurePlayerStopped ();
 			Action doLoadSmf = () => {
-				using (var stream = Platform.GetResourceStream (filename))
-					current_music = MidiMusic.Read (stream);
+				try {
+					using (var stream = Platform.GetResourceStream (filename))
+						current_music = MidiMusic.Read (stream);
+					DefaultConfiguration.LastPlayedFile = filename;
+				} catch (Exception ex) {
+					// FIXME: there should be some error reporting system...
+					Console.WriteLine ("Error while loading MIDI file: " + ex.Message);
+					Console.WriteLine ("Details: " + ex);
+				}
 			};
 			Platform.StartWatchingFile (filename, delegate {
 				Stop ();
@@ -176,7 +248,14 @@ namespace Xmdsp
 		public event Action TickProgress;
 		
 		public DateTime PlayStartedTime { get; private set; }
-		
+		public string MidiOutputDeviceId {
+			get => Platform.MidiOutputDeviceId;
+			set {
+				Platform.MidiOutputDeviceId = value;
+				DefaultConfiguration.LastSelectedDevice = value;
+			}
+		}
+
 		DateTime time_last_tick_based_progress = DateTime.MinValue;
 		const double tick_progress_ratio = 2000.0 / 16; // 16 events per 192 ticks (2 sec. on BPM 120)
 		

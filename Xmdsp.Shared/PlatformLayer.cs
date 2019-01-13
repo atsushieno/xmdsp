@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using Commons.Music.Midi;
 using System.Linq;
+using System.IO.IsolatedStorage;
 
 namespace Xmdsp
 {
@@ -58,6 +59,24 @@ namespace Xmdsp
 		}
 
 		public bool WatchFileChanges { get; set; } = true;
+
+		public virtual string LoadConfigurationString ()
+		{
+			using (var storage = IsolatedStorageFile.GetUserStoreForAssembly ()) {
+				if (!storage.FileExists ("xmdsp.config"))
+					return "";
+				using (var reader = new StreamReader (storage.OpenFile ("xmdsp.config", FileMode.Open)))
+					return reader.ReadToEnd ();
+			}
+		}
+
+		public virtual void SaveConfigurationString (string s)
+		{
+			using (var storage = IsolatedStorageFile.GetUserStoreForAssembly ()) {
+				using (var writer = new StreamWriter (storage.OpenFile ("xmdsp.config", FileMode.Create)))
+					writer.Write (s);
+			}
+		}
 
 		FileSystemWatcher fs_watcher;
 

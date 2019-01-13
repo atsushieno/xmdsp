@@ -138,7 +138,7 @@ namespace Xmdsp
 				device.SubMenu.Items.Clear ();
 				foreach (var dev in model.Platform.AllMidiDevices) {
 					var dmi = new MenuItem (dev.Name);
-					dmi.Clicked += delegate { model.Platform.MidiOutputDeviceId = dev.Id; };
+					dmi.Clicked += delegate { model.MidiOutputDeviceId = dev.Id; };
 					device.SubMenu.Items.Add (dmi);
 				}
 			//};
