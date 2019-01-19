@@ -216,27 +216,6 @@ namespace Xmdsp
 				StopTimer ();
 		}
 
-		public void StartFastForward ()
-		{
-			if (current_player == null)
-				return; // ignore
-			if (current_player.State == PlayerState.Paused)
-				current_player.PlayAsync ();
-			current_player.TempoChangeRatio = 4.0;
-			if (PlayerStateChanged != null)
-				PlayerStateChanged (PlayerState.FastForward);
-		}
-		
-		public void StopFastForward ()
-		{
-			if (current_player == null || current_player.State != PlayerState.Playing)
-				return; // ignore
-			Player.TempoChangeRatio = 1.0;
-			current_player.TempoChangeRatio = 1.0;
-			if (PlayerStateChanged != null)
-				PlayerStateChanged (PlayerState.Playing);
-		}
-		
 		public void ProcessChangeTempoRatio (double ratio)
 		{
 			if (current_player == null)

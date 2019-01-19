@@ -51,7 +51,6 @@ namespace Xmdsp
 			if (pm.Model.Player != null) {
 				switch (pm.Model.Player.State) {
 				case PlayerState.Playing:
-				case PlayerState.FastForward:
 					ctx.SetColor (pm.Pallette.CommonTextMiddle.ToXwt ());
 					var p = -current_position;
 					ctx.MoveTo ((int) (Math.Sin (2 * Math.PI / num_lines * p) * start), (int) (Math.Cos (2 * Math.PI / num_lines * p) * start));

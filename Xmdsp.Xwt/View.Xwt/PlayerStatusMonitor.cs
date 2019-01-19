@@ -31,16 +31,6 @@ namespace Xmdsp
 				ctx.LineTo (4, 2);
 				ctx.Fill ();
 				};
-			actions [PlayerState.FastForward] = (ctx,active) => {
-				ctx.SetLineWidth (2);
-				ctx.MoveTo (3, 2);
-				ctx.LineTo (6, 6);
-				ctx.LineTo (3, 10);
-				ctx.MoveTo (6, 2);
-				ctx.LineTo (9, 6);
-				ctx.LineTo (6, 10);
-				ctx.Stroke ();
-				};
 			actions [PlayerState.Paused] = (ctx,active) => {
 				ctx.SetLineWidth (2);
 				ctx.MoveTo (4, 2);
@@ -56,12 +46,6 @@ namespace Xmdsp
 				ctx.Stroke ();
 				};
 			
-			this.ButtonPressed += (object sender, ButtonEventArgs e) => {
-				if (e.Button != PointerButton.Left)
-					return;
-				if (new Rectangle (GetScaledPosition (coordinates [PlayerState.FastForward]), GetButtonSize ()).Contains (e.Position))
-					pm.Model.StartFastForward ();
-			};
 			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
 				if (e.Button != PointerButton.Left)
 					return;
@@ -70,7 +54,6 @@ namespace Xmdsp
 					if (new Rectangle (GetScaledPosition (coordinates [stat]), GetButtonSize ()).Contains (e.Position)) {
 						switch (stat) {
 						case PlayerState.Playing: pm.Model.Play (); break;
-						case PlayerState.FastForward: pm.Model.StopFastForward (); break;
 						case PlayerState.Paused: pm.Model.Pause (); break;
 						case PlayerState.Stopped: pm.Model.Stop (); break;
 						}
@@ -86,7 +69,6 @@ namespace Xmdsp
 			HeightRequest = pm.PlayerStatusMonitor.Height * pm.Scale;
 			var textWidth = pm.PlayerStatusMonitor.TextSize * 6;
 			coordinates [PlayerState.Playing] = new Point (0, 0);
-			coordinates [PlayerState.FastForward] = new Point (textWidth * pm.Scale, 0);
 			coordinates [PlayerState.Paused] = new Point (0, 20 * pm.Scale);
 			coordinates [PlayerState.Stopped] = new Point (textWidth * pm.Scale, 20 * pm.Scale);
 		}
@@ -101,7 +83,7 @@ namespace Xmdsp
 			return new Point (point.X * pm.Scale, point.Y * pm.Scale); 
 		}
 
-		PlayerState [] states = new PlayerState[] {PlayerState.Playing, PlayerState.FastForward, PlayerState.Paused, PlayerState.Stopped};
+		PlayerState [] states = new PlayerState[] {PlayerState.Playing, PlayerState.Paused, PlayerState.Stopped};
 		Dictionary<PlayerState, Point> coordinates = new Dictionary<PlayerState, Point> ();
 		Dictionary<PlayerState, Action<Context,bool>> actions = new Dictionary<PlayerState, Action<Context,bool>> ();
 
@@ -126,7 +108,6 @@ namespace Xmdsp
 				DrawItem (ctx, state);
 			};
 			func ("Play", PlayerState.Playing);
-			func ("FF", PlayerState.FastForward);
 			func ("Pause", PlayerState.Paused);
 			func ("Stop", PlayerState.Stopped);
 		}

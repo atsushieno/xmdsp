@@ -151,7 +151,6 @@ namespace Xmdsp
 				var state = model.Player == null ? PlayerState.Stopped : model.Player.State;
 				switch (state) {
 				case PlayerState.Playing:
-				case PlayerState.FastForward:
 					MenuItem pause = new MenuItem ("_Pause");
 					pause.Clicked += delegate { model.Pause (); };
 					player.SubMenu.Items.Add (pause);
@@ -165,9 +164,15 @@ namespace Xmdsp
 				MenuItem stop = new MenuItem ("_Stop");
 				stop.Clicked += delegate { model.Stop (); };
 				player.SubMenu.Items.Add (stop);
-				
+
 				foreach (var item in player.SubMenu.Items)
 					item.Sensitive = model.Player != null;
+
+				foreach (var ratio in new double [] { 1, 2, 4, 8}) {
+					MenuItem ff = new MenuItem ($"FF: {ratio}x");
+					ff.Clicked += delegate { model.ProcessChangeTempoRatio (ratio); };
+					player.SubMenu.Items.Add (ff);
+				}
 			};
 			menu.Items.Add (player);
 			
