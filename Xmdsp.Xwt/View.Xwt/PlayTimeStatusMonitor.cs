@@ -21,6 +21,11 @@ namespace Xmdsp
 			pm.Model.PlayerStateChanged += delegate {
 				Application.Invoke (() => QueueDraw ());
 			};
+			
+			Action smfLoaded = () => total_time_string = TimeSpan.FromMilliseconds (pm.Model.Music.GetTotalPlayTimeMilliseconds ()).ToString ("mm\\:ss"); 
+			pm.Model.SmfLoaded += smfLoaded;
+			if (pm.Model.Music != null)
+				smfLoaded ();
 		}
 
 		internal void SetSize ()
@@ -31,7 +36,6 @@ namespace Xmdsp
 		
 		Font font_label;
 		Font font_value;
-		WeakReference cached_player;
 		string total_time_string;
 		
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
@@ -74,10 +78,6 @@ namespace Xmdsp
 			string playTime, totalTime, ticks, tempo, meter;
 			
 			if (pm.Model.Player != null) {
-				if (cached_player == null || !cached_player.IsAlive) {
-					cached_player = new WeakReference (pm.Model.Player);
-					total_time_string = TimeSpan.FromMilliseconds (((MidiPlayer) cached_player.Target).GetTotalPlayTimeMilliseconds ()).ToString ("mm\\:ss");
-				}
 				totalTime = "   " + total_time_string;
 				playTime = "   " + pm.Model.Player.PositionInTime.ToString ("mm\\:ss");
 				ticks = pm.Model.Player.PlayDeltaTime.ToString ("D08");

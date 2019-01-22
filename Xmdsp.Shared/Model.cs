@@ -101,9 +101,9 @@ namespace Xmdsp
 		public event MidiEventAction MidiMessageReceived;
 		//public MidiMachine MidiMachine { get; private set; }
 		
-		public MidiPlayer Player {
-			get { return current_player; }
-		}
+		public MidiPlayer Player => current_player;
+
+		public MidiMusic Music => current_music;
 		
 		public PlatformLayer Platform { get; private set; }
 
@@ -117,6 +117,8 @@ namespace Xmdsp
 		public Action ResumeTimer;
 		public Action StopTimer;
 
+		public event Action SmfLoaded;
+
 		public void LoadSmf (string filename)
 		{
 			Stop ();
@@ -125,6 +127,8 @@ namespace Xmdsp
 					using (var stream = Platform.GetResourceStream (filename))
 						current_music = MidiMusic.Read (stream);
 					DefaultConfiguration.LastPlayedFile = filename;
+					if (SmfLoaded != null)
+						SmfLoaded ();
 				} catch (Exception ex) {
 					// FIXME: there should be some error reporting system...
 					Console.WriteLine ("Error while loading MIDI file: " + ex.Message);
