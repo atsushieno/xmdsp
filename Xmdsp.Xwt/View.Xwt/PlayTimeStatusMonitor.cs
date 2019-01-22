@@ -21,7 +21,16 @@ namespace Xmdsp
 			pm.Model.PlayerStateChanged += delegate {
 				Application.Invoke (() => QueueDraw ());
 			};
-			
+			pm.Model.MidiMessageReceived += e =>
+			{
+				if (e.StatusByte != MidiEvent.Meta)
+					return;
+				if (e.MetaType == MidiMetaType.TimeSignature) {
+					var data = pm.Model.Player.TimeSignature;
+					var timeSigNoSpace = data [0] + "/" + Math.Pow (2, data [1]);
+					meter_string = new string (' ', 8 - timeSigNoSpace.Length) + timeSigNoSpace;
+				}
+			};			
 			Action smfLoaded = () => total_time_string = TimeSpan.FromMilliseconds (pm.Model.Music.GetTotalPlayTimeMilliseconds ()).ToString ("mm\\:ss"); 
 			pm.Model.SmfLoaded += smfLoaded;
 			if (pm.Model.Music != null)
@@ -36,7 +45,7 @@ namespace Xmdsp
 		
 		Font font_label;
 		Font font_value;
-		string total_time_string;
+		string total_time_string, meter_string;
 		
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
@@ -82,8 +91,7 @@ namespace Xmdsp
 				playTime = "   " + pm.Model.Player.PositionInTime.ToString ("mm\\:ss");
 				ticks = pm.Model.Player.PlayDeltaTime.ToString ("D08");
 				tempo = "     " + pm.Model.Player.Bpm.ToString ("D03");
-				var data = pm.Model.Player.TimeSignature;
-				meter = "     " + data [0] + "/" + Math.Pow (2, data [1]);
+				meter = meter_string;
 			} else {
 				playTime = "   --:--";
 				totalTime = "   --:--";
