@@ -165,6 +165,12 @@ namespace Xmdsp
 			};
 			current_player.EventReceived += MidiMessageReceived;
 			PlayStartedTime = DateTime.Now;
+			
+			if (next_start_from_ticks != 0) {
+				current_player.SeekAsync (next_start_from_ticks);
+				next_start_from_ticks = 0;
+			}
+
 			current_player.PlayAsync ();
 			if (PlayStarted != null)
 				PlayStarted ();
@@ -181,7 +187,8 @@ namespace Xmdsp
 			current_player.PlayAsync ();
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
-			ResumeTimer ();
+			if (ResumeTimer != null)
+				ResumeTimer ();
 		}
 
 		public void Pause ()
@@ -213,6 +220,17 @@ namespace Xmdsp
 			current_player = null;
 			if (StopTimer != null)
 				StopTimer ();
+		}
+
+		private int next_start_from_ticks;
+
+		public void Seek (int ticks)
+		{
+			if (current_player == null) {
+				next_start_from_ticks = ticks;
+				return;
+			}
+			current_player.SeekAsync (ticks);
 		}
 
 		public void ProcessChangeTempoRatio (double ratio)
