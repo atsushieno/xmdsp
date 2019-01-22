@@ -32,7 +32,7 @@ namespace Xmdsp
 		public void Dispose ()
 		{
 			IsApplicationActive = false;
-			EnsurePlayerStopped ();
+			Stop ();
 			Platform.Shutdown ();
 		}
 
@@ -117,15 +117,9 @@ namespace Xmdsp
 		public Action ResumeTimer;
 		public Action StopTimer;
 
-		void EnsurePlayerStopped ()
-		{
-			if (current_player != null)
-				current_player.Dispose ();
-		}
-
 		public void LoadSmf (string filename)
 		{
-			EnsurePlayerStopped ();
+			Stop ();
 			Action doLoadSmf = () => {
 				try {
 					using (var stream = Platform.GetResourceStream (filename))
@@ -158,7 +152,8 @@ namespace Xmdsp
 		
 		void DoPlay ()
 		{
-			EnsurePlayerStopped ();
+			if (current_player != null)
+				current_player.Dispose ();
 			current_player = Platform.CreateMidiPlayer (current_music);
 			current_player.Finished += () => {
 				if (PlayerStateChanged != null)
