@@ -15,8 +15,8 @@ namespace Xmdsp
 
 			pm.ScaleChanged += SetSize;
 
-			pm.Model.PlayTimerTick += delegate { QueueDraw (); };
-			pm.Model.PlayerStateChanged += delegate { QueueDraw (); };
+			pm.Model.PlayTimerTick += delegate { Application.Invoke (QueueDraw); };
+			pm.Model.PlayerStateChanged += delegate { Application.Invoke (QueueDraw); };
 			pm.MidiMessageReceived += e =>
 			{
 				if (e.StatusByte != MidiEvent.Meta)

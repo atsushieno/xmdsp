@@ -411,5 +411,15 @@ namespace Xmdsp
 			public Color CommonTextMiddle { get; private set; }
 			public Color CommonTextBlightest { get; private set; }
 		}
+
+		public void SeekByPercent (double progressSliderValue)
+		{
+			Model.SeekByPercent (progressSliderValue);
+		}
+
+		public void SeekByDeltaTime (int deltaTime)
+		{
+			Model.SeekByDeltaTime (deltaTime);
+		}
 	}
 }

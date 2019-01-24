@@ -127,8 +127,10 @@ namespace Xmdsp
 			Action doLoadSmf = () => {
 				try {
 					using (var stream = Platform.GetResourceStream (filename))
-						current_music = MidiMusic.Read (stream);
+						// merge tracks for optimization (many operations run merger at run-time if they are not in format 0).
+						current_music = SmfTrackMerger.Merge (MidiMusic.Read (stream));
 					DefaultConfiguration.LastPlayedFile = filename;
+					cached_total_ticks = Music.GetTotalTicks ();
 					if (SmfLoaded != null)
 						SmfLoaded ();
 				} catch (Exception ex) {
@@ -226,13 +228,18 @@ namespace Xmdsp
 
 		private int next_start_from_ticks;
 
-		public void Seek (int ticks)
+		public void SeekByDeltaTime (int ticks)
 		{
 			if (current_player == null) {
 				next_start_from_ticks = ticks;
 				return;
 			}
 			current_player.SeekAsync (ticks);
+		}
+
+		public void SeekByPercent (double percent)
+		{
+			SeekByDeltaTime ((int) (percent / 100.0 * cached_total_ticks));
 		}
 
 		public void ProcessChangeTempoRatio (double ratio)
@@ -244,6 +251,10 @@ namespace Xmdsp
 		
 		public event Action PlayTimerTick;
 		public event Action TickProgress;
+
+		private int cached_total_ticks;
+		// 0..1
+		public double PlayerProgress => current_player == null ? 0 : current_player.PlayDeltaTime / (double) cached_total_ticks;
 		
 		public DateTime PlayStartedTime { get; private set; }
 		public string MidiOutputDeviceId {

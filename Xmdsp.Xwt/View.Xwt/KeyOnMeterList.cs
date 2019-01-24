@@ -51,19 +51,19 @@ namespace Xmdsp
 				case MidiEvent.Program:
 					program [m.Channel] = m.Msb;
 					dirty_prog = true;
-					QueueDraw (new Rectangle (0, prog_bnk_offset_y, pmk.Width, prog_bnk_height));
+					Application.Invoke (() => QueueDraw (new Rectangle (0, prog_bnk_offset_y, pmk.Width, prog_bnk_height)));
 					break;
 				case MidiEvent.CC:
 					switch (m.Msb) {
 					case MidiCC.Pan:
 						pan [m.Channel] = m.Lsb;
 						dirty_pan = true;
-						QueueDraw (new Rectangle (0, panpot_offset_y, pmk.Width, panpot_height));
+						Application.Invoke (() => QueueDraw (new Rectangle (0, panpot_offset_y, pmk.Width, panpot_height)));
 						break;
 					case MidiCC.BankSelectLsb:
 						bank_select [m.Channel] = m.Lsb;
 						dirty_prog = true;
-						QueueDraw (new Rectangle (0, prog_bnk_offset_y, pmk.Width, prog_bnk_height));
+						Application.Invoke (() => QueueDraw (new Rectangle (0, prog_bnk_offset_y, pmk.Width, prog_bnk_height)));
 						break;
 					}
 					break;
@@ -74,8 +74,8 @@ namespace Xmdsp
 				if (!dirty_keyon && current_progress++ < pmk.TotalProgressSteps) {
 					dirty_keyon = true;
 					// FIXME: enable this once I figured out why the other QueueDraw() overload doesn't work.
-					//QueueDraw (new Rectangle (0, 0, pmk.Width, pmk.Height));
-					QueueDraw ();
+					//Application.Invoke (() => QueueDraw (new Rectangle (0, 0, pmk.Width, pmk.Height)));
+					Application.Invoke (QueueDraw);
 				}
 			};
 		}

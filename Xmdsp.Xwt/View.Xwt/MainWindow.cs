@@ -12,6 +12,8 @@ namespace Xmdsp
 		readonly Model model;
 		readonly Presenter pm;
 
+		bool suspend_slider_updates;
+		
 		public MainWindow ()
 		{
 			model = new Model (new DesktopPlatformLayer ());
@@ -33,6 +35,24 @@ namespace Xmdsp
 			var mainPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
 			var rightPane = new VBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
 			rightPane.PackStart (new ApplicationHeaderPane (pm), false);
+			
+			/* disable it until the issue that the slider jumps around gets fixed...
+			var progressSlider = new HSlider () { MaximumValue = 100.0, ExpandHorizontal = true };
+			progressSlider.ButtonPressed += (o, e) => suspend_slider_updates = true;
+			progressSlider.ButtonReleased += delegate {
+				var pos = progressSlider.Value;
+				suspend_slider_updates = false;
+				pm.SeekByPercent (pos);
+			};
+			pm.MidiMessageReceived += delegate {
+					Application.Invoke (() => {
+						if (!suspend_slider_updates)
+							progressSlider.Value = pm.Model.PlayerProgress * 100;
+					});
+			};
+			rightPane.PackStart (progressSlider, false);
+			*/
+			
 			var rightSecondPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
 			rightSecondPane.PackStart (new CircularProgressMeter (pm), false);
 			rightSecondPane.PackStart (new PlayerStatusMonitor (pm), false);
@@ -159,7 +179,7 @@ namespace Xmdsp
 						var milliseconds = model.Music.GetTimePositionInMillisecondsForTick (m.DeltaTime);
 						var item = new MenuItem (TimeSpan.FromMilliseconds (milliseconds).ToString ("mm':'ss'.'fff") + " : " + markerText);
 						// FIXME: add seek operation.
-						item.Clicked += delegate { model.Seek (m.DeltaTime); };
+						item.Clicked += delegate { pm.SeekByDeltaTime (m.DeltaTime); };
 						marker.SubMenu.Items.Add (item);
 					}
 				}

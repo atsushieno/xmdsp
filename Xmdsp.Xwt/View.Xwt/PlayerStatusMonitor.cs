@@ -19,7 +19,7 @@ namespace Xmdsp
 
 			pm.Model.PlayerStateChanged += state => {
 				state_to_draw = state;
-				QueueDraw ();
+				Application.Invoke (QueueDraw);
 			};
 
 			pm.ScaleChanged += SetSize;
