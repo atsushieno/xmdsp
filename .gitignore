@@ -1,5 +1,8 @@
 bin/
 obj/
 packages/
+.vs
+.idea
 *.userprefs
+*.DotSettings.user
 
