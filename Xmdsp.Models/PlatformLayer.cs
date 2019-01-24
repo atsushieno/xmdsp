@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Commons.Music.Midi;
 using System.Linq;
 using System.IO.IsolatedStorage;
+using System.Timers;
 
 namespace Xmdsp
 {
@@ -98,6 +99,33 @@ namespace Xmdsp
 		{
 			if (fs_watcher != null)
 				fs_watcher.Dispose ();
+		}
+
+		const long timer_fps = 30;
+		Timer timer;
+
+		public virtual void StartTimer (Action onTimerElapsed)
+		{
+			timer = new Timer (1000.0 / timer_fps);
+			timer.Elapsed += (o, e) => onTimerElapsed ();
+			timer.Enabled = true;
+		}
+
+		void ResumeTimer ()
+		{
+			timer.Enabled = true;
+		}
+
+		void PauseTimer ()
+		{
+			timer.Enabled = false;
+		}
+
+		void StopTimer ()
+		{
+			timer.Enabled = false;
+			timer.Dispose ();
+			timer = null;
 		}
 	}
 }

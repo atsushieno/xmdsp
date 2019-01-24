@@ -93,6 +93,10 @@
       <Project>{59EEFB0D-3957-43FC-8272-C3B460F7FF84}</Project>
       <Name>Commons.Music.Midi.Desktop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Xmdsp.Models\Xmdsp.Models.csproj">
+      <Project>{8046f374-5126-48bc-b079-aea83b09bf1d}</Project>
+      <Name>Xmdsp.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

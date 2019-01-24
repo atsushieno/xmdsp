@@ -28,6 +28,7 @@ namespace Xmdsp
 			Platform.MidiOutputDeviceId = DefaultConfiguration.LastSelectedDevice;
 			if (!string.IsNullOrEmpty (DefaultConfiguration.LastPlayedFile))
 				LoadSmf (DefaultConfiguration.LastPlayedFile);
+			StartTimer = Platform.StartTimer;
 		}
 		
 		public void Dispose ()

@@ -12,9 +12,6 @@
     <None Include="$(MSBuildThisFileDirectory)packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Model.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MusicPlayer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PlatformLayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModel.DrawingSupplements.cs" />
   </ItemGroup>

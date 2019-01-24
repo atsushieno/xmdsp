@@ -12,12 +12,9 @@ namespace Xmdsp
 		readonly Model model;
 		readonly Presenter pm;
 
-		Timer timer;
-
 		public MainWindow ()
 		{
 			model = new Model (new DesktopPlatformLayer ());
-			model.StartTimer = StartTimer;
 			pm = new Presenter (model);
 			var pmw = pm.MainWindow;
 
@@ -76,32 +73,6 @@ namespace Xmdsp
 			model.Stop ();
 			model.Dispose ();
 			Application.Exit ();			
-		}
-
-		const long timer_fps = 30;
-
-		void StartTimer (Action onTimerElapsed)
-		{
-			timer = new Timer (1000.0 / timer_fps);
-			timer.Elapsed += (o, e) => onTimerElapsed ();
-			timer.Enabled = true;
-		}
-
-		void ResumeTimer ()
-		{
-			timer.Enabled = true;
-		}
-
-		void PauseTimer ()
-		{
-			timer.Enabled = false;
-		}
-
-		void StopTimer ()
-		{
-			timer.Enabled = false;
-			timer.Dispose ();
-			timer = null;
 		}
 
 		void SetupMenu ()

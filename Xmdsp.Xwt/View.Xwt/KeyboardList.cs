@@ -38,7 +38,7 @@ namespace Xmdsp
 				}
 				if (!dirty) {
 					dirty = true;
-					Application.Invoke (QueueDraw);
+					QueueDraw ();
 				}
 			};
 		}
