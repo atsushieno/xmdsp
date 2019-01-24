@@ -1,6 +1,7 @@
 using System;
 using Commons.Music.Midi;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -101,14 +102,14 @@ namespace Xmdsp
 		public event MidiEventAction MidiMessageReceived;
 		//public MidiMachine MidiMachine { get; private set; }
 		
-		public MidiPlayer Player => current_player;
+		public IMusicPlayer Player => current_player;
 
 		public MidiMusic Music => current_music;
 		
 		public PlatformLayer Platform { get; private set; }
 
 		MidiMusic current_music;
-		MidiPlayer current_player;
+		IMusicPlayer current_player;
 
 		public event Action<PlayerState> PlayerStateChanged;
 
