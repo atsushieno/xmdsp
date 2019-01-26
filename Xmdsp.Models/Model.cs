@@ -163,6 +163,8 @@ namespace Xmdsp
 			if (current_player != null)
 				current_player.Dispose ();
 			current_player = Platform.CreateMidiPlayer (current_music);
+			if (current_channel_mask != null)
+				current_player.SetChannelMask (current_channel_mask);
 			current_player.Finished += () => {
 				if (PlayerStateChanged != null)
 					PlayerStateChanged (PlayerState.Stopped);
@@ -279,6 +281,15 @@ namespace Xmdsp
 				time_last_tick_based_progress = DateTime.Now;
 				TickProgress ();
 			}
+		}
+
+		bool [] current_channel_mask;
+
+		public void SetChannelMasks (bool [] channelMask)
+		{
+			if (current_player != null)
+				current_player.SetChannelMask (channelMask);
+			current_channel_mask = (bool []) channelMask.Clone ();
 		}
 	}
 }

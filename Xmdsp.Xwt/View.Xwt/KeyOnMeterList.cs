@@ -14,9 +14,12 @@ namespace Xmdsp
 		int [] program;
 		int [] bank_select;
 		int [] pan;
+		bool [] masked;
+		Rectangle [] mask_rectangles;
 		Font font;
 		int prog_bnk_offset_y;
 		int panpot_offset_y;
+		int mask_offset_y;
 		int prog_bnk_height;
 		int panpot_height;
 		
@@ -29,6 +32,7 @@ namespace Xmdsp
 			program = new int [pm.MaxChannels];
 			bank_select = new int [pm.MaxChannels];
 			pan = new int [pm.MaxChannels];
+			masked = new bool [pm.MaxChannels];
 
 			for (int i = 0; i < pm.MaxChannels; i++) {
 				keyon_meter_progress [i] = pmk.TotalProgressSteps;
@@ -39,6 +43,12 @@ namespace Xmdsp
 			prog_bnk_height = (pmk.KeyOnMeterTextSize + pmk.LineGapSize) * 2;
 			panpot_offset_y = pmk.MeterHeight + (pmk.KeyOnMeterTextSize + pmk.LineGapSize) * 2;
 			panpot_height = pmk.PanpotOuterRadius * 2;
+			mask_offset_y = panpot_offset_y + panpot_height + pmk.LineGapSize * 2 + pmk.MaskOffsetY;
+			mask_rectangles = new Rectangle [pm.MaxChannels];
+			for (int i = 0; i < pm.MaxChannels; i++) {
+				var x = (pmk.ItemWidth) * i + pmk.MetersOffset;
+				mask_rectangles [i] = new Rectangle (x, mask_offset_y, pmk.MaskWidth, pmk.MaskWidth);
+			}
 
 			pm.ScaleChanged += SetSize;
 
@@ -78,6 +88,26 @@ namespace Xmdsp
 					Application.Invoke (QueueDraw);
 				}
 			};
+			
+			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
+				if (e.Button != PointerButton.Left)
+					return;
+				for (int i = 0; i < mask_rectangles.Length; i++) {
+					var maskRect = new Rectangle (
+						GetScaledPosition (mask_rectangles [i].TopLeft),
+						GetScaledPosition (mask_rectangles [i].BottomRight));
+					if (maskRect.Contains (e.Position)) {
+						this.pm.SetChannelMasks (masked);
+						masked [i] = !masked [i];
+						break;
+					}
+				}
+			};
+		}
+
+		Point GetScaledPosition (Point point)
+		{
+			return new Point (point.X * pm.Scale, point.Y * pm.Scale); 
 		}
 
 		internal void SetSize ()
@@ -92,7 +122,7 @@ namespace Xmdsp
 			return DrawingHelper.DrawText (ctx, font, size, color, text, x, y);
 		}
 		
-		bool dirty_keyon = true, dirty_prog = true, dirty_pan = true;
+		bool dirty_keyon = true, dirty_prog = true, dirty_pan = true, dirty_mask = true;
 
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
@@ -103,6 +133,8 @@ namespace Xmdsp
 				DrawProgramBank (ctx);
 			//if (dirty_pan)
 				DrawPanpot (ctx);
+			//if (dirty_mask)
+				DrawChannelMask (ctx);
 		}
 
 		void DrawProgramBank (Context ctx)
@@ -110,8 +142,8 @@ namespace Xmdsp
 			dirty_prog = false;
 			var pmk = pm.KeyOnMeterList;
 
-			DrawText (ctx, font, pmk.KeyOnMeterTextSize, pm.Pallette.CommonTextMiddle, "PRG", 0, pmk.MeterHeight);
-			DrawText (ctx, font, pmk.KeyOnMeterTextSize, pm.Pallette.CommonTextMiddle, "BNK", 0, pmk.MeterHeight + pmk.KeyOnMeterTextSize + pmk.LineGapSize);
+			DrawText (ctx, font, pmk.KeyOnMeterTextSize, pm.Pallette.CommonTextMiddle, "PROG", 0, pmk.MeterHeight);
+			DrawText (ctx, font, pmk.KeyOnMeterTextSize, pm.Pallette.CommonTextMiddle, "BANK", 0, pmk.MeterHeight + pmk.KeyOnMeterTextSize + pmk.LineGapSize);
 			for (int i = 0; i < keyon_meter_progress.Length; i++) {
 				var tx = (pmk.ItemWidth) * i + pmk.MetersOffset;
 				var ty = prog_bnk_offset_y;
@@ -168,6 +200,24 @@ namespace Xmdsp
 			for (int i = 0; i < keyon_meter_progress.Length; i++)
 				if (keyon_meter_progress [i] < steps)
 					keyon_meter_progress [i]++;
+		}
+
+		void DrawChannelMask (Context ctx)
+		{
+			dirty_mask = false;
+			var pmk = pm.KeyOnMeterList;
+
+			ctx.SetLineWidth (1);
+
+			DrawText (ctx, font, pmk.KeyOnMeterTextSize, pm.Pallette.CommonTextMiddle, "MASK", 0, mask_offset_y);
+			for (int i = 0; i < keyon_meter_progress.Length; i++) {
+				var color = masked [i]
+					? pm.Pallette.CommonTextDarkest.ToXwt ()
+					: pm.Pallette.CommonTextMiddle.ToXwt ();
+				ctx.SetColor (color);
+				ctx.Rectangle (mask_rectangles [i]);
+				ctx.Fill ();
+			}
 		}
 	}
 }

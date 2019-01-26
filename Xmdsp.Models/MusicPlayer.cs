@@ -23,6 +23,7 @@ namespace Xmdsp
 		byte [] TimeSignature { get; }
 		TimeSpan PositionInTime { get; }
 		int PlayDeltaTime { get; }
+		void SetChannelMask (bool [] channelMask);
 	}
 
 	// Plays multiple SMF in parallel, to support more than 16 channels at a time.
@@ -95,6 +96,12 @@ namespace Xmdsp
 		public byte [] TimeSignature => players.First ().TimeSignature;
 		public TimeSpan PositionInTime => players.First ().PositionInTime;
 		public int PlayDeltaTime => players.First ().PlayDeltaTime;
+
+		public void SetChannelMask (bool [] channelMask)
+		{
+			foreach (var p in players)
+				p.SetChannelMask (channelMask);
+		}
 	}
 
 	public class MidiMusicPlayer : IMusicPlayer
@@ -139,6 +146,11 @@ namespace Xmdsp
 		public event MidiEventAction EventReceived {
 			add { player.EventReceived += value; }
 			remove { player.EventReceived -= value; }
+		}
+
+		public void SetChannelMask (bool [] channelMask)
+		{
+			player.SetChannelMask (channelMask);
 		}
 	}	
 }

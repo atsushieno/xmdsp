@@ -303,12 +303,15 @@ namespace Xmdsp
 
 				ItemWidth = 22;
 				ItemHeight = 70;
-				MetersOffset = KeyOnMeterTextSize * 3;
+				MetersOffset = KeyOnMeterTextSize * 4;
 				MeterWidth = 18;
 				MeterHeight = 64;
 				PanpotOuterRadius = 8;
 				PanpotInnerObjectRadius = 6;
 				PanpotOffset = 4;
+				MaskMargin = 2;
+				MaskWidth = ItemWidth - MaskMargin * 2;
+				MaskOffsetY = 4;
 			}
 
 			public int TotalProgressSteps => 16;
@@ -320,7 +323,7 @@ namespace Xmdsp
 
 			public int Height
 			{
-				get { return ItemHeight + KeyOnMeterTextSize * 2 + LineGapSize + PanpotOuterRadius * 2 + PanpotOffset; }
+				get { return ItemHeight + KeyOnMeterTextSize * 2 + LineGapSize + PanpotOuterRadius * 2 + PanpotOffset + MaskWidth + LineGapSize * 2 + MaskOffsetY; }
 			}
 
 			public int ItemWidth { get; private set; }
@@ -334,6 +337,9 @@ namespace Xmdsp
 			public int PanpotOuterRadius { get; private set; }
 			public int PanpotInnerObjectRadius { get; private set; }
 			public int PanpotOffset { get; private set; }
+			public int MaskMargin { get; private set; }
+			public int MaskWidth { get; private set; }
+			public int MaskOffsetY { get; private set; }
 		}
 
 		public class CircularProgressMeterPresenter
@@ -420,6 +426,11 @@ namespace Xmdsp
 		public void SeekByDeltaTime (int deltaTime)
 		{
 			Model.SeekByDeltaTime (deltaTime);
+		}
+
+		public void SetChannelMasks (bool [] channelMask)
+		{
+			Model.SetChannelMasks (channelMask);
 		}
 	}
 }
