@@ -1,6 +1,7 @@
 ﻿using System;
 using Xwt;
 using System.Collections.Generic;
+using System.Linq;
 using Xwt.Drawing;
 using Commons.Music.Midi;
 
@@ -90,15 +91,22 @@ namespace Xmdsp
 			};
 			
 			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
-				if (e.Button != PointerButton.Left)
-					return;
 				for (int i = 0; i < mask_rectangles.Length; i++) {
 					var maskRect = new Rectangle (
 						GetScaledPosition (mask_rectangles [i].TopLeft),
 						GetScaledPosition (mask_rectangles [i].BottomRight));
 					if (maskRect.Contains (e.Position)) {
+						// left click = simple toggle
+						if (e.Button == PointerButton.Left)
+							masked [i] = !masked [i];
+						// right click = toggle between solo and reset
+						else if (e.Button == PointerButton.Right) {
+							var currentHasAnyMutedChannel = masked.Any (b => b);
+							for (int x = 0; x < masked.Length; x++)
+								masked [x] = currentHasAnyMutedChannel ? false : i != x;
+						}
+
 						this.pm.SetChannelMasks (masked);
-						masked [i] = !masked [i];
 						break;
 					}
 				}
