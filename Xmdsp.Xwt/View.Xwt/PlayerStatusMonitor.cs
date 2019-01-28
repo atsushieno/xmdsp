@@ -102,14 +102,16 @@ namespace Xmdsp
 			ctx.SetColor (pm.Pallette.ApplicationBackgroundColor.ToXwt ());
 			ctx.Rectangle (dirtyRect);
 			ctx.Fill ();
-			Action<string,PlayerState> func = (label, state) => {
-				var co = coordinates [state];
-				DrawText (ctx, font, pmp.TextSize, pm.Pallette.CommonTextMiddle, label, co.X + pmp.BaseIconSize, co.Y);
-				DrawItem (ctx, state);
-			};
-			func ("Play", PlayerState.Playing);
-			func ("Pause", PlayerState.Paused);
-			func ("Stop", PlayerState.Stopped);
+			DrawState (ctx, pmp, "Play", PlayerState.Playing);
+			DrawState (ctx, pmp, "Pause", PlayerState.Paused);
+			DrawState (ctx, pmp, "Stop", PlayerState.Stopped);
+		}
+
+		void DrawState (Context ctx, Presenter.PlayerStatusMonitorPresenter pmp, string label, PlayerState state)
+		{
+			var co = coordinates [state];
+			DrawText (ctx, font, pmp.TextSize, pm.Pallette.CommonTextMiddle, label, co.X + pmp.BaseIconSize, co.Y);
+			DrawItem (ctx, state);
 		}
 
 		Size DrawText (Context ctx, Font font, int size, Presenter.Color color, string text, double x, double y)

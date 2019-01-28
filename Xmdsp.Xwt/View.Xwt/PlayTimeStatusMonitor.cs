@@ -31,6 +31,9 @@ namespace Xmdsp
 			pm.Model.SmfLoaded += smfLoaded;
 			if (pm.Model.Music != null)
 				smfLoaded ();
+
+			font_label = font_label ?? this.Font.WithSize (10);
+			font_value = font_value ?? Font.SystemMonospaceFont.WithSize (16);
 		}
 
 		internal void SetSize ()
@@ -55,8 +58,9 @@ namespace Xmdsp
 				ctx.LineTo (180, 30 * i + 24 + 1);
 				ctx.Stroke ();
 			}
-			
-			ctx.SetColor (pm.Pallette.CommonTextMiddle.ToXwt ());
+
+			var color = pm.Pallette.CommonTextMiddle;
+			ctx.SetColor (color.ToXwt ());
 			for (int i = 0; i < 5; i++) {
 				ctx.Rectangle (0, 30 * i, 5, 24);
 				ctx.Fill ();
@@ -64,21 +68,16 @@ namespace Xmdsp
 			
 			ctx.Translate (10, 0);
 			
-			font_label = font_label ?? this.Font.WithSize (10);
-			var font = font_label;
-			
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Passed" }, new Point (0, 0));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Time" }, new Point (10, 12));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Total" }, new Point (0, 30));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Time" }, new Point (10, 42));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Tick" }, new Point (0, 60));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Count" }, new Point (10, 72));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Tempo" }, new Point (0, 90));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = "Meter" }, new Point (0, 120));
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Passed", 0, 0);
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Time", 10, 12);
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Total", 0, 30);
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Time", 10, 42);
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Tick", 0, 60);
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Count", 10, 72);
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Tempo", 0, 90);
+			DrawingHelper.DrawText (ctx, font_label, 10, color, "Meter", 0, 120);
 			
 			ctx.Translate (60, 0);
-			font_value = font_value ?? Font.SystemMonospaceFont.WithSize (16);
-			font = font_value;
 			
 			string playTime, totalTime, ticks, tempo, meter;
 			
@@ -95,12 +94,12 @@ namespace Xmdsp
 				tempo = "     ---";
 				meter = "     -/-";
 			}
-				
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = playTime }, new Point (0, 0));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = totalTime }, new Point (0, 30));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = ticks }, new Point (0, 60));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = tempo }, new Point (0, 90));
-			ctx.DrawTextLayout (new TextLayout () { Font = font, Text = meter }, new Point (0, 120));
+
+			DrawingHelper.DrawText (ctx, font_value, 16, color, playTime, 0, 0);
+			DrawingHelper.DrawText (ctx, font_value, 16, color, totalTime, 0, 30);
+			DrawingHelper.DrawText (ctx, font_value, 16, color, ticks, 0, 60);
+			DrawingHelper.DrawText (ctx, font_value, 16, color, tempo, 0, 90);
+			DrawingHelper.DrawText (ctx, font_value, 16, color, meter, 0, 120);
 			
 			ctx.Translate (-70, 0);
 			

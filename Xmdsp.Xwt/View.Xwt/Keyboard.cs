@@ -59,6 +59,7 @@ namespace Xmdsp
 				path.ClosePath ();
 				ctx.AppendPath (path);
 				ctx.Fill ();
+				path.Dispose ();
 				//ctx.SetColor (vm.Pallette.WhiteKeyStrokeColor.ToXwt ());
 				//ctx.AppendPath (path);
 				//ctx.Stroke ();
