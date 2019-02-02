@@ -84,7 +84,7 @@ namespace Xmdsp
 			int wheight = pmk.WhiteKeyHeight;
 			ctx.SetLineWidth (1);
 			int n = 0;
-			foreach (var rect in pmk.WhiteKeyRectangles ()) {
+			foreach (var rect in pmk.WhiteKeyRectangles) {
 				int key = n / 7 * 12 + white_key_index_to_note [n % 7];
 				if (key_on_status [key])
 					ctx.SetColor (noteOnColor);
@@ -98,7 +98,7 @@ namespace Xmdsp
 				n++;
 			}
 			n = 0;
-			foreach (var rect in pmk.BlackKeyRectangles ()) {
+			foreach (var rect in pmk.BlackKeyRectangles) {
 				int key = n / 5 * 12 + black_key_index_to_note [n % 5];
 				if (key_on_status [key])
 					ctx.SetColor (noteOnColor);

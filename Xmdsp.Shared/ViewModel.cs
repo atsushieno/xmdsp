@@ -136,7 +136,10 @@ namespace Xmdsp
 			public int BlackKeyHeight { get; private set; }
 			public int BlackKeyShiftWidth { get; private set; }
 
-			public IEnumerable<Rectangle> WhiteKeyRectangles ()
+			Rectangle [] white_key_rectangles;
+			public Rectangle [] WhiteKeyRectangles => white_key_rectangles = white_key_rectangles ?? GetWhiteKeyRectangles ().ToArray ();
+
+			IEnumerable<Rectangle> GetWhiteKeyRectangles ()
 			{
 				int octaves = MaxKeys / 12;
 				int width = WhiteKeyWidth;
@@ -182,7 +185,10 @@ namespace Xmdsp
 
 			static readonly bool [] has_sharp = { true, true, false, true, true, true, false };
 
-			public IEnumerable<Rectangle> BlackKeyRectangles ()
+			Rectangle [] black_key_rectangles;
+			public Rectangle [] BlackKeyRectangles => black_key_rectangles = black_key_rectangles ?? GetBlackKeyRectangles ().ToArray ();
+
+			IEnumerable<Rectangle> GetBlackKeyRectangles ()
 			{
 				int octaves = MaxKeys / 12;
 				int wwidth = WhiteKeyWidth;

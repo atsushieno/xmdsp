@@ -26,7 +26,7 @@ namespace Xmdsp
 					var timeSigNoSpace = data [0] + "/" + Math.Pow (2, data [1]);
 					meter_string = new string (' ', 8 - timeSigNoSpace.Length) + timeSigNoSpace;
 				}
-			};			
+			};
 			Action smfLoaded = () => total_time_string = TimeSpan.FromMilliseconds (pm.Model.Music.GetTotalPlayTimeMilliseconds ()).ToString ("mm\\:ss"); 
 			pm.Model.SmfLoaded += smfLoaded;
 			if (pm.Model.Music != null)
