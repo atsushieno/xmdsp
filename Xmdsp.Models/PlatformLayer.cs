@@ -97,8 +97,10 @@ namespace Xmdsp
 
 		public virtual void StopWatchingFile ()
 		{
-			if (fs_watcher != null)
-				fs_watcher.Dispose ();
+			if (fs_watcher == null)
+				return;
+			fs_watcher.EnableRaisingEvents = false;
+			fs_watcher.Dispose ();
 		}
 
 		const long timer_fps = 30;
