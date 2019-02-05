@@ -29,6 +29,7 @@ namespace Xmdsp
 			if (!string.IsNullOrEmpty (DefaultConfiguration.LastPlayedFile))
 				LoadSmf (DefaultConfiguration.LastPlayedFile);
 			StartTimer = Platform.StartTimer;
+			StopTimer = Platform.StopTimer;
 		}
 		
 		public void Dispose ()
@@ -166,6 +167,7 @@ namespace Xmdsp
 			if (current_channel_mask != null)
 				current_player.SetChannelMask (current_channel_mask);
 			current_player.Finished += () => {
+				StopTimer ();
 				if (PlayerStateChanged != null)
 					PlayerStateChanged (PlayerState.Stopped);
 			};
@@ -183,6 +185,7 @@ namespace Xmdsp
 			if (PlayerStateChanged != null)
 				PlayerStateChanged (PlayerState.Playing);
 
+			StopTimer ();
 			StartTimer (OnTimerElapsed);
 		}
 

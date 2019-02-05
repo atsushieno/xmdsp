@@ -123,8 +123,10 @@ namespace Xmdsp
 			timer.Enabled = false;
 		}
 
-		void StopTimer ()
+		public virtual void StopTimer ()
 		{
+			if (timer == null)
+				return;
 			timer.Enabled = false;
 			timer.Dispose ();
 			timer = null;
