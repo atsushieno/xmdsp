@@ -25,9 +25,11 @@ namespace Xmdsp
 			base.OnDraw (ctx, dirtyRect);
 			ctx.Scale (pm.Scale, pm.Scale);
 
+			var pma = pm.ApplicationHeaderPane;
+			
 			ctx.SetLineWidth (1);
 			
-			var size = DrawingHelper.DrawText (ctx, Font, 18, pm.Pallette.CommonTextMiddle, "XMDSP", 0, 0);
+			var size = DrawingHelper.DrawText (ctx, Font, 18, pm.Pallette.CommonTextMiddle, pma.ApplicationTitle, 0, 0);
 			
 			int leftEnd = (int) size.Width;
 			
@@ -37,10 +39,10 @@ namespace Xmdsp
 
 			int rightStart = leftEnd + 5;
 
-			string descText = "standard MIDI file visualizer and player";
+			string descText = pma.DescriptionText;
 			DrawingHelper.DrawText (ctx, Font, 8, pm.Pallette.CommonTextMiddle, descText, rightStart, 0);
 
-			var detailsText = "version " + Model.VersionNumbers + " / with Xwt. (C)2013- atsushieno";
+			var detailsText = pma.DetailsText;
 			size = DrawingHelper.DrawText (ctx, Font, 8, pm.Pallette.CommonTextMiddle, detailsText, rightStart, 11);
 			
 			int rightEnd = rightStart + (int) size.Width;

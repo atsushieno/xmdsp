@@ -245,6 +245,12 @@ namespace Xmdsp
 			public int Width => 250;
 
 			public int Height => ApplicationNameTextSize + 2 + 12;
+
+			public string ApplicationTitle => "XMDSP";
+
+			public string DescriptionText => "standard MIDI file visualizing player";
+
+			public string DetailsText => "for composers aid and joy / Commons.Music.Midi project";
 		}
 
 		public class PlayerStatusMonitorPresenter
