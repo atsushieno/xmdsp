@@ -57,7 +57,7 @@ namespace Xmdsp
 				switch (m.EventType) {
 				case MidiEvent.NoteOn:
 					if (m.Lsb > 0)
-						keyon_meter_progress [m.Channel] = current_progress = 0;
+						keyon_meter_progress [m.Channel] = current_progress = (127 - m.Lsb) / (128 / pmk.TotalProgressSteps);
 					break;
 				case MidiEvent.Program:
 					program [m.Channel] = m.Msb;
