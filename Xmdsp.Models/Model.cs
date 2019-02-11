@@ -89,9 +89,8 @@ namespace Xmdsp
 				DefaultConfiguration.LastSelectedDevice = doc?.XPathSelectElement ("/config/last-selected-device")?.Value;
 				DefaultConfiguration.OnLoading = false;
 			} catch (Exception ex) {
-				// FIXME: we need some error reporting system
-				Console.WriteLine ($"Error while loading default settings: {ex.Message}");
-				Console.WriteLine ("Details: " + ex);
+				ReportError ($"Error while loading default settings: {ex.Message}");
+				ReportError ("Details: " + ex);
 			}
 		}
 
@@ -112,6 +111,14 @@ namespace Xmdsp
 
 		MidiMusic current_music;
 		IMusicPlayer current_player;
+
+		public event Action<string> Report;
+
+		internal void ReportError (string message)
+		{
+			if (Report != null)
+				Report (message);
+		}
 
 		public event Action<PlayerState> PlayerStateChanged;
 

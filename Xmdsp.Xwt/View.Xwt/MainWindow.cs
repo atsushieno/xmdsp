@@ -17,6 +17,7 @@ namespace Xmdsp
 		public MainWindow ()
 		{
 			model = new Model (new DesktopPlatformLayer ());
+			model.Report += msg => Console.Error.WriteLine (msg); // HACK
 			pm = new Presenter (model);
 			var pmw = pm.MainWindow;
 
@@ -175,9 +176,6 @@ namespace Xmdsp
 				MenuItem stop = new MenuItem ("_Stop");
 				stop.Clicked += delegate { model.Stop (); };
 				player.SubMenu.Items.Add (stop);
-
-				foreach (var item in player.SubMenu.Items)
-					item.Sensitive = model.Player != null;
 
 				foreach (var ratio in new double [] { 1, 2, 4, 8}) {
 					MenuItem ff = new MenuItem ($"FF: {ratio}x");
