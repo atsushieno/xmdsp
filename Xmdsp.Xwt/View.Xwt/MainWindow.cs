@@ -35,7 +35,8 @@ namespace Xmdsp
 			
 			var mainPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
 			var rightPane = new VBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightPane.PackStart (new ApplicationHeaderPane (pm), false);
+			app_header_pane = new ApplicationHeaderPane (pm);
+			rightPane.PackStart (app_header_pane, false);
 			
 			/* disable it until the issue that the slider jumps around gets fixed...
 			var progressSlider = new HSlider () { MaximumValue = 100.0, ExpandHorizontal = true };
@@ -55,9 +56,12 @@ namespace Xmdsp
 			*/
 			
 			var rightSecondPane = new HBox () { BackgroundColor = pm.Pallette.ApplicationBackgroundColor.ToXwt () };
-			rightSecondPane.PackStart (new CircularProgressMeter (pm), false);
-			rightSecondPane.PackStart (new PlayerStatusMonitor (pm), false);
-			rightSecondPane.PackStart (new PlayTimeStatusMonitor (pm), false);
+			circular_progress = new CircularProgressMeter (pm);
+			rightSecondPane.PackStart (circular_progress, false);
+			player_status = new PlayerStatusMonitor (pm);
+			rightSecondPane.PackStart (player_status, false);
+			play_time_status_monitor = new PlayTimeStatusMonitor (pm);
+			rightSecondPane.PackStart (play_time_status_monitor, false);
 			rightPane.PackStart (rightSecondPane, false);
 			key_on_meter_list = new KeyOnMeterList (pm);
 			rightPane.PackStart (key_on_meter_list, false);
@@ -91,8 +95,12 @@ namespace Xmdsp
 			this.BoundsChanged += (sender, e) => pm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
 		}
 
+		ApplicationHeaderPane app_header_pane;
+		CircularProgressMeter circular_progress;
 		KeyboardList keyboard_list;
 		KeyOnMeterList key_on_meter_list;
+		PlayerStatusMonitor player_status;
+		PlayTimeStatusMonitor play_time_status_monitor;
 		
 		void ShutdownApplication ()
 		{
@@ -135,6 +143,31 @@ namespace Xmdsp
 				pm.KeyboardList.Visible = keyboard_list.Visible = viewKeyboards.Checked;
 			};
 			view.SubMenu.Items.Add (viewKeyboards);
+			var viewHeader = new CheckBoxMenuItem ("Application _Header Pane") {Checked = true};
+			viewHeader.Clicked += delegate {
+				viewHeader.Checked = !pm.ApplicationHeaderPane.Visible;
+				pm.ApplicationHeaderPane.Visible = app_header_pane.Visible = viewHeader.Checked;
+			};
+			view.SubMenu.Items.Add (viewHeader);
+			var viewCircle = new CheckBoxMenuItem ("_Circular Progress") {Checked = true};
+			viewCircle.Clicked += delegate {
+				viewCircle.Checked = !pm.CircularProgressMeter.Visible;
+				pm.CircularProgressMeter.Visible = circular_progress.Visible = viewCircle.Checked;
+			};
+			view.SubMenu.Items.Add (viewCircle);
+			var viewPlayStat = new CheckBoxMenuItem ("Player _Statuses") {Checked = true};
+			viewPlayStat.Clicked += delegate {
+				viewPlayStat.Checked = !pm.PlayerStatusMonitor.Visible;
+				pm.PlayerStatusMonitor.Visible = player_status.Visible = viewPlayStat.Checked;
+			};
+			view.SubMenu.Items.Add (viewPlayStat);
+			menu.Items.Add (view);
+			var viewPlayTime = new CheckBoxMenuItem ("Play _Time Monitor") {Checked = true};
+			viewPlayTime.Clicked += delegate {
+				viewPlayTime.Checked = !pm.PlayTimeStatusMonitor.Visible;
+				pm.PlayTimeStatusMonitor.Visible = play_time_status_monitor.Visible = viewPlayTime.Checked;
+			};
+			view.SubMenu.Items.Add (viewPlayTime);
 			var viewKeyOnMeters = new CheckBoxMenuItem ("Key-On _Meters") {Checked = true};
 			viewKeyOnMeters.Clicked += delegate {
 				viewKeyOnMeters.Checked = !pm.KeyOnMeterList.Visible;

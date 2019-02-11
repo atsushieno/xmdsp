@@ -37,6 +37,9 @@ namespace Xmdsp
 		
 		protected override void OnDraw (Xwt.Drawing.Context ctx, Rectangle dirtyRect)
 		{
+			if (!pm.CircularProgressMeter.Visible)
+				return;
+			
 			ctx.Scale (pm.Scale, pm.Scale);
 			ctx.SetLineWidth (1);
 			ctx.SetColor (pm.Pallette.CommonTextDarkest.ToXwt ());

@@ -22,6 +22,9 @@ namespace Xmdsp
 		
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
+			if (!pm.ApplicationHeaderPane.Visible)
+				return;
+			
 			base.OnDraw (ctx, dirtyRect);
 			ctx.Scale (pm.Scale, pm.Scale);
 

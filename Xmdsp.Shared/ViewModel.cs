@@ -242,6 +242,8 @@ namespace Xmdsp
 				ApplicationNameTextSize = 24;
 			}
 
+			public bool Visible { get; set; } = true;
+
 			public int ApplicationNameTextSize { get; private set; }
 
 			public int Width => 250;
@@ -266,6 +268,8 @@ namespace Xmdsp
 				TextSize = 9;
 			}
 
+			public bool Visible { get; set; } = true;
+			
 			public int BaseIconSize { get; private set; }
 
 			public int Width
@@ -290,6 +294,8 @@ namespace Xmdsp
 				this.pm = pm;
 				ItemHeight = 30;
 			}
+
+			public bool Visible { get; set; } = true;
 
 			public int ItemHeight { get; set; }
 
@@ -366,6 +372,8 @@ namespace Xmdsp
 			{
 				this.pm = pm;
 			}
+			
+			public bool Visible { get; set; } = true;
 
 			public int Width => 60;
 			public int Height => 60;

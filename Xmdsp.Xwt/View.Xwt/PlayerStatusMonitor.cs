@@ -91,6 +91,9 @@ namespace Xmdsp
 
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
+			if (!pm.PlayerStatusMonitor.Visible)
+				return;
+			
 			base.OnDraw (ctx, dirtyRect);
 			//if (last_state == state_to_draw)
 			//	return;
