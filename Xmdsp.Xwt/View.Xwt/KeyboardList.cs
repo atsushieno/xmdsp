@@ -55,6 +55,9 @@ namespace Xmdsp
 			
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
+			if (!pm.KeyboardList.Visible)
+				return;
+			
 			dirty = false;
 			ctx.Scale (pm.Scale, pm.Scale);
 			foreach (var kb in keyboards) {

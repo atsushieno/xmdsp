@@ -87,6 +87,8 @@ namespace Xmdsp
 				this.pm = pm;
 			}
 
+			public bool Visible { get; set; } = true;
+
 			public int Width
 			{
 				get { return Math.Max (pm.Keyboard.Width, pm.KeyboardParameterBlock.Width); }
@@ -325,6 +327,8 @@ namespace Xmdsp
 				MaskWidth = ItemWidth - MaskMargin * 2;
 				MaskOffsetY = 4;
 			}
+
+			public bool Visible { get; set; } = true;
 
 			public int TotalProgressSteps => 16;
 

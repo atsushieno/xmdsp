@@ -134,6 +134,9 @@ namespace Xmdsp
 
 		protected override void OnDraw (Context ctx, Rectangle dirtyRect)
 		{
+			if (!pm.KeyOnMeterList.Visible)
+				return;
+			
 			ctx.Scale (pm.Scale, pm.Scale);
 			//if (dirty_keyon)
 				DrawKeyOn (ctx);

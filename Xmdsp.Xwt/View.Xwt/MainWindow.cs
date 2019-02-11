@@ -58,9 +58,11 @@ namespace Xmdsp
 			rightSecondPane.PackStart (new PlayerStatusMonitor (pm), false);
 			rightSecondPane.PackStart (new PlayTimeStatusMonitor (pm), false);
 			rightPane.PackStart (rightSecondPane, false);
-			rightPane.PackStart (new KeyOnMeterList (pm), false);
-			
-			mainPane.PackStart (new KeyboardList (pm), true);
+			key_on_meter_list = new KeyOnMeterList (pm);
+			rightPane.PackStart (key_on_meter_list, false);
+
+			keyboard_list = new KeyboardList (pm);
+			mainPane.PackStart (keyboard_list, true);
 			mainPane.PackStart (rightPane, true);
 
 			mainPane.SetDragDropTarget (TransferDataType.Uri);
@@ -87,6 +89,9 @@ namespace Xmdsp
 
 			this.BoundsChanged += (sender, e) => pm.Scale = Math.Min (Width / initialWidth, Height / initialHeight);
 		}
+
+		KeyboardList keyboard_list;
+		KeyOnMeterList key_on_meter_list;
 		
 		void ShutdownApplication ()
 		{
@@ -120,7 +125,22 @@ namespace Xmdsp
 			close.Clicked += delegate { ShutdownApplication (); };
 			file.SubMenu.Items.Add (close);
 			menu.Items.Add (file);
-			menu.Items.Add (file);
+
+			var view = new MenuItem ("_View");
+			view.SubMenu = new Menu ();
+			var viewKeyboards = new CheckBoxMenuItem ("_Keyboards") {Checked = true};
+			viewKeyboards.Clicked += delegate {
+				viewKeyboards.Checked = !pm.KeyboardList.Visible;
+				pm.KeyboardList.Visible = keyboard_list.Visible = viewKeyboards.Checked;
+			};
+			view.SubMenu.Items.Add (viewKeyboards);
+			var viewKeyOnMeters = new CheckBoxMenuItem ("Key-On _Meters") {Checked = true};
+			viewKeyOnMeters.Clicked += delegate {
+				viewKeyOnMeters.Checked = !pm.KeyOnMeterList.Visible;
+				pm.KeyOnMeterList.Visible = key_on_meter_list.Visible = viewKeyOnMeters.Checked;
+			};
+			view.SubMenu.Items.Add (viewKeyOnMeters);
+			menu.Items.Add (view);
 
 			var device = new MenuItem ("_Device");
 			device.SubMenu = new Menu ();
