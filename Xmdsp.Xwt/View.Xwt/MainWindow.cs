@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Text;
 using System.Timers;
 using Commons.Music.Midi;
 using Xwt;
 using Xwt.Drawing;
+using Xwt.GtkBackend;
 
 namespace Xmdsp
 {
@@ -220,17 +222,11 @@ namespace Xmdsp
 				marker.SubMenu = new Menu ();
 				if (model.Music != null) {
 					int i = 0;
-					foreach (var m in model.Music.GetMetaEventsOfType (MidiMetaType.Marker)) {
-						var markerText = "";
-						try {
-							markerText = Encoding.Default.GetString (m.Event.Data);
-						} catch (ArgumentException) {
-							markerText = Encoding.UTF8.GetString (m.Event.Data);
-						}
-						var milliseconds = model.Music.GetTimePositionInMillisecondsForTick (m.DeltaTime);
-						var item = new MenuItem (TimeSpan.FromMilliseconds (milliseconds).ToString ("mm':'ss'.'fff") + " : " + markerText);
-						// FIXME: add seek operation.
-						item.Clicked += delegate { pm.SeekByDeltaTime (m.DeltaTime); };
+					foreach (var m in model.CurrentMusicMarkers) {
+						var markerText = m.Item1;
+						var milliseconds = model.Music.GetTimePositionInMillisecondsForTick (m.Item3);
+						var item = new MenuItem (m.Item2.ToString ("mm':'ss'.'fff") + " : " + markerText);
+						item.Clicked += delegate { pm.SeekByDeltaTime (m.Item3); };
 						marker.SubMenu.Items.Add (item);
 					}
 				}

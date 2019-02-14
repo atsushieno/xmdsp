@@ -61,10 +61,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Xwt.Gtk">
-      <HintPath>..\packages\Xwt.Gtk.0.2.14\lib\net40\Xwt.Gtk.dll</HintPath>
-      <Package>monodevelop</Package>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows" />
@@ -80,7 +76,7 @@
       <HintPath>..\packages\Xwt.XamMac.0.2.145\lib\net40\Xwt.XamMac.dll</HintPath>
     </Reference>
     <Reference Include="Xwt.Gtk3">
-      <HintPath>..\packages\Xwt.Gtk3.0.2.145\lib\net40\Xwt.Gtk3.dll</HintPath>
+      <HintPath>../packages/Xwt.Gtk3.0.2.145/lib/net40/Xwt.Gtk3.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>

@@ -2,6 +2,7 @@ using System;
 using Commons.Music.Midi;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -300,6 +301,33 @@ namespace Xmdsp
 			if (current_player != null)
 				current_player.SetChannelMask (channelMask);
 			current_channel_mask = (bool []) channelMask.Clone ();
+		}
+		
+		public IEnumerable<Tuple<string,TimeSpan,int>> CurrentMusicMarkers {
+			get {
+				foreach (var m in Music.GetMetaEventsOfType (MidiMetaType.Marker)) {
+					var markerText = "";
+					try {
+						markerText = Encoding.Default.GetString (m.Event.Data);
+					}
+					catch (ArgumentException) {
+						markerText = Encoding.UTF8.GetString (m.Event.Data);
+					}
+
+					var milliseconds = Music.GetTimePositionInMillisecondsForTick (m.DeltaTime);
+					yield return new Tuple<string,TimeSpan,int> (markerText,
+						TimeSpan.FromMilliseconds (milliseconds), m.DeltaTime);
+				}
+			}
+		}
+
+		public void JumpToMarker (int i)
+		{
+			var markers = CurrentMusicMarkers.ToArray ();
+			if (i < markers.Length) {
+				var m = markers [i];
+				SeekByDeltaTime (m.Item3);
+			}
 		}
 	}
 }
