@@ -1,11 +1,18 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using System.Windows.Forms;
 using Commons.Music.Midi;
 using Xwt;
 using Xwt.Drawing;
 using Xwt.GtkBackend;
+using Application = Xwt.Application;
+using FileDialog = System.Windows.Forms.FileDialog;
+using Menu = Xwt.Menu;
+using MenuItem = Xwt.MenuItem;
+using OpenFileDialog = Xwt.OpenFileDialog;
 
 namespace Xmdsp
 {
@@ -67,6 +74,8 @@ namespace Xmdsp
 			rightPane.PackStart (rightSecondPane, false);
 			key_on_meter_list = new KeyOnMeterList (pm);
 			rightPane.PackStart (key_on_meter_list, false);
+			quueued_file_list = new QueuedFileList (pm);
+			rightPane.PackStart (quueued_file_list, true);
 
 			keyboard_list = new KeyboardList (pm);
 			mainPane.PackStart (keyboard_list, true);
@@ -103,6 +112,7 @@ namespace Xmdsp
 		KeyOnMeterList key_on_meter_list;
 		PlayerStatusMonitor player_status;
 		PlayTimeStatusMonitor play_time_status_monitor;
+		QueuedFileList quueued_file_list;
 		
 		void ShutdownApplication ()
 		{
@@ -120,21 +130,37 @@ namespace Xmdsp
 			
 			MenuItem open = new MenuItem ("_Open");
 			open.Clicked += delegate {
-				var dlg = new OpenFileDialog ();
+				var dlg = new OpenFileDialog () { Multiselect = true };
 				dlg.Filters.Add (new FileDialogFilter ("Standard MIDI Files", "*.mid", "*.MID", "*.Mid"));
+				dlg.Filters.Add (new FileDialogFilter ("Song List Files", "*.m3u", "*.M3U", "*.M3u"));
 				dlg.Filters.Add (new FileDialogFilter ("All Files", "*"));
 				if (dlg.Run ()) {
-					model.LoadSmf (dlg.FileName);
-					model.Play ();
+					if (dlg.FileName != null &&
+					    dlg.FileName.EndsWith (".m3u", StringComparison.OrdinalIgnoreCase)) {
+						foreach (var line in File.ReadAllLines (dlg.FileName))
+							model.Queue.QueuedFiles.Add (new Model.MediaFile (Path.Combine(Path.GetDirectoryName (dlg.FileName), line)));
+					} else {
+						if (dlg.FileNames.Length > 1)
+						foreach (var queuedFile in dlg.FileNames)
+							model.Queue.QueuedFiles.Add (new Model.MediaFile (queuedFile));
+
+						if (dlg.FileName != null) {
+							model.LoadSmf (dlg.FileName);
+							model.Play ();
+						}
+					}
 				}
 			};
 			file.SubMenu.Items.Add (open);
+			
 			var watchUnwatch = new CheckBoxMenuItem ("_Watch and restart for file change") { Checked = true };
 			watchUnwatch.Clicked += (sender, e) => model.Platform.WatchFileChanges = watchUnwatch.Checked;
 			file.SubMenu.Items.Add (watchUnwatch);
-			MenuItem close = new MenuItem ("_Close");
-			close.Clicked += delegate { ShutdownApplication (); };
-			file.SubMenu.Items.Add (close);
+			
+			MenuItem exit = new MenuItem ("E_xit");
+			exit.Clicked += delegate { ShutdownApplication (); };
+			file.SubMenu.Items.Add (exit);
+			
 			menu.Items.Add (file);
 
 			var view = new MenuItem ("_View");
@@ -176,6 +202,13 @@ namespace Xmdsp
 				pm.KeyOnMeterList.Visible = key_on_meter_list.Visible = viewKeyOnMeters.Checked;
 			};
 			view.SubMenu.Items.Add (viewKeyOnMeters);
+			var viewQueuedFileList = new CheckBoxMenuItem ("_Queued File List") {Checked = true};
+			viewQueuedFileList.Clicked += delegate {
+				viewQueuedFileList.Checked = !pm.QueuedFileList.Visible;
+				pm.QueuedFileList.Visible = quueued_file_list.Visible = viewQueuedFileList.Checked;
+			};
+			view.SubMenu.Items.Add (viewKeyOnMeters);
+			
 			menu.Items.Add (view);
 
 			var device = new MenuItem ("_Device");

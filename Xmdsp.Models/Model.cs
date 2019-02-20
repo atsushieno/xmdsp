@@ -1,7 +1,9 @@
 using System;
 using Commons.Music.Midi;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Xml.Linq;
@@ -328,6 +330,34 @@ namespace Xmdsp
 				var m = markers [i];
 				SeekByDeltaTime (m.Item3);
 			}
+		}
+		
+		public MediaPlayerQueue Queue { get; private set; } = new MediaPlayerQueue ();
+
+		public class MediaPlayerQueue
+		{
+			public IList<MediaFile> QueuedFiles { get; private set; } = new List<MediaFile> ();
+		}
+
+		public class MediaFile
+		{
+			public MediaFile (string filePath)
+			{
+				FullPath = Path.GetFullPath (filePath);
+				FileName = Path.GetFileName (FullPath);
+				using (var s = File.OpenRead (FullPath)) {
+					var music = MidiMusic.Read (s);
+					var data = music.GetMetaEventsOfType (MidiMetaType.TrackName).FirstOrDefault().Event.Data;
+					if (data != null)
+						Title = Encoding.UTF8.GetString (data);
+					TotalPlayTime = music.GetTotalPlayTimeMilliseconds ();
+				}
+			}
+
+			public string FileName { get; private set; }
+			public string FullPath { get; private set; }
+			public string Title { get; private set; }
+			public int TotalPlayTime { get; private set; }
 		}
 	}
 }

@@ -21,7 +21,8 @@ namespace Xmdsp
 
 		public KeyOnMeterListPresenter KeyOnMeterList { get; private set; }
 		public CircularProgressMeterPresenter CircularProgressMeter { get; private set; }
-		public PseudoSpectrumAnalyzerPresenter PseudoSpectrumAnalyzer { get; private set; }
+		//public PseudoSpectrumAnalyzerPresenter PseudoSpectrumAnalyzer { get; private set; }
+		public QueuedFileListPresenter QueuedFileList { get; private set; }
 
 		public event MidiEventAction MidiMessageReceived;
 
@@ -39,6 +40,7 @@ namespace Xmdsp
 			PlayTimeStatusMonitor = new PlayTimeStatusMonitorPresenter (this);
 			KeyOnMeterList = new KeyOnMeterListPresenter (this);
 			CircularProgressMeter = new CircularProgressMeterPresenter (this);
+			QueuedFileList = new QueuedFileListPresenter (this);
 
 			MaxChannels = 16;
 
@@ -381,6 +383,29 @@ namespace Xmdsp
 			public int Padding = 32;
 		}
 
+		public class QueuedFileListPresenter
+		{
+			Presenter pm;
+
+			public QueuedFileListPresenter (Presenter pm)
+			{
+				this.pm = pm;
+			}
+			
+			public bool Visible { get; set; } = true;
+
+			public int Width => 300;
+			public int Height => 240;
+			public int TextSize => 18;
+			public int LabelTextSize => 12;
+			public int TrackNumberXOffset => 10;
+			public int TitleXOffset => 50;
+			public int LineGap => 3;
+
+			public int LineThickness => 1;
+		}
+
+		/*
 		public class PseudoSpectrumAnalyzerPresenter
 		{
 			public int Width => 300;
@@ -390,6 +415,7 @@ namespace Xmdsp
 			public int CellWidth => 16;
 			public int CellHeight => 8;
 		}
+		*/
 
 		public class PalletteDefinition
 		{

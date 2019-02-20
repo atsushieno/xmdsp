@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PlayTimeStatusMonitor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\Program.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\PseudoSpectrumAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\QueuedFileList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View.Xwt\XwtPresenterExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformDependent\DesktopPlaformLayer.cs" />
   </ItemGroup>

@@ -127,6 +127,11 @@ namespace Xmdsp
 			case MidiEvent.NoteOff:
 				key_on_status [n] = false;
 				break;
+			case MidiEvent.CC:
+				if (m.Msb == MidiCC.AllSoundOff)
+					for (int i = 0; i < key_on_status.Length; i++)
+						key_on_status [i] = false;
+				break;
 			}
 		}
 
