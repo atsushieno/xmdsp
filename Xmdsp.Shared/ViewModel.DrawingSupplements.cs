@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Linq;
 
 namespace Xmdsp
 {
@@ -7,6 +9,11 @@ namespace Xmdsp
 		public struct Color
 		{
 			int color;
+
+			public Color (int argb)
+			{
+				color = argb;
+			}
 			
 			public Color (byte r, byte g, byte b, byte a = 255)
 			{
@@ -25,6 +32,15 @@ namespace Xmdsp
 			public Color Darken (double percent)
 			{
 				return new Color ((byte) (R * percent), (byte) (G * percent), (byte) (B * percent), A);
+			}
+
+			public static Color Parse (string s)
+			{
+				if (s == null)
+					throw new ArgumentNullException (nameof (s));
+				if (s.FirstOrDefault () != '#' || s.Length != 9)
+					throw new ArgumentException ();
+				return new Color (int.Parse (s.Substring (1), NumberStyles.HexNumber));
 			}
 		}
 		

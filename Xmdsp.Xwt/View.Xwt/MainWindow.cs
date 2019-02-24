@@ -208,6 +208,26 @@ namespace Xmdsp
 				pm.QueuedFileList.Visible = quueued_file_list.Visible = viewQueuedFileList.Checked;
 			};
 			view.SubMenu.Items.Add (viewQueuedFileList);
+
+			var viewPallette = new MenuItem ("_Pallette");
+			viewPallette.SubMenu = new Menu ();
+			viewPallette.Clicked += delegate {
+				viewPallette.SubMenu.Items.Clear ();
+
+				viewPallette.SubMenu.Items.Add (CreatePalletteMenu ("_Base Color", model.BaseColor, s => model.BaseColor = s));
+				//viewPallette.SubMenu.Items.Add (CreatePalletteMenu ("_Background Color", model.BackgroundColor, s => model.BackgroundColor = s));
+				viewPallette.SubMenu.Items.Add (CreatePalletteMenu ("_Note On Color", model.NoteOnColor, s => model.NoteOnColor = s));
+
+				var viewResetPallette = new MenuItem ("_Reset Pallette");
+				viewResetPallette.Clicked += delegate {
+					model.BaseColor = Model.DefaultBaseColor;
+					model.BackgroundColor = Model.DefaultBackgroundColor;
+					model.NoteOnColor = Model.DefaultNoteOnColor;
+				};
+				viewPallette.SubMenu.Items.Add (viewResetPallette);
+			};
+			 
+			view.SubMenu.Items.Add (viewPallette);
 			
 			menu.Items.Add (view);
 
@@ -269,6 +289,18 @@ namespace Xmdsp
 			menu.Items.Add (player);
 			
 			this.MainMenu = menu;
+		}
+
+		MenuItem CreatePalletteMenu (string label, string color, Action<string> setter)
+		{
+			var mi = new MenuItem (label);
+			var currentColor = Presenter.Color.Parse (color).ToXwt ();
+			mi.Clicked += delegate {
+				var cdlg = new SelectColorDialog () { Color = currentColor };
+				if (cdlg.Run ())
+					setter ("#FF" + cdlg.Color.ToHexString (false).Substring (1));
+			};
+			return mi;
 		}
 	}
 }

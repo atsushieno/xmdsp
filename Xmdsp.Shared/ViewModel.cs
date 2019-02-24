@@ -31,7 +31,15 @@ namespace Xmdsp
 			Model = model;
 			model.MidiMessageReceived += OnMessageReceived;
 			MainWindow = new MainWindowPresenter (this);
-			Pallette = new PalletteDefinition (this);
+			Action setPallette = () => {
+				Pallette = new PalletteDefinition (this,
+					Color.Parse (Model.BaseColor),
+					Color.Parse (Model.BackgroundColor),
+					Color.Parse (Model.NoteOnColor));
+			};
+			model.PalletteChanged += delegate { setPallette (); };
+			setPallette ();
+
 			Keyboard = new KeyboardPresenter (this);
 			KeyboardParameterBlock = new KeyboardParameterBlockPresenter (this);
 			KeyboardList = new KeyboardListPresenter (this);
@@ -421,19 +429,18 @@ namespace Xmdsp
 		{
 			private Presenter pm;
 
-			public PalletteDefinition (Presenter pm)
+			public PalletteDefinition (Presenter pm, Color baseColor, Color backgroundColor, Color noteOnColor)
 			{
-				this.pm = pm;
-				ApplicationBackgroundColor = Color.Black;
+				this.pm = pm;				
+				ApplicationBackgroundColor = backgroundColor;
 				KeyboardBackgroundColor = Color.Transparent;
 				WhiteKeyFillColor = Color.White;
 				WhiteKeyStrokeColor = Color.Black;
 				BlackKeyFillColor = Color.Black;
 				BlackKeyStrokeColor = Color.White.Darken (0.5);
 
-				NoteOnColor = new Color (255, 255, 0);
+				NoteOnColor = noteOnColor;
 
-				var baseColor = new Color (128, 128, 255);
 				KeyParameterBackgroundColor = Color.Transparent;
 				CommonTextDarkest = baseColor.Darken (0.5);
 				CommonTextMiddle = baseColor.Darken (0.75);

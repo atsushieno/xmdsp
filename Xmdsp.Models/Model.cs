@@ -1,6 +1,7 @@
 using System;
 using Commons.Music.Midi;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -51,7 +52,7 @@ namespace Xmdsp
 
 			Model model;
 
-			string last_played_file, last_selected_device;
+			string last_played_file, last_selected_device, base_color, bg_color, note_on_color;
 
 			internal bool OnLoading { get; set; }
 
@@ -72,12 +73,44 @@ namespace Xmdsp
 				}
 			}
 
+			public string BaseColor {
+				get => base_color;
+				set
+				{
+					base_color = value;
+					if (!OnLoading)
+						Save ();
+				}
+			}
+
+			public string BackgroundColor {
+				get => bg_color;
+				set
+				{
+					bg_color = value;
+					if (!OnLoading)
+						Save ();
+				}
+			}
+			
+			public string NoteOnColor {
+				get => note_on_color;
+				set
+				{
+					note_on_color = value;
+					if (!OnLoading)
+						Save ();
+				}
+			}
+
 			void Save ()
 			{
 				var doc = new XDocument (
 					new XElement ("config",
 						new XElement ("last-played-file", last_played_file),
-						new XElement ("last-selected-device", last_selected_device)));
+						new XElement ("last-selected-device", last_selected_device),
+						new XElement ("base-color", base_color),
+						new XElement ("note-on-color", note_on_color)));
 				model.Platform.SaveConfigurationString (doc.ToString ());
 			}
 		}
@@ -358,6 +391,39 @@ namespace Xmdsp
 			public string FullPath { get; private set; }
 			public string Title { get; private set; }
 			public int TotalPlayTime { get; private set; }
+		}
+
+		public event EventHandler PalletteChanged;
+
+		public const string DefaultBaseColor = "#FF80A0FF";
+		public const string DefaultBackgroundColor = "#FF000000";
+		public const string DefaultNoteOnColor = "#FFFF4080";
+
+		public string BaseColor {
+			get => DefaultConfiguration.BaseColor ?? DefaultBaseColor;
+			set {
+				DefaultConfiguration.BaseColor = value;
+				if (PalletteChanged != null)
+					PalletteChanged (this, EventArgs.Empty);
+			}
+		}
+
+		public string BackgroundColor {
+			get => DefaultConfiguration.BackgroundColor ?? DefaultBackgroundColor;
+			set {
+				DefaultConfiguration.BackgroundColor = value;
+				if (PalletteChanged != null)
+					PalletteChanged (this, EventArgs.Empty);
+			}
+		}
+
+		public string NoteOnColor {
+			get => DefaultConfiguration.NoteOnColor ?? DefaultNoteOnColor;
+			set {
+				DefaultConfiguration.NoteOnColor = value;
+				if (PalletteChanged != null)
+					PalletteChanged (this, EventArgs.Empty);
+			}
 		}
 	}
 }
