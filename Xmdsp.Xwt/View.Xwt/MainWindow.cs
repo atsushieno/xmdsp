@@ -207,7 +207,7 @@ namespace Xmdsp
 				viewQueuedFileList.Checked = !pm.QueuedFileList.Visible;
 				pm.QueuedFileList.Visible = quueued_file_list.Visible = viewQueuedFileList.Checked;
 			};
-			view.SubMenu.Items.Add (viewKeyOnMeters);
+			view.SubMenu.Items.Add (viewQueuedFileList);
 			
 			menu.Items.Add (view);
 
