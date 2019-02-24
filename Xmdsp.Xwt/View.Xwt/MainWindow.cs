@@ -255,8 +255,9 @@ namespace Xmdsp
 				marker.SubMenu = new Menu ();
 				if (model.Music != null) {
 					int i = 0;
-					foreach (var m in model.CurrentMusicMarkers) {
-						var markerText = m.Item1;
+					foreach (var mg in model.CurrentMusicMarkers.GroupBy (m => m.Item3)) {
+						var m = mg.First ();
+						var markerText = string.Join (",", mg.Select (_ => _.Item1).Distinct ());
 						var milliseconds = model.Music.GetTimePositionInMillisecondsForTick (m.Item3);
 						var item = new MenuItem (m.Item2.ToString ("mm':'ss'.'fff") + " : " + markerText);
 						item.Clicked += delegate { pm.SeekByDeltaTime (m.Item3); };
