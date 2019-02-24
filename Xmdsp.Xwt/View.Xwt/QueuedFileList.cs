@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Commons.Music.Midi;
 using Xwt;
 using Xwt.Drawing;
@@ -43,14 +44,20 @@ namespace Xmdsp
 			var size = pm.QueuedFileList.TextSize;
 			var height = pm.QueuedFileList.TextSize + pm.QueuedFileList.LineGap;
 
-			DrawingHelper.DrawText (ctx, font_label, pm.QueuedFileList.LabelTextSize, color, "- No. -", pm.QueuedFileList.TrackNumberXOffset, 0);
-			DrawingHelper.DrawText (ctx, font_label, pm.QueuedFileList.LabelTextSize, color, "- Title -", pm.QueuedFileList.TitleXOffset, 0);
-			for (int i = 0; i < 10; i++) {
-				if (i >= pm.Model.Queue.QueuedFiles.Count)
-					break;
-				var file = pm.Model.Queue.QueuedFiles [i];
-				DrawingHelper.DrawText (ctx, font_label, size, color, (i + 1).ToString (), pm.QueuedFileList.TrackNumberXOffset, (i + 1) * height);
-				DrawingHelper.DrawText (ctx, font_label, size, color, file.Title, pm.QueuedFileList.TitleXOffset, (i + 1) * height);
+			if (pm.Model.Queue.QueuedFiles.Any ()) {
+				DrawingHelper.DrawText (ctx, font_label, pm.QueuedFileList.LabelTextSize, color,
+					"- No. -", pm.QueuedFileList.TrackNumberXOffset, 0);
+				DrawingHelper.DrawText (ctx, font_label, pm.QueuedFileList.LabelTextSize, color,
+					"- Title -", pm.QueuedFileList.TitleXOffset, 0);
+				for (int i = 0; i < 10; i++) {
+					if (i >= pm.Model.Queue.QueuedFiles.Count)
+						break;
+					var file = pm.Model.Queue.QueuedFiles [i];
+					DrawingHelper.DrawText (ctx, font_label, size, color, (i + 1).ToString (),
+						pm.QueuedFileList.TrackNumberXOffset, (i + 1) * height);
+					DrawingHelper.DrawText (ctx, font_label, size, color, file.Title,
+						pm.QueuedFileList.TitleXOffset, (i + 1) * height);
+				}
 			}
 		}
 	}
