@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xmdsp.Models", "Xmdsp.Model
 EndProject
 Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Xmdsp.Mobile.Android", "Xmdsp.Mobile\Xmdsp.Mobile.Android\Xmdsp.Mobile.Android.csproj", "{F1D509D1-A9AF-4BBD-BE68-F0F4563EA0FD}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Commons.Music.Midi.CoreMidiShared", "external\managed-midi\Commons.Music.Midi.CoreMidiShared\Commons.Music.Midi.CoreMidiShared.shproj", "{6197A7EE-4469-4FFA-BC33-F180A2877580}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Commons.Music.Midi.DesktopShared", "external\managed-midi\Commons.Music.Midi.DesktopShared\Commons.Music.Midi.DesktopShared.shproj", "{ACB7F202-3B4C-4859-B9BE-ADE6B6726DB0}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Xmdsp.Mobile\Xmdsp.Mobile\Xmdsp.Mobile.projitems*{07c7866e-137e-42b2-b066-e5cbcb6028d5}*SharedItemsImports = 4
@@ -856,5 +860,7 @@ Global
 		{1F06E431-EF07-4161-8C74-5DBB80537F3E} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
 		{9CED7E33-D8EB-43B2-A903-9E5D63B34F23} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
 		{D8537EB3-C573-43D6-914A-455D6AC5AA11} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
+		{6197A7EE-4469-4FFA-BC33-F180A2877580} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
+		{ACB7F202-3B4C-4859-B9BE-ADE6B6726DB0} = {993BB2D1-BA80-47BA-A4A9-988B05D5F4C3}
 	EndGlobalSection
 EndGlobal

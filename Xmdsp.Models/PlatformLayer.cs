@@ -39,7 +39,7 @@ namespace Xmdsp
 		{
 			if (midi_output != null)
 				midi_output.CloseAsync ().Wait ();
-			string dev = current_device == null ? AllMidiDevices.Last ().Id : current_device;
+			string dev = string.IsNullOrEmpty (current_device) ? AllMidiDevices.Last ().Id : current_device;
 			midi_output = MidiAccess.OpenOutputAsync (dev).Result;
 		}
 
