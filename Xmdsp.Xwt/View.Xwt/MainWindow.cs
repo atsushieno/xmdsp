@@ -3,13 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Timers;
-using System.Windows.Forms;
 using Commons.Music.Midi;
 using Xwt;
 using Xwt.Drawing;
-using Xwt.GtkBackend;
 using Application = Xwt.Application;
-using FileDialog = System.Windows.Forms.FileDialog;
 using Menu = Xwt.Menu;
 using MenuItem = Xwt.MenuItem;
 using OpenFileDialog = Xwt.OpenFileDialog;
@@ -189,7 +186,6 @@ namespace Xmdsp
 				pm.PlayerStatusMonitor.Visible = player_status.Visible = viewPlayStat.Checked;
 			};
 			view.SubMenu.Items.Add (viewPlayStat);
-			menu.Items.Add (view);
 			var viewPlayTime = new CheckBoxMenuItem ("Play _Time Monitor") {Checked = true};
 			viewPlayTime.Clicked += delegate {
 				viewPlayTime.Checked = !pm.PlayTimeStatusMonitor.Visible;

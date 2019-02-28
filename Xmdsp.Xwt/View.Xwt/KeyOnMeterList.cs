@@ -92,9 +92,8 @@ namespace Xmdsp
 			
 			this.ButtonReleased += (object sender, ButtonEventArgs e) => {
 				for (int i = 0; i < mask_rectangles.Length; i++) {
-					var maskRect = new Rectangle (
-						GetScaledPosition (mask_rectangles [i].TopLeft),
-						GetScaledPosition (mask_rectangles [i].BottomRight));
+					var r = mask_rectangles [i];
+					var maskRect = new Rectangle(r.X * pm.Scale, r.Y * pm.Scale, r.Width * pm.Scale, r.Height * pm.Scale);
 					if (maskRect.Contains (e.Position)) {
 						// left click = simple toggle
 						if (e.Button == PointerButton.Left)

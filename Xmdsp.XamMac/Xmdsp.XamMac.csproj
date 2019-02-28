@@ -12,6 +12,7 @@
     <AssemblyName>Xmdsp.XamMac</AssemblyName>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
     <UseXamMacFullFramework>true</UseXamMacFullFramework>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,6 +33,7 @@
     <LinkMode>None</LinkMode>
     <XamMacArch></XamMacArch>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +52,7 @@
     <HttpClientHandler>HttpClientHandler</HttpClientHandler>
     <XamMacArch></XamMacArch>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -99,11 +102,16 @@
     <InterfaceDefinition Include="MainWindow.xib" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.CoreMidi\Commons.Music.Midi.CoreMidi.csproj">
-      <Project>{8D8311AF-0FC7-4BBF-842B-79CC0313FAAE}</Project>
-      <Name>Commons.Music.Midi.CoreMidi</Name>
+    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.XamMacFull\Commons.Music.Midi.XamMacFull.csproj">
+      <Project>{1F06E431-EF07-4161-8C74-5DBB80537F3E}</Project>
+      <Name>Commons.Music.Midi.XamMacFull</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xmdsp.Models\Xmdsp.Models.csproj">
+      <Project>{8046F374-5126-48BC-B079-AEA83B09BF1D}</Project>
+      <Name>Xmdsp.Models</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\Xmdsp.Xwt\Xmdsp.Xwt.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Xwt\Xmdsp.Xwt.projitems')" />
   <Import Project="..\Xmdsp.Shared\Xmdsp.Shared.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Shared\Xmdsp.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

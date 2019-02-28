@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Xwt.Gtk3.0.2.145\build\Xwt.Gtk3.props" Condition="Exists('..\packages\Xwt.Gtk3.0.2.145\build\Xwt.Gtk3.props')" />
+  <Import Project="..\packages\Xwt.Gtk3.0.2.163\build\Xwt.Gtk3.props" Condition="Exists('..\packages\Xwt.Gtk3.0.2.163\build\Xwt.Gtk3.props')" />
+  <Import Project="..\packages\Xwt.Gtk.0.2.163\build\Xwt.Gtk.props" Condition="Exists('..\packages\Xwt.Gtk.0.2.163\build\Xwt.Gtk.props')" />
   <Import Project="..\Xmdsp.Xwt\Xmdsp.Xwt.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Xwt\Xmdsp.Xwt.projitems')" />
   <Import Project="..\Xmdsp.Shared\Xmdsp.Shared.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Shared\Xmdsp.Shared.projitems')" />
   <Import Project="..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props" Condition="Exists('..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props')" />
@@ -67,18 +68,18 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="WindowsBase" />
     <Reference Include="Xwt">
-      <HintPath>..\packages\Xwt.0.2.145\lib\net40\Xwt.dll</HintPath>
+      <HintPath>..\packages\Xwt.0.2.163\lib\net40\Xwt.dll</HintPath>
     </Reference>
     <Reference Include="Xwt.WPF">
-      <HintPath>..\packages\Xwt.WPF.0.2.145\lib\net40\Xwt.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Xwt.XamMac">
-      <HintPath>..\packages\Xwt.XamMac.0.2.145\lib\net40\Xwt.XamMac.dll</HintPath>
+      <HintPath>..\packages\Xwt.WPF.0.2.163\lib\net40\Xwt.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Xwt.Gtk3">
-      <HintPath>../packages/Xwt.Gtk3.0.2.145/lib/net40/Xwt.Gtk3.dll</HintPath>
+      <HintPath>..\packages\Xwt.Gtk3.0.2.163\lib\net40\Xwt.Gtk3.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Xwt.Gtk">
+      <HintPath>..\packages\Xwt.Gtk.0.2.163\lib\net40\Xwt.Gtk.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
