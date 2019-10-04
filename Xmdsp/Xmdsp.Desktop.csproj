@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Xwt.Gtk3.0.2.163\build\Xwt.Gtk3.props" Condition="Exists('..\packages\Xwt.Gtk3.0.2.163\build\Xwt.Gtk3.props')" />
-  <Import Project="..\packages\Xwt.Gtk.0.2.163\build\Xwt.Gtk.props" Condition="Exists('..\packages\Xwt.Gtk.0.2.163\build\Xwt.Gtk.props')" />
+  <Import Project="..\packages\Xwt.Gtk3.0.2.195\build\Xwt.Gtk3.props" Condition="Exists('..\packages\Xwt.Gtk3.0.2.195\build\Xwt.Gtk3.props')" />
+  <Import Project="..\packages\Xwt.Gtk.0.2.195\build\Xwt.Gtk.props" Condition="Exists('..\packages\Xwt.Gtk.0.2.195\build\Xwt.Gtk.props')" />
   <Import Project="..\Xmdsp.Xwt\Xmdsp.Xwt.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Xwt\Xmdsp.Xwt.projitems')" />
   <Import Project="..\Xmdsp.Shared\Xmdsp.Shared.projitems" Label="Shared" Condition="Exists('..\Xmdsp.Shared\Xmdsp.Shared.projitems')" />
   <Import Project="..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props" Condition="Exists('..\packages\Xwt.Gtk.0.2.14\build\Xwt.Gtk.props')" />
@@ -61,24 +61,44 @@
     <LangVersion>Default</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="alsa-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\managed-midi.1.9.12\lib\net45\alsa-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Commons.Music.Midi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\managed-midi.1.9.12\lib\net45\Commons.Music.Midi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Xwt">
-      <HintPath>..\packages\Xwt.0.2.163\lib\net40\Xwt.dll</HintPath>
-    </Reference>
-    <Reference Include="Xwt.WPF">
-      <HintPath>..\packages\Xwt.WPF.0.2.163\lib\net40\Xwt.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="Xwt.Gtk3">
-      <HintPath>..\packages\Xwt.Gtk3.0.2.163\lib\net40\Xwt.Gtk3.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Xwt.Gtk">
-      <HintPath>..\packages\Xwt.Gtk.0.2.163\lib\net40\Xwt.Gtk.dll</HintPath>
+    <Reference Include="Xwt, Version=0.2.195.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\packages\Xwt.0.2.195\lib\net40\Xwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xwt.Gtk, Version=0.2.195.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\packages\Xwt.Gtk.0.2.195\lib\net40\Xwt.Gtk.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xwt.Gtk3, Version=0.2.195.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\packages\Xwt.Gtk3.0.2.195\lib\net40\Xwt.Gtk3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xwt.WPF, Version=0.2.195.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\packages\Xwt.WPF.0.2.195\lib\net47\Xwt.WPF.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -86,10 +106,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.Desktop\Commons.Music.Midi.Desktop.csproj">
-      <Project>{59EEFB0D-3957-43FC-8272-C3B460F7FF84}</Project>
-      <Name>Commons.Music.Midi.Desktop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Xmdsp.Models\Xmdsp.Models.csproj">
       <Project>{8046f374-5126-48bc-b079-aea83b09bf1d}</Project>
       <Name>Xmdsp.Models</Name>
@@ -99,4 +115,11 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Xwt.Gtk.0.2.195\build\Xwt.Gtk.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xwt.Gtk.0.2.195\build\Xwt.Gtk.props'))" />
+    <Error Condition="!Exists('..\packages\Xwt.Gtk3.0.2.195\build\Xwt.Gtk3.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Xwt.Gtk3.0.2.195\build\Xwt.Gtk3.props'))" />
+  </Target>
 </Project>

@@ -55,16 +55,27 @@
     <AOTMode>None</AOTMode>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="alsa-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\managed-midi.1.9.12\lib\net45\alsa-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Commons.Music.Midi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\managed-midi.1.9.12\lib\net45\Commons.Music.Midi.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="Xamarin.Mac" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
-    <Reference Include="Xwt">
-      <HintPath>..\packages\Xwt.0.2.17\lib\net40\Xwt.dll</HintPath>
+    <Reference Include="Xwt, Version=0.2.195.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\packages\Xwt.0.2.195\lib\net40\Xwt.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Xwt.XamMac">
-      <HintPath>..\packages\Xwt.XamMac.0.2.17\lib\net40\Xwt.XamMac.dll</HintPath>
+    <Reference Include="Xwt.XamMac, Version=0.2.195.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <HintPath>..\packages\Xwt.XamMac.0.2.195\lib\net40\Xwt.XamMac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -102,10 +113,6 @@
     <InterfaceDefinition Include="MainWindow.xib" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\external\managed-midi\Commons.Music.Midi.XamMacFull\Commons.Music.Midi.XamMacFull.csproj">
-      <Project>{1F06E431-EF07-4161-8C74-5DBB80537F3E}</Project>
-      <Name>Commons.Music.Midi.XamMacFull</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Xmdsp.Models\Xmdsp.Models.csproj">
       <Project>{8046F374-5126-48BC-B079-AEA83B09BF1D}</Project>
       <Name>Xmdsp.Models</Name>
