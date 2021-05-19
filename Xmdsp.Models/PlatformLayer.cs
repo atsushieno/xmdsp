@@ -83,6 +83,12 @@ namespace Xmdsp
 
 		public virtual void StartWatchingFile (string file, Action action)
 		{
+			if (string.IsNullOrEmpty (file) || !File.Exists (file))  {
+				// FIXME: there should be some error reporting system...
+				Console.WriteLine ("Error the specified file does not exist: " + file);
+				return;
+			}
+
 			StopWatchingFile ();
 			fs_watcher = new FileSystemWatcher ();
 			var fp = Path.GetFullPath (file);

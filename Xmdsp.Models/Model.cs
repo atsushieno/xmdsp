@@ -168,7 +168,8 @@ namespace Xmdsp
 		public void LoadSmf (string filename)
 		{
 			Stop ();
-			Action doLoadSmf = () => {
+			Action doLoadSmf = null;
+			doLoadSmf = () => {
 				try {
 					using (var stream = Platform.GetResourceStream (filename))
 						// merge tracks for optimization (many operations run merger at run-time if they are not in format 0).
